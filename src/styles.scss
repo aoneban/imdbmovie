@@ -1,4 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+@use 'sass/abstracts/variables';
+@use 'sass/vendors/bootstrap';
+@use 'sass/base/reset';
+@use 'sass/layout/header';
+@use 'sass/components/buttons';
+@use 'sass/pages/home';
+@use 'sass/themes/theme';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
