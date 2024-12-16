@@ -1,9 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { TrendingService } from '../../services/trending.service';
 
 @Component({
   selector: 'app-welcome',
-  imports: [],
-  template: ` <p>welcome works!</p> `,
-  styles: ``,
+  imports: [CommonModule],
+  template: `
+    <section class="inner__content new__index">
+      <div
+        [ngStyle]="{ 'background-image': 'url(' + imgUrl + ')' }"
+        class="background">
+        <div class="greetings">
+          <h2 class="welcome">Welcome</h2>
+          <p class="motto">
+            Millions of movies, TV shows and people to discover. Explore now.
+          </p>
+          <div class="search-container">
+            <input
+              type="text"
+              placeholder="Search for a movie, TV show, person..."
+              class="search-input" />
+            <button class="search-button">Search</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+  styleUrls: ['../../../styles.scss'],
 })
-export class WelcomeComponent {}
+export class WelcomeComponent implements OnInit {
+  startUrl = 'https://image.tmdb.org/t/p/w1280/';
+  imgUrl = '';
+
+  constructor(private trendingService: TrendingService) {}
+
+  ngOnInit() {
+    this.trendingService.getTrendingDataMovies().subscribe(
+      data => {
+        const random = this.getRandomNumber();
+        this.imgUrl = this.startUrl + data.results[random].backdrop_path;
+      },
+      error => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+
+  getRandomNumber() {
+    return Math.floor(Math.random() * 20);
+  }
+}

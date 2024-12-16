@@ -1,0 +1,115 @@
+:root {
+  --duotone-dark: #00192f;
+  --duotone-light: #00baff;
+}
+
+.background {
+  position: relative;
+  min-height: 300px;
+  height: calc(100vh / 2);
+  background-color: rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  background-position: center;
+  background-attachment: fixed;
+  isolation: isolate;
+}
+
+section.inner__content {
+  min-width: 100%;
+  min-height: 300px;
+  height: calc(100vh / 2);
+  max-height: 400px;
+}
+
+.background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    var(--duotone-dark),
+    var(--duotone-light)
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+section.new__index {
+  position: relative;
+  min-height: 300px;
+  height: calc(100vh / 2);
+  max-height: 400px;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+}
+
+.greetings {
+  display: flex;
+  max-width: 1440px;
+  width: 80%;
+  padding-top: 5rem;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  z-index: 2;
+  color: #fff;
+}
+
+.welcome {
+    float: left;
+    display: block;
+    font-size: 3rem;
+    font-weight: 500;
+}
+
+.motto {
+    font-size: 2rem;
+    padding-bottom: 20px;
+}
+
+.search-container {
+    position: relative;
+    max-width: 1440px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-input {
+    padding: 8px 16px;
+    max-width: 100%;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+    outline: none;
+    color: #00192f;
+    flex: 1;
+  }
+  
+  .search-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 8px 36px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-left: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 30px;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
