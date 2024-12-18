@@ -7,15 +7,18 @@
   background-size: contain;
   margin: 0 auto;
   max-width: 1380px;
+  position: relative;
+  top: 50px;
 }
 
-.movies__wrapper { 
+.movies__wrapper {
   position: relative;
   max-width: 1280px;
   display: flex;
   margin: 0 auto;
   justify-content: center;
   overflow: hidden;
+  bottom: 30px;
 }
 
 .movies__wrapper-block {

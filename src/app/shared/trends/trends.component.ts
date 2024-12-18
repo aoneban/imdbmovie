@@ -84,7 +84,6 @@ export class TrendsComponent implements OnInit {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
       data => {
         this.newData = data.results;
-        console.log(this.newData);
       },
       error => {
         console.error('Error fetching data:', error);
