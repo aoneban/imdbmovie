@@ -5,7 +5,8 @@ export interface GenreIds {
 export interface Movie extends GenreIds {
   backdrop_path: string;
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   original_title: string;
   overview: string;
   poster_path: string;
@@ -13,7 +14,8 @@ export interface Movie extends GenreIds {
   adult: boolean;
   original_language: string;
   popularity: number;
-  release_date: string;
+  release_date?: string;
+  first_air_date?: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
@@ -22,4 +24,6 @@ export interface Movie extends GenreIds {
 export interface ApiResponse {
   page: number;
   results: Movie[];
+  total_pages?: number;
+  total_results?: number;
 }

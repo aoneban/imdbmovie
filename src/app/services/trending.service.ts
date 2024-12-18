@@ -8,16 +8,18 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class TrendingService {
-  private apiUrl =
+  private apiUrl1 =
     'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
+  private apiUrl2 =
+    'https://api.themoviedb.org/3/trending/all/day?language=en-US';
 
   constructor(private http: HttpClient) {}
 
-  getTrendingDataMovies(): Observable<ApiResponse> {
+  getTrendingDataMovies(apiUrl: string): Observable<ApiResponse> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<ApiResponse>(`${this.apiUrl}`, { headers });
+    return this.http.get<ApiResponse>(apiUrl, { headers });
   }
 }

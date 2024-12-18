@@ -29,13 +29,14 @@ import { TrendingService } from '../../services/trending.service';
   styleUrls: ['../../../styles.scss'],
 })
 export class WelcomeComponent implements OnInit {
+  apiUrl1 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w1280/';
   imgUrl = '';
 
   constructor(private trendingService: TrendingService) {}
 
   ngOnInit() {
-    this.trendingService.getTrendingDataMovies().subscribe(
+    this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
       data => {
         const random = this.getRandomNumber();
         this.imgUrl = this.startUrl + data.results[random].backdrop_path;
