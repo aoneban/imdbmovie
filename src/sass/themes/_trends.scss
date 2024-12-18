@@ -1,6 +1,15 @@
 @use '../abstracts/variables';
 
-.movies__wrapper {
+.movies__main {
+  background-image: url('/trending-bg.svg');
+  background-repeat: no-repeat;
+  background-position: left;
+  background-size: contain;
+  margin: 0 auto;
+  max-width: 1380px;
+}
+
+.movies__wrapper { 
   position: relative;
   max-width: 1280px;
   display: flex;
@@ -49,6 +58,9 @@
   width: 100%;
   border-radius: 10px;
   height: auto;
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .movies__wrapper-block::-webkit-scrollbar {
@@ -92,17 +104,16 @@
   left: 0;
   top: 0;
   bottom: 0;
-  transition: left 0.3s ease; 
+  transition: left 0.3s ease;
 }
 
 .back.this-week {
-  left: 55%; 
+  left: 55%;
 }
 
 button.active {
-  color: white; 
+  color: white;
 }
-
 
 @media (max-width: 992px) {
   .movies__wrapper-cart {

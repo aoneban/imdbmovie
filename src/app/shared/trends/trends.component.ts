@@ -3,11 +3,12 @@ import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
 import { Movie } from '../../interfaces/interface';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-trends',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
       <h3 class="trending">Trending</h3>
@@ -30,18 +31,23 @@ import { Movie } from '../../interfaces/interface';
         </button>
       </div>
     </div>
-    <section class="movies__wrapper">
-      <div class="movies__wrapper-block" [@listAnimation]="newData.length">
-        <div
-          class="movies__wrapper-cart"
-          *ngFor="let movie of newData"
-          [@fadeAnimation]>
-          <img
-            class="image"
-            src="{{ startUrl + movie.poster_path }}"
-            alt="{{ movie.title }}" />
-          <p>{{ getMovieTitle(movie) }}</p>
-          <p>{{ getReleaseDate(movie) }}</p>
+    <section class="movies__main">
+      <div class="movies__wrapper">
+        <div class="movies__wrapper-block" [@listAnimation]="newData.length">
+          <div
+            class="movies__wrapper-cart"
+            *ngFor="let movie of newData"
+            [@fadeAnimation]>
+            <img
+              [routerLink]="['/movie', movie.id]"
+              class="image"
+              src="{{ startUrl + movie.poster_path }}"
+              alt="{{ movie.title }}" />
+            <a [routerLink]="['/movie', movie.id]">
+              <p>{{ getMovieTitle(movie) }}</p>
+            </a>
+            <p>{{ getReleaseDate(movie) }}</p>
+          </div>
         </div>
       </div>
     </section>

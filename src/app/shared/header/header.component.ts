@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [RouterModule],
   template: `
     <header class="w-full bg-blue-950 py-5">
       <div class="content">
@@ -10,7 +11,7 @@ import { Component } from '@angular/core';
           class="content__wrapper flex justify-between max-w-screen-xl mx-auto">
           <div class="content__wrapper-navbar_left">
             <ul class="flex gap-x-5">
-              <li><img src="#" alt="" />Logo</li>
+              <li><a href="" [routerLink]="['/main']">Logo</a></li>
               <li>
                 <div class="dropdown">
                   <button class="dropbtn">Movies</button>
