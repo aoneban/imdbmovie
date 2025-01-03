@@ -1,0 +1,155 @@
+@use '../abstracts/variables';
+
+:root {
+    --duotone-dark: #00192f;
+    --duotone-light: #00baff;
+  }
+
+.background-trailers {
+  position: relative;
+  min-height: 300px;
+  height: 22vw;
+  max-height: 350px;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  background-position: center;
+  background-attachment: scroll;
+  isolation: isolate;
+  padding-bottom: 50px; 
+}
+
+.background-trailers::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(
+      135deg,
+      var(--duotone-dark),
+      var(--duotone-light)
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.8;
+  }
+
+  .movies__trailers-block {
+    position: relative;
+    margin: 25px auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+  }
+
+  .movies__trailers-block::-webkit-scrollbar {
+    height: 9px;
+  }
+  
+  .movies__trailers-block::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 2px solid #ccc;
+  }
+  
+  .movies__trailers-block::-webkit-scrollbar-button {
+    display: none;
+  }
+
+.trailers {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.trending {
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.switch-trailers {
+  position: relative;
+  display: flex;
+  background: #1a1a1a;
+  border-radius: 30px;
+  padding: 4px;
+  width: fit-content;
+  margin: 20px 0;
+
+  button {
+    position: relative;
+    width: 100px;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 25px;
+    background: transparent;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 2;
+
+    &.active {
+      color: #000;
+    }
+  }
+
+  .back-trailers {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    background: #fff;
+    height: calc(100% - 8px);
+    width: 100px;
+    border-radius: 25px;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1;
+
+    &.today {
+      transform: translateX(0);
+    }
+
+    &.this-week {
+      transform: translateX(100px);
+    }
+
+    &.on-tv {
+      transform: translateX(200px);
+    }
+    &.in-theatres {
+      transform: translateX(300px);
+    }
+  }
+}
+
+.cart {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 24px 0;
+  width: 19rem;
+}
+
+.movies__trailers-cart {
+  position: relative;
+  max-width: 1280px;
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  overflow: hidden;
+  bottom: 30px;
+  padding-bottom: 50px; 
+}
+
+.movies__wrapper-cart p {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

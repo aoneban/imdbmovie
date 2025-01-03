@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-trends',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { MainPageComponent } from './pages/main-page/main-page.component';
+import { MainPageComponent } from './pages/main/main.component';
 import { MovieComponent } from './pages/movie/movie.component';
 
 export const routes: Routes = [
