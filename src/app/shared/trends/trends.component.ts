@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-trends',
   standalone: true,
   imports: [CommonModule, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
       <h3 class="trending">Trending</h3>
@@ -39,6 +40,8 @@ import { RouterModule } from '@angular/router';
             *ngFor="let movie of newData"
             [@fadeAnimation]>
             <img
+              loading="lazy"
+              decoding="async"
               [routerLink]="['/movie', movie.id]"
               class="image"
               src="{{ startUrl + movie.poster_path }}"
