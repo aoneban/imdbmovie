@@ -8,13 +8,14 @@
   min-height: 300px;
   height: 25vw;
   max-height: 400px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: #595f64;
   background-size: cover;
   background-repeat: no-repeat;
   color: #fff;
   background-position: center;
   background-attachment: scroll;
   isolation: isolate;
+  background-blend-mode: screen;
 }
 
 section.inner__content {

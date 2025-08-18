@@ -1,0 +1,86 @@
+@use '../abstracts/variables';
+
+.switch {
+  position: relative;
+  display: flex;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 30px;
+  height: 45px;
+  padding: 4px;
+  width: fit-content;
+  margin: 20px 0;
+}
+
+button {
+  position: relative;
+  width: 100px;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 2;
+
+  &.active {
+    color: #000;
+  }
+}
+
+.back {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  background: #fff;
+  height: calc(100% - 8px);
+  width: 100px;
+  border-radius: 25px;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
+
+  &.popular {
+    transform: translateX(0);
+  }
+
+  &.tv {
+    transform: translateX(100px);
+  }
+
+  &.top {
+    transform: translateX(200px);
+  }
+
+  &.upcoming {
+    transform: translateX(300px);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.fade-in.loaded {
+  opacity: 1;
+}
+
+
+@media (max-width: 992px) {
+  .movies__wrapper-cart {
+    width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .movies__wrapper-cart {
+    width: 130px;
+  }
+}
+
+@media (max-width: 576px) {
+  .movies__wrapper-cart {
+    width: 110px;
+    gap: 5px;
+  }
+}
