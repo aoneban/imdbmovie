@@ -1,9 +1,15 @@
 import { Routes } from '@angular/router';
-import { MainPageComponent } from './pages/main/main.component';
-import { MovieComponent } from './pages/movie/movie.component';
 
 export const routes: Routes = [
-  { path: 'main', component: MainPageComponent },
-  { path: 'movie/:id', component: MovieComponent },
+  {
+    path: 'main',
+    loadComponent: () =>
+      import('./pages/main/main.component').then(m => m.MainPageComponent),
+  },
+  {
+    path: 'movie/:id',
+    loadComponent: () =>
+      import('./pages/movie/movie.component').then(m => m.MovieComponent),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

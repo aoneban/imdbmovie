@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   imports: [RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header class="w-full bg-blue-950 py-5">
       <div class="content">

@@ -1,9 +1,9 @@
 @use '../abstracts/variables';
 
 :root {
-    --duotone-dark: #00192f;
-    --duotone-light: #00baff;
-  }
+  --duotone-dark: #00192f;
+  --duotone-light: #00baff;
+}
 
 .background-trailers {
   position: relative;
@@ -17,51 +17,51 @@
   background-position: center;
   background-attachment: scroll;
   isolation: isolate;
-  padding-bottom: 50px; 
+  padding-bottom: 50px;
 }
 
 .background-trailers::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(
-      135deg,
-      var(--duotone-dark),
-      var(--duotone-light)
-    );
-    mix-blend-mode: multiply;
-    opacity: 0.8;
-  }
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    var(--duotone-dark),
+    var(--duotone-light)
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
 
-  .movies__trailers-block {
-    position: relative;
-    margin: 25px auto;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    width: 100%;
-    gap: 20px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-  }
+.movies__trailers-block {
+  position: relative;
+  margin: 25px auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
 
-  .movies__trailers-block::-webkit-scrollbar {
-    height: 9px;
-  }
-  
-  .movies__trailers-block::-webkit-scrollbar-thumb {
-    background-color: #888;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-  }
-  
-  .movies__trailers-block::-webkit-scrollbar-button {
-    display: none;
-  }
+.movies__trailers-block::-webkit-scrollbar {
+  height: 9px;
+}
+
+.movies__trailers-block::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+}
+
+.movies__trailers-block::-webkit-scrollbar-button {
+  display: none;
+}
 
 .trailers {
   max-width: 1280px;
@@ -133,7 +133,7 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  margin: 24px 0;
+  margin: 23px 0;
   width: 19rem;
 }
 
@@ -145,7 +145,7 @@
   justify-content: center;
   overflow: hidden;
   bottom: 30px;
-  padding-bottom: 50px; 
+  padding-bottom: 50px;
 }
 
 .movies__wrapper-cart p {

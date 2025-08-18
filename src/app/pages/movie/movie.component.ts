@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { MovieService } from '../../services/movie.service';
@@ -9,6 +9,7 @@ import { MovieCast } from '../../interfaces/interface';
 @Component({
   selector: 'movie',
   imports: [HeaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-header></app-header>
     ./movie.component.html-works {{ movieId }}'

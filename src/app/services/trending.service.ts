@@ -8,11 +8,6 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class TrendingService {
-  private apiUrl1 =
-    'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
-  private apiUrl2 =
-    'https://api.themoviedb.org/3/trending/all/day?language=en-US';
-
   constructor(private http: HttpClient) {}
 
   getTrendingDataMovies(apiUrl: string): Observable<ApiResponse> {

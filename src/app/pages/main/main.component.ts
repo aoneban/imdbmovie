@@ -12,6 +12,7 @@ import { TrailersComponent } from '../../shared/trailers/trailers.component';
     TrendsComponent,
     TrailersComponent,
   ],
+
   template: `
     <app-header></app-header>
     <app-welcome></app-welcome>

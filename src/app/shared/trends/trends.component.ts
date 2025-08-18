@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
@@ -8,6 +13,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'app-trends',
   imports: [CommonModule, RouterModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
       <h3 class="trending">Trending</h3>
@@ -38,6 +44,8 @@ import { RouterModule } from '@angular/router';
             *ngFor="let movie of newData"
             [@fadeAnimation]>
             <img
+              loading="lazy"
+              decoding="async"
               [routerLink]="['/movie', movie.id]"
               class="image"
               src="{{ startUrl + movie.poster_path }}"
@@ -73,27 +81,29 @@ export class TrendsComponent implements OnInit {
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   imgUrl = '';
-  apiUrl1 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
-  apiUrl2 = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
+  apiUrlToday =
+    'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
+  apiUrlWeek =
+    'https://api.themoviedb.org/3/trending/movie/week?language=en-US';
   activeButton = 'today';
 
-  constructor(private trendingService: TrendingService) {}
+  constructor(
+    private trendingService: TrendingService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
-      data => {
-        this.newData = data.results;
-      },
-      error => {
-        console.error('Error fetching data:', error);
-      }
-    );
+    this.switchTo(this.activeButton);
   }
 
   switchTo(button: string): void {
     this.activeButton = button;
-    const apiUrl = button === 'today' ? this.apiUrl1 : this.apiUrl2;
-    this.fetchData(apiUrl);
+    const apiUrl = button === 'today' ? this.apiUrlToday : this.apiUrlWeek;
+
+    this.trendingService.getTrendingDataMovies(apiUrl).subscribe(data => {
+      this.newData = data.results;
+      this.cdr.markForCheck();
+    });
   }
 
   fetchData(apiUrl: string): void {

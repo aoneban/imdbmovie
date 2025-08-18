@@ -23,7 +23,7 @@
 
 .movies__wrapper-block {
   position: relative;
-  margin: 25px auto;
+  margin: 25px auto 4px auto;
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
@@ -89,33 +89,50 @@
 .switch {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: 20px;
-  justify-content: space-between;
-  border: 1px solid rgb(10, 46, 228);
-  padding: 0 15px;
+  background: #1a1a1a;
+  color: #fff;
   border-radius: 30px;
+  height: 45px;
+  padding: 4px;
+  width: fit-content;
+  margin: 20px 0;
+}
+
+button {
+  position: relative;
+  width: 100px;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 25px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 2;
+
+  &.active {
+    color: #000;
+  }
 }
 
 .back {
   position: absolute;
-  z-index: -1;
-  background-color: rgb(10, 46, 228);
-  width: 45%;
-  height: 100%;
-  border-radius: 30px;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  transition: left 0.3s ease;
-}
+  left: 4px;
+  top: 4px;
+  background: #fff;
+  height: calc(100% - 8px);
+  width: 100px;
+  border-radius: 25px;
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
 
-.back.this-week {
-  left: 55%;
-}
+  &.today {
+    transform: translateX(0);
+  }
 
-button.active {
-  color: white;
+  &.this-week {
+    transform: translateX(100px);
+  }
 }
 
 @media (max-width: 992px) {
