@@ -4,6 +4,7 @@ import { WelcomeComponent } from '../../shared/welcome/welcome.component';
 import { TrendsComponent } from '../../shared/trends/trends.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
 import { PopularComponent } from '../../shared/popular/popular.component';
+import { FreeComponent } from '../../shared/free/free.component';
 
 @Component({
   selector: 'main',
@@ -13,6 +14,7 @@ import { PopularComponent } from '../../shared/popular/popular.component';
     TrendsComponent,
     TrailersComponent,
     PopularComponent,
+    FreeComponent,
   ],
 
   template: `
@@ -21,6 +23,7 @@ import { PopularComponent } from '../../shared/popular/popular.component';
     <app-trends></app-trends>
     <app-trailers></app-trailers>
     <app-popular></app-popular>
+    <app-free></app-free>
   `,
   styles: ``,
 })

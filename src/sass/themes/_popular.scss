@@ -59,12 +59,11 @@ button {
 
 .fade-in {
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 .fade-in.loaded {
   opacity: 1;
 }
-
 
 @media (max-width: 992px) {
   .movies__wrapper-cart {
