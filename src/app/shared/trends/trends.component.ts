@@ -44,7 +44,6 @@ import { RouterModule } from '@angular/router';
             *ngFor="let movie of newData"
             [@fadeAnimation]>
             <img
-              loading="lazy"
               decoding="async"
               [routerLink]="['/movie', movie.id]"
               class="image"
@@ -104,17 +103,6 @@ export class TrendsComponent implements OnInit {
       this.newData = data.results;
       this.cdr.markForCheck();
     });
-  }
-
-  fetchData(apiUrl: string): void {
-    this.trendingService.getTrendingDataMovies(apiUrl).subscribe(
-      data => {
-        this.newData = data.results;
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
   }
 
   getMovieTitle(movie: Movie): string {

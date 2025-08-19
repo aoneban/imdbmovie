@@ -10,7 +10,9 @@
 @use 'sass/themes/trailers';
 @use 'sass/welcome/welcome';
 @use 'sass/themes/popular';
+@use 'sass/themes/persons';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+

@@ -100,3 +100,54 @@ export interface MovieCast {
   id: number;
   cast: CastMember[];
 }
+
+export interface ApiResponsePerson {
+  page: number;
+  results: Person[];
+}
+
+export interface Person {
+  adult: boolean;
+  gender: number;
+  id: number;
+  known_for_department: string;
+  name: string;
+  original_name: string;
+  popularity: number;
+  profile_path: string;
+  known_for: KnownForItem[];
+}
+
+export type KnownForItem = KnownForMovie | KnownForTv;
+
+export interface BaseKnownFor {
+  adult: boolean;
+  name: string;
+  title: string;
+  backdrop_path: string;
+  id: number;
+  overview: string;
+  poster_path: string;
+  media_type: 'movie' | 'tv';
+  original_language: string;
+  genre_ids: number[];
+  popularity: number;
+  vote_average: number;
+  vote_count: number;
+}
+
+export interface KnownForMovie extends BaseKnownFor {
+  media_type: 'movie';
+  title: string;
+  original_title: string;
+  release_date: string;
+  video: boolean;
+}
+
+export interface KnownForTv extends BaseKnownFor {
+  media_type: 'tv';
+  name: string;
+  original_name: string;
+  first_air_date: string;
+  origin_country: string[];
+}

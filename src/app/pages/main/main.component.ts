@@ -5,6 +5,7 @@ import { TrendsComponent } from '../../shared/trends/trends.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
 import { PopularComponent } from '../../shared/popular/popular.component';
 import { FreeComponent } from '../../shared/free/free.component';
+import { PopularPersonsComponent } from '../../shared/popularpersons/popularpersons.component';
 
 @Component({
   selector: 'main',
@@ -15,6 +16,7 @@ import { FreeComponent } from '../../shared/free/free.component';
     TrailersComponent,
     PopularComponent,
     FreeComponent,
+    PopularPersonsComponent,
   ],
 
   template: `
@@ -24,6 +26,7 @@ import { FreeComponent } from '../../shared/free/free.component';
     <app-trailers></app-trailers>
     <app-popular></app-popular>
     <app-free></app-free>
+    <app-popularpersons></app-popularpersons>
   `,
   styles: ``,
 })
