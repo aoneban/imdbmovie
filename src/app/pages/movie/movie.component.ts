@@ -12,7 +12,7 @@ import { MovieCast } from '../../interfaces/interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-header></app-header>
-    ./movie.component.html-works {{ movieId }}'
+    <p>./movie.component.html-works {{ movieId }}</p>
   `,
   styles: ``,
 })

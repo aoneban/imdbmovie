@@ -11,5 +11,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/movie/movie.component').then(m => m.MovieComponent),
   },
+  {
+    path: 'persons/:id',
+    loadComponent: () =>
+      import('./pages/persons/persons.component').then(m => m.PersonsComponent),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

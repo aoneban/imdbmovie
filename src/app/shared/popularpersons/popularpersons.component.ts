@@ -2,17 +2,17 @@ import {
   Component,
   OnInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
+  signal,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { PopPersonService } from '../../services/popperson.service';
 import { Person } from '../../interfaces/interface';
-// import { RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-popularpersons',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: ` <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
       <h3 class="trending">Most popular celebrities</h3>
@@ -21,20 +21,23 @@ import { Person } from '../../interfaces/interface';
       <div class="movies__wrapper">
         <div
           class="movies__wrapper-block add"
-          [@listAnimation]="newData.length">
+          [@listAnimation]="newData().length">
           <div
             class="movies__wrapper-cart"
-            *ngFor="let person of newData"
+            *ngFor="let person of newData()"
             [@fadeAnimation]>
             <div class="wrapper_img">
               <img
                 decoding="async"
+                [routerLink]="['/persons', person.id]"
                 class="image"
                 src="{{ startUrl + person.profile_path }}"
                 alt="{{ person.name }}" />
             </div>
-            <a>
+            <a [routerLink]="['/persons', person.id]">
               <p>{{ person.name }}</p>
+            </a>
+            <a>
               <p>
                 {{
                   person.known_for[0].name !== undefined
@@ -66,19 +69,15 @@ import { Person } from '../../interfaces/interface';
   ],
 })
 export class PopularPersonsComponent implements OnInit {
-  newData: Person[] = [];
+  newData = signal<Person[]>([]);
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   apiUrl = 'https://api.themoviedb.org/3/person/popular?language=en-US&page=1';
-  constructor(
-    private popPersonService: PopPersonService,
-    private cdr: ChangeDetectorRef
-  ) {}
+
+  constructor(private popPersonService: PopPersonService) {}
 
   ngOnInit(): void {
     this.popPersonService.getDataPopularPerson(this.apiUrl).subscribe(data => {
-      this.newData = data.results;
-      this.cdr.markForCheck();
-      console.log(this.newData);
+      this.newData.set(data.results);
     });
   }
 }
