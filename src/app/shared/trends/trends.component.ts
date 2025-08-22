@@ -79,7 +79,6 @@ import { RouterModule } from '@angular/router';
 export class TrendsComponent implements OnInit {
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
-  imgUrl = '';
   apiUrlToday =
     'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   apiUrlWeek =

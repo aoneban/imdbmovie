@@ -1,0 +1,53 @@
+:root {
+  --duotone-dark: #00192f;
+  --duotone-light: #00baff;
+}
+
+.background-movie {
+  position: relative;
+  min-height: 300px;
+  height: 32vw;
+  max-height: 600px;
+  background-color: #595f64;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  background-position: center;
+  background-attachment: scroll;
+  isolation: isolate;
+  background-blend-mode: screen;
+}
+
+section.inner__content {
+  min-width: 100%;
+  min-height: 300px;
+  height: 25vw;
+  max-height: 400px;
+}
+
+.background::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    135deg,
+    var(--duotone-dark),
+    var(--duotone-light)
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+section.new__index {
+  position: relative;
+  min-height: 300px;
+  height: 25vw;
+  max-height: 400px;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+}

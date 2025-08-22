@@ -3,6 +3,7 @@
 @use 'sass/vendors/bootstrap';
 @use 'sass/base/reset';
 @use 'sass/layout/header';
+@use 'sass/layout/navbar';
 @use 'sass/components/buttons';
 @use 'sass/pages/home';
 @use 'sass/themes/theme';
@@ -11,6 +12,7 @@
 @use 'sass/welcome/welcome';
 @use 'sass/themes/popular';
 @use 'sass/themes/persons';
+@use 'sass/themes/movie';
 
 @tailwind base;
 @tailwind components;
