@@ -98,6 +98,7 @@ export interface CastMember {
 }
 
 export interface MovieCast {
+  filter(arg0: (_: any, i: any) => boolean): MovieCast | undefined;
   id: number;
   cast: CastMember[];
 }

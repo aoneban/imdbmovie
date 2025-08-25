@@ -11,7 +11,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { MovieService } from '../../services/movie.service';
 import { SingleMovie, ImagesResponse } from '../../interfaces/interface';
 import { CastService } from '../../services/cast.service';
-import { MovieCast, CastMember } from '../../interfaces/interface';
+import { CastMember } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 
@@ -55,7 +55,9 @@ import { RouterModule } from '@angular/router';
         <h3 class="trending">Top Billed Cast</h3>
         <div class="movies__wrapper">
           <div class="movies__wrapper-block add">
-            <div class="movies__wrapper-cart" *ngFor="let person of newCast">
+            <div
+              class="movies__wrapper-cart"
+              *ngFor="let person of movieCast()">
               <div class="wrapper_img">
                 <img
                   decoding="async"
@@ -88,8 +90,7 @@ export class MovieComponent implements OnInit {
   movieId: number | undefined;
   movieData = signal<SingleMovie | undefined>(undefined);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
-  movieCast = signal<MovieCast | undefined>(undefined);
-  newCast: CastMember[] | undefined;
+  movieCast = signal<CastMember[] | undefined>(undefined);
 
   constructor(
     private route: ActivatedRoute,
@@ -143,19 +144,12 @@ export class MovieComponent implements OnInit {
   fetchCast(id: number): void {
     this.castService.getDataCast(id).subscribe(
       data => {
-        this.movieCast.set(data);
-        this.cutCast(this.movieCast());
+        this.movieCast.set(data.cast.filter((_, i) => i < 8));
         console.log('Data Cast: ', this.movieCast());
       },
       error => {
         console.error('Error fetching data: ', error);
       }
     );
-  }
-
-  cutCast(item: MovieCast | undefined): void {
-    if (item !== undefined) {
-      this.newCast = item.cast.filter((_, ind) => ind < 10);
-    }
   }
 }
