@@ -169,3 +169,17 @@ export interface KnownForTv extends BaseKnownFor {
   first_air_date: string;
   origin_country: string[];
 }
+
+export interface Backdrop {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string | null;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
+
+export interface ImagesResponse {
+  backdrops: Backdrop[];
+}
