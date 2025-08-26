@@ -15,6 +15,7 @@ import { CastMember } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
+import { AsideComponent } from './aside/aside.component';
 
 @Component({
   selector: 'movie',
@@ -23,6 +24,7 @@ import { ActorsComponent } from './actors/actors.component';
     CommonModule,
     NavbarComponent,
     ActorsComponent,
+    AsideComponent,
     RouterModule,
   ],
 
@@ -63,16 +65,7 @@ import { ActorsComponent } from './actors/actors.component';
     </section>
     <section class="add__content">
       <app-actors [cast]="movieCast()" class="actors"></app-actors>
-      <aside class="aside">
-        <h3>Status</h3>
-        <p>{{ movieData()?.status }}</p>
-        <h3>Original language</h3>
-        <p>{{ movieData()?.original_language }}</p>
-        <h3>Budget</h3>
-        <p>{{ movieData()?.budget }}</p>
-        <h3>Revenue</h3>
-        <p>{{ movieData()?.revenue }}</p>
-      </aside>
+      <app-aside [props]="movieData()"></app-aside>
     </section>
     <section>
       <button>Full Cast & Crew</button>
