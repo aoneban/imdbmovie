@@ -14,10 +14,17 @@ import { CastService } from '../../services/cast.service';
 import { CastMember } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
+import { ActorsComponent } from './actors/actors.component';
 
 @Component({
   selector: 'movie',
-  imports: [HeaderComponent, CommonModule, NavbarComponent, RouterModule],
+  imports: [
+    HeaderComponent,
+    CommonModule,
+    NavbarComponent,
+    ActorsComponent,
+    RouterModule,
+  ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 
@@ -36,7 +43,11 @@ import { RouterModule } from '@angular/router';
             [src]="startUrl + (movieData()?.poster_path || '')"
             [alt]="movieData()?.title || ''" />
           <div class="text-content">
-            <h2>Title</h2>
+            <h2>
+              {{ movieData()?.title }} ({{
+                movieData()?.release_date?.slice(0, 4)
+              }})
+            </h2>
             <p>Description</p>
             <h3>Users marks</h3>
             <h4>Overview</h4>
@@ -50,39 +61,38 @@ import { RouterModule } from '@angular/router';
         </div>
       </div>
     </section>
-    <section class="average__content new__index-content">
-      <div class="content-left">
-        <h3 class="trending">Top Billed Cast</h3>
-        <div class="movies__wrapper">
-          <div class="movies__wrapper-block add">
-            <div
-              class="movies__wrapper-cart"
-              *ngFor="let person of movieCast()">
-              <div class="wrapper_img">
-                <img
-                  decoding="async"
-                  [routerLink]="['/persons', person.id]"
-                  class="image"
-                  src="{{ startUrl + person.profile_path }}"
-                  alt="{{ person.name }}" />
-              </div>
-              <a [routerLink]="['/persons', person.id]">
-                <p>{{ person.original_name }}</p>
-              </a>
-              <a>
-                <p>
-                  {{ person.character }}
-                </p>
-              </a>
-            </div>
-            <button>Add</button>
-          </div>
-        </div>
-      </div>
-      <div class="content-right"></div>
+    <section class="add__content">
+      <app-actors [cast]="movieCast()" class="actors"></app-actors>
+      <aside class="aside">
+        <h3>Status</h3>
+        <p>{{ movieData()?.status }}</p>
+        <h3>Original language</h3>
+        <p>{{ movieData()?.original_language }}</p>
+        <h3>Budget</h3>
+        <p>{{ movieData()?.budget }}</p>
+        <h3>Revenue</h3>
+        <p>{{ movieData()?.revenue }}</p>
+      </aside>
+    </section>
+    <section>
+      <button>Full Cast & Crew</button>
     </section>
   `,
-  styles: ``,
+  styles: `
+    .add__content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1280px;
+      margin: 0 auto;
+    }
+    .actors {
+      flex: 70%;
+    }
+    .aside {
+      flex: 30%;
+    }
+  `,
 })
 export class MovieComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500';
@@ -144,7 +154,7 @@ export class MovieComponent implements OnInit {
   fetchCast(id: number): void {
     this.castService.getDataCast(id).subscribe(
       data => {
-        this.movieCast.set(data.cast.filter((_, i) => i < 8));
+        this.movieCast.set(data.cast.filter((_, i) => i < 15));
         console.log('Data Cast: ', this.movieCast());
       },
       error => {

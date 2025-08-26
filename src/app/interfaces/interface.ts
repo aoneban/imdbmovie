@@ -38,6 +38,7 @@ export interface SingleMovie {
   title: string;
   id: number;
   imdb_id: string;
+  status?: string;
   origin_country: string[];
   original_language: string;
   original_title: string;
@@ -98,7 +99,6 @@ export interface CastMember {
 }
 
 export interface MovieCast {
-  filter(arg0: (_: any, i: any) => boolean): MovieCast | undefined;
   id: number;
   cast: CastMember[];
 }
