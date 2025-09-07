@@ -3,12 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { SinglePerson } from '../../interfaces/interface';
 import { PersonService } from '../../services/person.service';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 
 @Component({
   selector: 'persons',
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, NavbarComponent],
   template: `
     <app-header></app-header>
+    <app-navbar></app-navbar>
     <p>persons works!</p>
     <p>Name: {{ personData()?.name }}</p>
     <p>persons works!</p>

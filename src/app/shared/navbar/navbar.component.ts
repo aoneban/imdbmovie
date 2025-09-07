@@ -14,9 +14,9 @@ import { RouterModule } from '@angular/router';
             <ul class="flex gap-x-5">
               <li>
                 <div class="dropdown-navbar">
-                  <button class="dropbtn">Overview</button>
+                  <button class="dropbtn">Overview &#9662;</button>
                   <div class="dropdown-navbar_content">
-                    <a href="#">Link 1</a>
+                    <a href="#">Link 1 </a>
                     <a href="#">Link 2</a>
                     <a href="#">Link 3</a>
                   </div>
@@ -24,7 +24,7 @@ import { RouterModule } from '@angular/router';
               </li>
               <li>
                 <div class="dropdown-navbar">
-                  <button class="dropbtn">Media</button>
+                  <button class="dropbtn">Media &#9662;</button>
                   <div class="dropdown-navbar_content">
                     <a href="#">Link 4</a>
                     <a href="#">Link 5</a>
@@ -34,7 +34,7 @@ import { RouterModule } from '@angular/router';
               </li>
               <li>
                 <div class="dropdown-navbar">
-                  <button class="dropbtn">Fandom</button>
+                  <button class="dropbtn">Fandom &#9662;</button>
                   <div class="dropdown-navbar_content">
                     <a href="#">Link 7</a>
                     <a href="#">Link 8</a>
@@ -44,7 +44,7 @@ import { RouterModule } from '@angular/router';
               </li>
               <li>
                 <div class="dropdown-navbar">
-                  <button class="dropbtn">Share</button>
+                  <button class="dropbtn">Share &#9662;</button>
                   <div class="dropdown-navbar_content">
                     <a href="#">Link 10</a>
                     <a href="#">Link 11</a>

@@ -16,5 +16,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/persons/persons.component').then(m => m.PersonsComponent),
   },
+  {
+    path: 'cast/:id',
+    loadComponent: () =>
+      import('./pages/movie/all-actors/all-actors.component').then(
+        m => m.AllActorsComponent
+      ),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

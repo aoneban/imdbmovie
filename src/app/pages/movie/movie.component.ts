@@ -9,9 +9,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
 import { MovieService } from '../../services/movie.service';
-import { SingleMovie, ImagesResponse } from '../../interfaces/interface';
 import { CastService } from '../../services/cast.service';
-import { CastMember } from '../../interfaces/interface';
+import {
+  CastMember,
+  MovieCast,
+  SingleMovie,
+  ImagesResponse,
+} from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
@@ -68,7 +72,9 @@ import { AsideComponent } from './aside/aside.component';
       <app-aside [props]="movieData()"></app-aside>
     </section>
     <section>
-      <button>Full Cast & Crew</button>
+      <button [routerLink]="['/cast', movieAllTeam()?.id]">
+        Full Cast & Crew
+      </button>
     </section>
   `,
   styles: `
@@ -94,6 +100,7 @@ export class MovieComponent implements OnInit {
   movieData = signal<SingleMovie | undefined>(undefined);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
   movieCast = signal<CastMember[] | undefined>(undefined);
+  movieAllTeam = signal<MovieCast | undefined>(undefined);
 
   constructor(
     private route: ActivatedRoute,
@@ -148,7 +155,8 @@ export class MovieComponent implements OnInit {
     this.castService.getDataCast(id).subscribe(
       data => {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
-        console.log('Data Cast: ', this.movieCast());
+        this.movieAllTeam.set(data);
+        console.log('Data Cast: ', this.movieAllTeam());
       },
       error => {
         console.error('Error fetching data: ', error);
