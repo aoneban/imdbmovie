@@ -15,14 +15,16 @@ import { CommonModule } from '@angular/common';
             <div class="movies__wrapper-cart" *ngFor="let person of cast">
               <div class="wrapper_img">
                 <img
-                  decoding="async"
+                  decoding="auto"
                   [routerLink]="['/persons', person.id]"
                   class="image"
                   src="{{ startUrl + person.profile_path }}"
                   alt="{{ person.name }}" />
               </div>
               <a [routerLink]="['/persons', person.id]">
-                <p>{{ person.original_name }}</p>
+                <p>
+                  <b>{{ person.original_name }}</b>
+                </p>
               </a>
               <a>
                 <p>
@@ -30,7 +32,13 @@ import { CommonModule } from '@angular/common';
                 </p>
               </a>
             </div>
-            <button>View more -></button>
+            <div class="flex justify-center h-full items-center">
+              <button
+                [routerLink]="['/cast', id]"
+                class="w-fit whitespace-nowrap">
+                View more &#10230;
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -44,7 +52,6 @@ import { CommonModule } from '@angular/common';
       height: auto;
     }
     .trending {
-      margin-left: 1vw;
       margin-top: 8rem;
       margin-bottom: 1rem;
     }
@@ -62,4 +69,5 @@ import { CommonModule } from '@angular/common';
 export class ActorsComponent {
   startUrl = 'https://image.tmdb.org/t/p/w500';
   @Input() cast: CastMember[] | undefined;
+  @Input() id: number | undefined;
 }

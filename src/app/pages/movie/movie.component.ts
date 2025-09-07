@@ -67,31 +67,28 @@ import { AsideComponent } from './aside/aside.component';
         </div>
       </div>
     </section>
-    <section class="add__content">
-      <app-actors [cast]="movieCast()" class="actors"></app-actors>
-      <app-aside [props]="movieData()"></app-aside>
-    </section>
-    <section>
-      <button [routerLink]="['/cast', movieAllTeam()?.id]">
-        Full Cast & Crew
-      </button>
+    <section class="w-[80%] mx-auto flex">
+      <div class="w-4/5 mx-auto flex flex-col">
+        <app-actors [cast]="movieCast()" [id]="movieId" class="md:flex-row">
+        </app-actors>
+        <div
+          class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
+          <button
+            [routerLink]="['/cast', movieAllTeam()?.id]"
+            class="w-fit whitespace-nowrap">
+            Full Cast & Crew
+          </button>
+        </div>
+        <div>
+          <h3 class="text-2xl font-semibold text-gray-900 mb-4">Social</h3>
+        </div>
+      </div>
+      <app-aside
+        [props]="movieData()"
+        class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
   `,
-  styles: `
-    .add__content {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 1280px;
-      margin: 0 auto;
-    }
-    .actors {
-      flex: 70%;
-    }
-    .aside {
-      flex: 30%;
-    }
-  `,
+  styles: ``,
 })
 export class MovieComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500';
