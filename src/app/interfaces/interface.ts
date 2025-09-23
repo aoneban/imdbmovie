@@ -35,7 +35,9 @@ export interface SingleMovie {
   budget: number;
   genres: Genre[];
   homepage: string;
+  tagline: string;
   title: string;
+  type: string;
   name: string;
   id: number;
   imdb_id: string;

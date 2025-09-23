@@ -11,8 +11,8 @@ import { CommonModule } from '@angular/common';
       <p>{{ props?.status }}</p>
       <h3 class="font-bold">Original language</h3>
       <p>{{ language(props?.original_language) }}</p>
-      <h3 class="font-bold">Budget</h3>
-      <p>&dollar;{{ reduceNumber(props?.budget) }}.00</p>
+      <h3 class="font-bold">Type</h3>
+      <p>{{ props?.type }}</p>
       <h3 class="font-bold">Revenue</h3>
       <p>&dollar;{{ reduceNumber(props?.revenue) }}.00</p>
     </aside>

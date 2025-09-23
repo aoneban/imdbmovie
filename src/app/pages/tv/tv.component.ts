@@ -49,17 +49,13 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
             [src]="startUrl + (tvData()?.poster_path || '')"
             [alt]="tvData()?.name || ''" />
           <div class="text-content">
-            <h2>
+            <h1 class="text-4xl font-bold text-white-900 mb-4">
               {{ tvData()?.name }} ({{ tvData()?.first_air_date?.slice(0, 4) }})
-            </h2>
-            <p>Description</p>
-            <h3>Users marks</h3>
-            <h4>Overview</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur
-              necessitatibus possimus pariatur culpa! Labore, ea! Ullam velit
-              illo ipsam consequatur veniam, placeat, quos quod harum architecto
-              commodi quia minima distinctio!
+            </h1>
+            <h3 class="italic text-gray-300">{{ tvData()?.tagline }}</h3>
+            <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
+            <p class="w-[80%]">
+              {{ tvData()?.overview }}
             </p>
           </div>
         </div>

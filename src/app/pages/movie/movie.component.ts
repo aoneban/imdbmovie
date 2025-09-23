@@ -49,19 +49,15 @@ import { AsideComponent } from './aside/aside.component';
             [src]="startUrl + (movieData()?.poster_path || '')"
             [alt]="movieData()?.title || ''" />
           <div class="text-content">
-            <h2>
+            <h1 class="text-4xl font-bold text-white-900 mb-4">
               {{ movieData()?.title }} ({{
                 movieData()?.release_date?.slice(0, 4)
               }})
-            </h2>
-            <p>Description</p>
-            <h3>Users marks</h3>
-            <h4>Overview</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur
-              necessitatibus possimus pariatur culpa! Labore, ea! Ullam velit
-              illo ipsam consequatur veniam, placeat, quos quod harum architecto
-              commodi quia minima distinctio!
+            </h1>
+            <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
+            <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
+            <p class="w-[80%]">
+              {{ movieData()?.overview }}
             </p>
           </div>
         </div>
