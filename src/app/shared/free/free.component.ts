@@ -43,11 +43,11 @@ import { RouterModule } from '@angular/router';
             [@fadeAnimation]>
             <img
               decoding="async"
-              [routerLink]="['/movie', movie.id]"
+              [routerLink]="['/tv', movie.id]"
               class="image"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
-            <a [routerLink]="['/movie', movie.id]">
+            <a [routerLink]="['/tv', movie.id]">
               <p>{{ getMovieTitle(movie) }}</p>
             </a>
             <p>{{ getReleaseDate(movie) }}</p>
@@ -78,10 +78,8 @@ export class FreeComponent implements OnInit {
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   imgUrl = '';
-  apiUrlmovies =
-    'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1';
-  apiUrlWeek =
-    'https://api.themoviedb.org/3/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc';
+  apiUrlmovies = 'https://api.themoviedb.org/3/tv/airing_today';
+  apiUrlWeek = 'https://api.themoviedb.org/3/tv/on_the_air';
   activeButton = 'movies';
 
   constructor(

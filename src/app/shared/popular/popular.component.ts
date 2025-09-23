@@ -32,7 +32,7 @@ import { RouterModule } from '@angular/router';
             upcoming: activeButton === 'upcoming',
           }"></div>
         <button (click)="switchTo('tv')" [class.active]="activeButton === 'tv'">
-          On TV
+          Now Playing
         </button>
         <button
           (click)="switchTo('top')"
@@ -93,8 +93,8 @@ export class PopularComponent implements OnInit {
   imgUrl = '';
   apiUrlPopular =
     'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
-  apiUrlTv = 'https://api.themoviedb.org/3/discover/tv';
-  apiUrlTop = 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1';
+  apiUrlTv = 'https://api.themoviedb.org/3/movie/now_playing';
+  apiUrlTop = 'https://api.themoviedb.org/3/movie/top_rated';
   apiUrlUpcoming =
     'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
   activeButton = 'popular';

@@ -12,7 +12,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   color: #fff;
-  background-position: center;
+  background-position: top;
   background-attachment: scroll;
   isolation: isolate;
   background-blend-mode: screen;
@@ -96,6 +96,7 @@ section.new__index {
   outline: none;
   color: #00192f;
   flex: 1;
+  opacity: 0.6;
 }
 
 .search-button {

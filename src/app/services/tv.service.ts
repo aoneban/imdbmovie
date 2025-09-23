@@ -2,37 +2,37 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { SinglePerson, CastCombined } from '../interfaces/interface';
+import { SingleMovie, ImagesResponse } from '../interfaces/interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class PersonService {
-  private apiUrl1 = 'https://api.themoviedb.org/3/person/';
-  private apiUrl2 = '?language=en-US';
+export class TvService {
+  private apiUrlStart = 'https://api.themoviedb.org/3/tv/';
+  private apiUrlEnd = '?language=en-US';
+  private apiUrlEnd2 = '/images';
 
   constructor(private http: HttpClient) {}
 
-  getDataPerson(id: number): Observable<SinglePerson> {
+  getDataTv(id: number): Observable<SingleMovie> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<SinglePerson>(`${this.apiUrl1}${id}${this.apiUrl2}`, {
-      headers,
-    });
+    return this.http.get<SingleMovie>(
+      `${this.apiUrlStart}${id}${this.apiUrlEnd}`,
+      { headers }
+    );
   }
 
-  getCombinedCredits(id: number): Observable<CastCombined> {
+  getDataImage(id: number): Observable<ImagesResponse> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<CastCombined>(
-      `${this.apiUrl1}${id}/combined_credits`,
-      {
-        headers,
-      }
+    return this.http.get<ImagesResponse>(
+      `${this.apiUrlStart}${id}${this.apiUrlEnd2}`,
+      { headers }
     );
   }
 }

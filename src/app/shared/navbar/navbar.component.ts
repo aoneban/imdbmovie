@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header class="w-full bg-white-950 py-3">
+    <header class="w-full bg-white-950 py-3 border-b border-gray-200">
       <div class="content">
         <div
           class="content__wrapper flex justify-center max-w-screen-xl mx-auto">

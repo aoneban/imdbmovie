@@ -9,6 +9,7 @@ import { MovieCast } from '../interfaces/interface';
 })
 export class CastService {
   private apiUrl1 = 'https://api.themoviedb.org/3/movie/';
+  private apiUrl0 = 'https://api.themoviedb.org/3/tv/';
   private apiUrl2 = '/credits?language=en-US';
 
   constructor(private http: HttpClient) {}
@@ -19,6 +20,16 @@ export class CastService {
       Accept: 'application/json',
     });
     return this.http.get<MovieCast>(`${this.apiUrl1}${id}${this.apiUrl2}`, {
+      headers,
+    });
+  }
+
+  getDataTvCast(id: number): Observable<MovieCast> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${environment.apiKey}`,
+      Accept: 'application/json',
+    });
+    return this.http.get<MovieCast>(`${this.apiUrl0}${id}${this.apiUrl2}`, {
       headers,
     });
   }

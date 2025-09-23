@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./pages/movie/movie.component').then(m => m.MovieComponent),
   },
   {
+    path: 'tv/:id',
+    loadComponent: () =>
+      import('./pages/tv/tv.component').then(m => m.TvComponent),
+  },
+  {
     path: 'persons/:id',
     loadComponent: () =>
       import('./pages/persons/persons.component').then(m => m.PersonsComponent),
@@ -21,6 +26,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/movie/all-actors/all-actors.component').then(
         m => m.AllActorsComponent
+      ),
+  },
+  {
+    path: 'tv-cast/:id',
+    loadComponent: () =>
+      import('./pages/tv/all-tv-actors/all-tv-actors.component').then(
+        m => m.AllTvActorsComponent
       ),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
