@@ -49,13 +49,8 @@ import { RouterModule } from '@angular/router';
             Known for
           </h4>
           <div class="movies__wrapper">
-            <div
-              class="movies__wrapper-block"
-              [@listAnimation]="topCast().length">
-              <div
-                class="movies__wrapper-cart"
-                *ngFor="let movie of topCast()"
-                [@fadeAnimation]>
+            <div class="movies__wrapper-block">
+              <div class="movies__wrapper-cart" *ngFor="let movie of topCast()">
                 <img
                   [routerLink]="['/movie', movie.id]"
                   class="image"
