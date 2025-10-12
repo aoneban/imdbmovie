@@ -68,6 +68,35 @@
   margin: 0 auto;
 }
 
+.play-triangle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  background: white;
+  z-index: 30;
+  clip-path: polygon(25% 15%, 25% 85%, 85% 50%);
+  border-radius: 18px;
+  transform: translate(-50%, -50%) scale(1);
+  transition: transform 0.4s ease;
+}
+
+.image {
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.img-wrapper:hover .play-triangle {
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.img-wrapper:hover .image {
+  transform: translate(-0.2%, -0.2%) scale(1.05);
+}
+
 .trending {
   margin-top: 20px;
   position: relative;

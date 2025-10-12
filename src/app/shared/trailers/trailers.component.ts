@@ -51,10 +51,13 @@ import { Movie } from '../../interfaces/interface';
               class="movies__wrapper-cart cart"
               *ngFor="let movie of newData"
               [@fadeAnimation]>
-              <img
-                class="image"
-                src="{{ startUrl + movie.backdrop_path }}"
-                alt="{{ movie.title }}" />
+              <div class="img-wrapper relative w-full h-full">
+                <div class="play-triangle"></div>
+                <img
+                  class="image relative z-10"
+                  [src]="startUrl + movie.backdrop_path"
+                  alt="{{ movie.title }}" />
+              </div>
               <p>{{ getMovieTitle(movie) }}</p>
             </div>
           </div>
