@@ -40,13 +40,18 @@ import { RouterModule } from '@angular/router';
       <div class="movies__wrapper">
         <div class="movies__wrapper-block" [@listAnimation]="newData.length">
           <div
-            class="movies__wrapper-cart"
+            class="movies__wrapper-cart relative overflow-hidden"
             *ngFor="let movie of newData"
             [@fadeAnimation]>
+            <div
+              *ngIf="!loadedImages.has(movie.id)"
+              class="absolute inset-0 bg-gray-700 animate-pulse rounded-lg"></div>
             <img
               decoding="async"
               [routerLink]="['/movie', movie.id]"
-              class="image"
+              (load)="onImageLoad(movie.id)"
+              class="image transition-opacity duration-700"
+              [class.opacity-0]="!loadedImages.has(movie.id)"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
             <a [routerLink]="['/movie', movie.id]">
@@ -84,6 +89,7 @@ export class TrendsComponent implements OnInit {
   apiUrlWeek =
     'https://api.themoviedb.org/3/trending/movie/week?language=en-US';
   activeButton = 'today';
+  loadedImages = new Set<number>();
 
   constructor(
     private trendingService: TrendingService,
@@ -102,6 +108,10 @@ export class TrendsComponent implements OnInit {
       this.newData = data.results;
       this.cdr.markForCheck();
     });
+  }
+
+  onImageLoad(id: number) {
+    this.loadedImages.add(id);
   }
 
   getMovieTitle(movie: Movie): string {

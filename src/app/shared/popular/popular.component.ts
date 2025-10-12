@@ -50,15 +50,25 @@ import { RouterModule } from '@angular/router';
       <div class="movies__wrapper">
         <div class="movies__wrapper-block" [@listAnimation]="newData.length">
           <div
-            class="movies__wrapper-cart"
+            class="movies__wrapper-cart relative overflow-hidden"
             *ngFor="let movie of newData; trackBy: trackByMovie"
             [@fadeAnimation]>
+            <div
+              *ngIf="!loadedImages.has(movie.id)"
+              class="absolute inset-0 bg-gray-300 animate-pulse mb-12 rounded-lg z-10">
+              <img
+                *ngIf="!loadedImages.has(movie.id)"
+                class="absolute inset-0 w-full h-full p-5 object-cover bg-gray-300"
+                src="/placeholder.svg"
+                alt="placeholder" />
+            </div>
             <img
               decoding="async"
               [routerLink]="['/movie', movie.id]"
-              (load)="onImageLoad($event)"
-              class="image fade-in"
-              src="{{ startUrl + movie.poster_path }}"
+              (load)="onImageLoad(movie.id)"
+              class="image transition-opacity duration-700 relative z-0"
+              [class.opacity-0]="!loadedImages.has(movie.id)"
+              [src]="startUrl + movie.poster_path"
               alt="{{ movie.title }}" />
             <a [routerLink]="['/movie', movie.id]">
               <p>{{ getMovieTitle(movie) }}</p>
@@ -74,14 +84,14 @@ import { RouterModule } from '@angular/router';
     trigger('fadeAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('1000ms 1000ms ease-out', style({ opacity: 1 })),
+        animate('1000ms 200ms ease-out', style({ opacity: 1 })),
       ]),
       transition(':leave', [animate('400ms', style({ opacity: 0 }))]),
     ]),
     trigger('listAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('1000ms 1000ms ease-out', style({ opacity: 1 })),
+        animate('1000ms 200ms ease-out', style({ opacity: 1 })),
       ]),
       transition(':leave', [animate('400ms', style({ opacity: 0 }))]),
     ]),
@@ -98,6 +108,7 @@ export class PopularComponent implements OnInit {
   apiUrlUpcoming =
     'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
   activeButton = 'popular';
+  loadedImages = new Set<number>();
 
   constructor(
     private trendingService: TrendingService,
@@ -112,8 +123,11 @@ export class PopularComponent implements OnInit {
     return movie.id;
   }
 
-  onImageLoad(event: Event) {
-    (event.target as HTMLImageElement).classList.add('loaded');
+  onImageLoad(id: number) {
+    setTimeout(() => {
+      this.loadedImages.add(id);
+      this.cdr.markForCheck();
+    }, 2000);
   }
 
   switchTo(button: string): void {

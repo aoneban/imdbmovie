@@ -38,12 +38,24 @@ import { RouterModule } from '@angular/router';
       <div class="movies__wrapper">
         <div class="movies__wrapper-block" [@listAnimation]="newData.length">
           <div
-            class="movies__wrapper-cart"
+            class="movies__wrapper-cart relative overflow-hidden"
             *ngFor="let movie of newData"
             [@fadeAnimation]>
+            <div
+              *ngIf="!loadedImages.has(movie.id)"
+              class="absolute inset-0 bg-gray-300 animate-pulse mb-12 rounded-lg z-10">
+              <img
+                *ngIf="!loadedImages.has(movie.id)"
+                class="absolute inset-0 w-full h-full p-5 object-cover bg-gray-300"
+                src="/placeholder.svg"
+                alt="placeholder" />
+            </div>
             <img
               decoding="async"
               [routerLink]="['/tv', movie.id]"
+              (load)="onImageLoad(movie.id)"
+              class="image transition-opacity duration-700 relative z-0"
+              [class.opacity-0]="!loadedImages.has(movie.id)"
               class="image"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
@@ -81,6 +93,7 @@ export class FreeComponent implements OnInit {
   apiUrlmovies = 'https://api.themoviedb.org/3/tv/airing_today';
   apiUrlWeek = 'https://api.themoviedb.org/3/tv/on_the_air';
   activeButton = 'movies';
+  loadedImages = new Set<number>();
 
   constructor(
     private trendingService: TrendingService,
@@ -99,6 +112,13 @@ export class FreeComponent implements OnInit {
       this.newData = data.results;
       this.cdr.markForCheck();
     });
+  }
+
+  onImageLoad(id: number) {
+    setTimeout(() => {
+      this.loadedImages.add(id);
+      this.cdr.markForCheck();
+    }, 2000);
   }
 
   fetchData(apiUrl: string): void {
