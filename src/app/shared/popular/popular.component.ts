@@ -46,7 +46,7 @@ import { RouterModule } from '@angular/router';
         </button>
       </div>
     </div>
-    <section class="movies__main">
+    <section class="movies__main bg-none">
       <div class="movies__wrapper">
         <div class="movies__wrapper-block" [@listAnimation]="newData.length">
           <div
@@ -74,14 +74,14 @@ import { RouterModule } from '@angular/router';
     trigger('fadeAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('1000ms', style({ opacity: 1 })),
+        animate('1000ms 1000ms ease-out', style({ opacity: 1 })),
       ]),
       transition(':leave', [animate('400ms', style({ opacity: 0 }))]),
     ]),
     trigger('listAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
-        animate('1000ms', style({ opacity: 1 })),
+        animate('1000ms 1000ms ease-out', style({ opacity: 1 })),
       ]),
       transition(':leave', [animate('400ms', style({ opacity: 0 }))]),
     ]),

@@ -9,7 +9,7 @@
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
     "lint:fix": "ng lint --fix",
-    "prepare": "husky init"
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
