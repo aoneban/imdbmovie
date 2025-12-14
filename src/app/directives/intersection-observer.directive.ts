@@ -32,7 +32,6 @@ export class IntersectionObserverDirective implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // не эмитим на сервере — чтобы SSR не рендерил компонент автоматически
     if (!isPlatformBrowser(this.platformId)) return;
 
     this.ngZone.runOutsideAngular(() => {

@@ -11,6 +11,14 @@ header {
   transition: 0.5s ease;
 }
 
+.logo {
+  border: 1px solid #ffffff;
+  padding: 5px;
+  border-radius: 5px;
+  position: relative;
+  bottom: 8px;
+}
+
 .dropdown .dropbtn {
   font-size: 17px;
   border: none;

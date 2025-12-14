@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 // import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
-import { Movie } from '../../interfaces/interface';
+import { Movie, VideoResult, VideoResponse } from '../../interfaces/interface';
+import { TrailerMovieService } from '../../services/trailermovie.service';
+import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @Component({
   selector: 'app-trailers',
-  imports: [CommonModule],
+  imports: [CommonModule, YouTubePlayerModule],
   template: `
     <section
       [ngStyle]="{ 'background-image': 'url(' + startUrl + imgUrl + ')' }"
@@ -51,7 +53,13 @@ import { Movie } from '../../interfaces/interface';
               class="movies__wrapper-cart cart"
               *ngFor="let movie of newData"
               [@fadeAnimation]>
-              <div class="img-wrapper relative w-full h-full">
+              <div
+                class="img-wrapper relative w-full h-full"
+                role="button"
+                tabindex="0"
+                (click)="onImageClick(movie.id)"
+                (keydown.enter)="onImageClick(movie.id)"
+                (keydown.space)="onImageClick(movie.id)">
                 <div class="play-triangle"></div>
                 <img
                   class="image relative z-10"
@@ -62,6 +70,17 @@ import { Movie } from '../../interfaces/interface';
             </div>
           </div>
         </div>
+        <div
+          class="modal-overlay"
+          *ngIf="selectedVideoId"
+          (click)="closeModal()"
+          (keyup.enter)="closeModal()"
+          (keyup.space)="closeModal()">
+          // eslint-disable-next-line @angular-eslint/template/interactive-supports-focus
+          <div class="modal-content" (click)="$event.stopPropagation()">
+            <youtube-player [videoId]="selectedVideoId"></youtube-player>
+          </div>
+        </div>
       </section>
     </section>
   `,
@@ -69,6 +88,8 @@ import { Movie } from '../../interfaces/interface';
 })
 export class TrailersComponent implements OnInit {
   newData: Movie[] = [];
+  trailersData: VideoResult[] = [];
+  selectedVideoId: string | null = null;
   startUrl = 'https://image.tmdb.org/t/p/w1280/';
   imgUrl = '';
   apiUrl1 =
@@ -78,7 +99,10 @@ export class TrailersComponent implements OnInit {
   apiUrl4 = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
   activeButton = 'today';
 
-  constructor(private trendingService: TrendingService) {}
+  constructor(
+    private trendingService: TrendingService,
+    private trailerMovie: TrailerMovieService
+  ) {}
 
   ngOnInit(): void {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
@@ -119,5 +143,36 @@ export class TrailersComponent implements OnInit {
   }
   getMovieTitle(movie: Movie): string {
     return movie.title || movie.name || 'Untitled';
+  }
+
+  onImageClick(id: number): void {
+    this.trailerMovie.getTrailersVideo(id).subscribe(
+      (data: VideoResponse) => {
+        const video = data.results.find(v => v.site === 'YouTube');
+        if (video) {
+          this.selectedVideoId = video.key;
+          this.stopScrolling();
+        }
+      },
+      error => console.error(error)
+    );
+  }
+
+  stopScrolling(): void {
+    document.body.style.overflow = 'hidden';
+    this.indexes('-1');
+  }
+
+  closeModal(): void {
+    this.selectedVideoId = null;
+    document.body.style.overflow = '';
+    this.indexes('1');
+  }
+
+  indexes(ind: string) {
+    const switches = document.querySelectorAll('.switch');
+    const movies = document.querySelectorAll('.movies__wrapper');
+    switches.forEach(el => ((el as HTMLElement).style.zIndex = ind));
+    movies.forEach(el => ((el as HTMLElement).style.zIndex = ind));
   }
 }

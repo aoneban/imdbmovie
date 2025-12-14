@@ -6,13 +6,21 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <header class="w-full bg-blue-950 py-5">
+    <header class="w-full bg-blue-950 pt-[22px] pb-[5px]">
       <div class="content">
         <div
           class="content__wrapper flex justify-between max-w-screen-xl mx-auto">
           <div class="content__wrapper-navbar_left">
             <ul class="flex gap-x-5">
-              <li><a href="" [routerLink]="['/main']">Logo</a></li>
+              <li>
+                <a href="" [routerLink]="['/main']">
+                  <img
+                    class="logo"
+                    decoding="async"
+                    src="/logo.png"
+                    alt="logo" />
+                </a>
+              </li>
               <li>
                 <div class="dropdown">
                   <button class="dropbtn">Movies</button>
