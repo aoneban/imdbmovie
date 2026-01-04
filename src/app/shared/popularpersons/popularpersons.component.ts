@@ -18,7 +18,7 @@ import { RouterModule } from '@angular/router';
       <h3 class="trending">Most popular celebrities</h3>
     </div>
     <section class="movies__main bg-none">
-      <div class="movies__wrapper">
+      <div class="movies__wrapper overflow-x-auto focus:outline-none">
         <div
           class="movies__wrapper-block add"
           [@listAnimation]="newData().length">
@@ -35,10 +35,10 @@ import { RouterModule } from '@angular/router';
                 alt="{{ person.name }}" />
             </div>
             <a [routerLink]="['/persons', person.id]">
-              <p>{{ person.name }}</p>
+              <p class="font-bold text-[17px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ person.name }}</p>
             </a>
             <a>
-              <p>
+              <p class="text-[15px] pl-[6px] text-gray-500">
                 {{
                   person.known_for[0].name !== undefined
                     ? person.known_for[0].name

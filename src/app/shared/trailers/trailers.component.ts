@@ -66,7 +66,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
                   [src]="startUrl + movie.backdrop_path"
                   alt="{{ movie.title }}" />
               </div>
-              <p>{{ getMovieTitle(movie) }}</p>
+              <p class="font-bold text-[16px] pl-[6px] pb-[2px]">{{ getMovieTitle(movie) }}</p>
             </div>
           </div>
         </div>
@@ -76,7 +76,6 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
           (click)="closeModal()"
           (keyup.enter)="closeModal()"
           (keyup.space)="closeModal()">
-          // eslint-disable-next-line @angular-eslint/template/interactive-supports-focus
           <div class="modal-content" (click)="$event.stopPropagation()">
             <youtube-player [videoId]="selectedVideoId"></youtube-player>
           </div>
@@ -101,7 +100,8 @@ export class TrailersComponent implements OnInit {
 
   constructor(
     private trendingService: TrendingService,
-    private trailerMovie: TrailerMovieService
+    private trailerMovie: TrailerMovieService,
+    private trailerSeries: TrailerMovieService
   ) {}
 
   ngOnInit(): void {
@@ -152,9 +152,24 @@ export class TrailersComponent implements OnInit {
         if (video) {
           this.selectedVideoId = video.key;
           this.stopScrolling();
+          console.log(this.selectedVideoId)
         }
       },
-      error => console.error(error)
+      error => {
+        console.log(id)
+        this.trailerSeries.getTrailersSeries(id).subscribe(
+          (data: VideoResponse) => {
+            const video2 = data.results.find(v => v.site === 'YouTube');
+            if (video2) {
+              this.selectedVideoId = video2.key;
+              this.stopScrolling();
+              console.log(id)
+              console.log(this.selectedVideoId)
+            }
+          },
+          error => console.error(error)
+        );
+      }
     );
   }
 

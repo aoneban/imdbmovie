@@ -71,13 +71,13 @@
 }
 
 .movies__wrapper-block::-webkit-scrollbar {
-  height: 9px;
+  height: 13px;
 }
 
 .movies__wrapper-block::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #ccc;
   border-radius: 10px;
-  border: 2px solid #ccc;
+  border: 2px solid #f3efef;
 }
 
 .movies__wrapper-block::-webkit-scrollbar-button {

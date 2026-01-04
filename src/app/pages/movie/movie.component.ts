@@ -37,7 +37,11 @@ import { AsideComponent } from './aside/aside.component';
   template: `
     <app-header></app-header>
     <app-navbar></app-navbar>
-    <section class="inner__content new__index">
+    <div *ngIf="isLoading" class="preloader">
+      <div class="loader"></div>
+      <p>Loading...</p>
+    </div>
+    <section *ngIf="!isLoading" class="inner__content new__index">
       <div
         [ngStyle]="{ 'background-image': backgroundImage() }"
         class="background-movie">
@@ -84,9 +88,62 @@ import { AsideComponent } from './aside/aside.component';
         class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
   `,
-  styles: ``,
+  styles: `
+    .preloader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding-bottom: 150px;
+    }
+
+    .loader {
+      width: 150px;
+      aspect-ratio: 1;
+      display: grid;
+      border: 4px solid #0000;
+      border-radius: 150%;
+      border-right-color: #8225b0;
+      animation: l15 2s infinite linear;
+    }
+    .loader::before {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(231, 102, 177);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(174, 25, 191);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      margin: 8px;
+      animation-duration: 3s;
+    }
+    @keyframes l15 {
+      100% {
+        transform: rotate(1turn);
+      }
+    }
+
+    header,
+    main,
+    footer {
+      display: none;
+    }
+  `,
 })
 export class MovieComponent implements OnInit {
+  isLoading = false;
   startUrl = 'https://image.tmdb.org/t/p/w500';
   startUrl2 = 'https://image.tmdb.org/t/p/w1920';
   movieId: number | undefined;
@@ -110,15 +167,18 @@ export class MovieComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.movieId = id ? Number(id) : undefined;
-      if (this.movieId !== undefined) {
-        this.fetchCast(this.movieId);
-        this.fetchData(this.movieId);
-        this.fetchDataImages(this.movieId);
-      }
-    });
+    this.isLoading = true;
+    setTimeout(() => {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        this.movieId = id ? Number(id) : undefined;
+        if (this.movieId !== undefined) {
+          this.fetchCast(this.movieId);
+          this.fetchData(this.movieId);
+          this.fetchDataImages(this.movieId);
+        }
+      });
+    }, 1000);
   }
 
   fetchData(id: number): void {
@@ -126,9 +186,11 @@ export class MovieComponent implements OnInit {
       data => {
         this.movieData.set(data);
         console.log('Movie data: ', this.movieData());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }
@@ -138,9 +200,11 @@ export class MovieComponent implements OnInit {
       data => {
         this.movieDataImg.set(data);
         console.log('Movie images: ', this.movieDataImg());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }
@@ -150,9 +214,11 @@ export class MovieComponent implements OnInit {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieAllTeam.set(data);
         console.log('Data Cast: ', this.movieAllTeam());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }

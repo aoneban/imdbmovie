@@ -8,7 +8,8 @@ import { VideoResponse } from '../interfaces/interface';
   providedIn: 'root',
 })
 export class TrailerMovieService {
-  private apiUrlStart = 'https://api.themoviedb.org/3/movie/';
+  private apiUrlStartMovie = 'https://api.themoviedb.org/3/movie/';
+  private apiUrlStartSeries = 'https://api.themoviedb.org/3/tv/';
   private apiUrlEnd = '/videos?language=en-US';
 
   constructor(private http: HttpClient) {}
@@ -19,7 +20,18 @@ export class TrailerMovieService {
       Accept: 'application/json',
     });
     return this.http.get<VideoResponse>(
-      `${this.apiUrlStart}${id}${this.apiUrlEnd}`,
+      `${this.apiUrlStartMovie}${id}${this.apiUrlEnd}`,
+      { headers }
+    );
+  }
+
+  getTrailersSeries(id: number): Observable<VideoResponse> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${environment.apiKey}`,
+      Accept: 'application/json',
+    });
+    return this.http.get<VideoResponse>(
+      `${this.apiUrlStartSeries}${id}${this.apiUrlEnd}`,
       { headers }
     );
   }

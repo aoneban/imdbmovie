@@ -23,6 +23,7 @@ module.exports = tseslint.config(
     processor: angular.processInlineTemplates,
     rules: {
       'no-unused-vars': 'off',
+      "@angular-eslint/template/interactive-supports-focus": "warn",
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': [
         'warn',

@@ -7,9 +7,8 @@
 
 .background-trailers {
   position: relative;
-  min-height: 300px;
-  height: 22vw;
-  max-height: 350px;
+  height: auto;
+  max-height: 355px;
   background-color: rgba(0, 0, 0, 0.2);
   background-size: cover;
   background-repeat: no-repeat;
@@ -50,13 +49,13 @@
 }
 
 .movies__trailers-block::-webkit-scrollbar {
-  height: 9px;
+  height: 13px;
 }
 
 .movies__trailers-block::-webkit-scrollbar-thumb {
-  background-color: #888;
+  background-color: #ccc;
   border-radius: 10px;
-  border: 2px solid #ccc;
+  border: 2px solid #f1eeee;
 }
 
 .movies__trailers-block::-webkit-scrollbar-button {

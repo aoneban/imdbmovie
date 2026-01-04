@@ -55,9 +55,9 @@ import { RouterModule } from '@angular/router';
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
             <a [routerLink]="['/movie', movie.id]">
-              <p>{{ getMovieTitle(movie) }}</p>
+              <p class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ getMovieTitle(movie) }}</p>
             </a>
-            <p>{{ getReleaseDate(movie) }}</p>
+            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getReleaseDate(movie) }}</p>
           </div>
         </div>
       </div>
@@ -118,7 +118,12 @@ export class TrendsComponent implements OnInit {
     return movie.title || movie.name || 'Untitled';
   }
 
-  getReleaseDate(date: Movie): string {
-    return date.release_date || date.first_air_date || 'Soon...';
+  getReleaseDate(movie: Movie): string {
+    const dateMovie = movie.release_date || movie.first_air_date || 'Soon...';
+    const year = dateMovie.slice(0, 4);
+    const monthNumber = Number(dateMovie.slice(5, 7));
+    const monthName = new Date(2020, monthNumber - 1).toLocaleString('en', { month: 'long' });
+    const day = dateMovie.slice(-2);
+    return `${monthName.slice(0, 3)} ${day}, ${year}`;
   }
 }
