@@ -20,6 +20,7 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { TvActorsComponent } from './tv-actors/tv-actors.component';
 import { TvAsideComponent } from './tv-aside/tv-aside.component';
+import { FooterComponent } from "../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-tv',
@@ -30,7 +31,8 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
     RouterModule,
     TvActorsComponent,
     TvAsideComponent,
-  ],
+    FooterComponent
+],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 
@@ -81,6 +83,7 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
         [props]="tvData()"
         class="w-1/5 md:flex-row flex items-center"></app-tv-aside>
     </section>
+    <app-footer></app-footer>
   `,
   styles: ``,
 })

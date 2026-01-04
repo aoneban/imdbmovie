@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../shared/header/header.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 import { SinglePerson, CastCombined } from '../../interfaces/interface';
 import { PersonService } from '../../services/person.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
   selector: 'persons',
   imports: [
     HeaderComponent,
+    FooterComponent,
     NavbarComponent,
     CommonModule,
     BiographyComponent,
@@ -65,6 +67,7 @@ import { RouterModule } from '@angular/router';
         </div>
       </div>
     </section>
+    <app-footer></app-footer>
   `,
   styles: ``,
 })

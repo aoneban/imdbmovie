@@ -20,11 +20,13 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
 import { AsideComponent } from './aside/aside.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 
 @Component({
   selector: 'movie',
   imports: [
     HeaderComponent,
+    FooterComponent,
     CommonModule,
     NavbarComponent,
     ActorsComponent,
@@ -87,6 +89,7 @@ import { AsideComponent } from './aside/aside.component';
         [props]="movieData()"
         class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
+    <app-footer></app-footer>
   `,
   styles: `
     .preloader {

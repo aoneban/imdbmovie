@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../../shared/header/header.component';
+import { FooterComponent } from '../../../shared/footer/footer.component';
 import { MovieService } from '../../../services/movie.service';
 import { CastService } from '../../../services/cast.service';
 import {
@@ -15,7 +16,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-all-actors',
-  imports: [HeaderComponent, RouterModule, NavbarComponent, CommonModule],
+  imports: [HeaderComponent, FooterComponent, RouterModule, NavbarComponent, CommonModule],
   template: `
     <app-header></app-header>
     <app-navbar></app-navbar>
@@ -106,6 +107,7 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
     </section>
+    <app-footer></app-footer>
   `,
   styles: ``,
 })

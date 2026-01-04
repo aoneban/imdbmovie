@@ -3,6 +3,7 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { WelcomeComponent } from '../../shared/welcome/welcome.component';
 import { TrendsComponent } from '../../shared/trends/trends.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 // import { PopularComponent } from '../../shared/popular/popular.component';
 // import { FreeComponent } from '../../shared/free/free.component';
 // import { PopularPersonsComponent } from '../../shared/popularpersons/popularpersons.component';
@@ -12,6 +13,7 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
   selector: 'main',
   imports: [
     HeaderComponent,
+    FooterComponent,
     WelcomeComponent,
     TrendsComponent,
     TrailersComponent,
@@ -49,6 +51,7 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       [rootMargin]="'10px'"
       style="height: 1px;"></div>
     <ng-template #personsContainer></ng-template>
+    <app-footer></app-footer>
   `,
   styles: ``,
 })
