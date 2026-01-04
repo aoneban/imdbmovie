@@ -105,21 +105,23 @@
 .switch-trailers {
   position: relative;
   display: flex;
-  background: #1a1a1a;
+  background: none;
   border-radius: 30px;
   padding: 4px;
   width: fit-content;
   margin: 20px 0;
+  border: 1px solid blueviolet;
 
   button {
     position: relative;
     width: 100px;
     border: none;
-    padding: 8px 15px;
+    padding: 4px 15px;
     border-radius: 25px;
     background: transparent;
     color: #fff;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
     z-index: 2;
 
@@ -132,7 +134,7 @@
     position: absolute;
     left: 4px;
     top: 4px;
-    background: #fff;
+    background: linear-gradient(to right, #d478d8, #752576);
     height: calc(100% - 8px);
     width: 100px;
     border-radius: 25px;

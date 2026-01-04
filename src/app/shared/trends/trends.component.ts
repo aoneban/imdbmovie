@@ -46,6 +46,22 @@ import { RouterModule } from '@angular/router';
             <div
               *ngIf="!loadedImages.has(movie.id)"
               class="absolute inset-0 bg-gray-700 animate-pulse rounded-lg"></div>
+            <div
+              class="rating"
+              [ngClass]="{
+                'border-2 border-green-500': movie.vote_average >= 7,
+                'border-2 border-yellow-500':
+                  movie.vote_average >= 5 && movie.vote_average < 7,
+                'border-2 border-red-500': movie.vote_average < 5,
+              }">
+              <span class="imdb">imdb</span>
+              <span class="mark">{{ movie.vote_average.toFixed(1) }}</span>
+            </div>
+            <img
+              *ngIf="!loadedImages.has(movie.id)"
+              class="absolute inset-0 w-full h-full p-5 object-cover bg-gray-300"
+              src="/placeholder.svg"
+              alt="placeholder" />
             <img
               decoding="async"
               [routerLink]="['/movie', movie.id]"
@@ -55,9 +71,14 @@ import { RouterModule } from '@angular/router';
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
             <a [routerLink]="['/movie', movie.id]">
-              <p class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ getMovieTitle(movie) }}</p>
+              <p
+                class="font-bold text-[15px] pl-[6px] pt-[15px] pb-[2px] break-words">
+                {{ getMovieTitle(movie) }}
+              </p>
             </a>
-            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getReleaseDate(movie) }}</p>
+            <p class="italic text-[14px] pl-[6px] text-gray-400">
+              {{ getReleaseDate(movie) }}
+            </p>
           </div>
         </div>
       </div>
@@ -107,6 +128,7 @@ export class TrendsComponent implements OnInit {
     this.trendingService.getTrendingDataMovies(apiUrl).subscribe(data => {
       this.newData = data.results;
       this.cdr.markForCheck();
+      console.log(this.newData);
     });
   }
 
@@ -122,7 +144,9 @@ export class TrendsComponent implements OnInit {
     const dateMovie = movie.release_date || movie.first_air_date || 'Soon...';
     const year = dateMovie.slice(0, 4);
     const monthNumber = Number(dateMovie.slice(5, 7));
-    const monthName = new Date(2020, monthNumber - 1).toLocaleString('en', { month: 'long' });
+    const monthName = new Date(2020, monthNumber - 1).toLocaleString('en', {
+      month: 'long',
+    });
     const day = dateMovie.slice(-2);
     return `${monthName.slice(0, 3)} ${day}, ${year}`;
   }

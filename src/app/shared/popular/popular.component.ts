@@ -32,7 +32,7 @@ import { RouterModule } from '@angular/router';
             upcoming: activeButton === 'upcoming',
           }"></div>
         <button (click)="switchTo('tv')" [class.active]="activeButton === 'tv'">
-          Now Playing
+          Now
         </button>
         <button
           (click)="switchTo('top')"
@@ -61,6 +61,17 @@ import { RouterModule } from '@angular/router';
                 class="absolute inset-0 w-full h-full p-5 object-cover bg-gray-300"
                 src="/placeholder.svg"
                 alt="placeholder" />
+            </div>
+            <div
+              class="rating"
+              [ngClass]="{
+                'border-2 border-green-500': movie.vote_average >= 7,
+                'border-2 border-yellow-500':
+                  movie.vote_average >= 5 && movie.vote_average < 7,
+                'border-2 border-red-500': movie.vote_average < 5,
+              }">
+              <span class="imdb">imdb</span>
+              <span class="mark">{{ movie.vote_average.toFixed(1) }}</span>
             </div>
             <img
               decoding="async"

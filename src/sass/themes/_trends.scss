@@ -52,9 +52,45 @@
 }
 
 .movies__wrapper-cart {
+  position: relative;
   flex: 0 0 auto;
   width: 9rem;
   scroll-snap-align: start;
+}
+
+.rating {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 35px;
+  min-height: 35px;
+  font-size: 14px;
+  border-radius: 50px;
+  background-color: #1a1a1a;
+  line-height: 80%;
+  left: 15px;
+  bottom: 43px;
+  z-index: 100000;
+  border: 2px solid green;
+}
+
+.imdb {
+  font-size: 8px;
+  font-weight: normal;
+  color: #f3efef;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.mark {
+  font-weight: bold;
+  color: #f3efef;
+  margin: 0;
+  padding: 0;
+  gap: 0;
 }
 
 .image {
@@ -93,49 +129,47 @@
 .switch {
   position: relative;
   display: flex;
-  background: #1a1a1a;
+  background: none!important;
+  border: 1px solid blueviolet;
   color: #fff;
   border-radius: 30px;
-  height: 45px;
-  padding: 4px;
   width: fit-content;
-  margin: 20px 0;
-}
+  margin: 5px 0;
 
-button {
-  position: relative;
-  width: 100px;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 25px;
-  background: transparent;
-  color: #fff;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 2;
+  button {
+    position: relative;
+    width: 100px;
+    padding: 0px 15px;
+    border-radius: 25px;
+    background: none!important;
+    color: #111;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 2;
 
-  &.active {
-    color: #000;
-  }
-}
-
-.back {
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  background: #fff;
-  height: calc(100% - 8px);
-  width: 100px;
-  border-radius: 25px;
-  transition: transform 0.3s ease-in-out;
-  z-index: 1;
-
-  &.today {
-    transform: translateX(0);
+    &.active {
+      color: #000;
+    }
   }
 
-  &.this-week {
-    transform: translateX(100px);
+  .back {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    background: linear-gradient(to right, #d478d8, #752576);;
+    width: 100px;
+    border-radius: 25px;
+    transition: transform 0.3s ease-in-out;
+    z-index: 1;
+
+    &.today {
+      transform: translateX(0);
+    }
+
+    &.this-week {
+      transform: translateX(100px);
+    }
   }
 }
 
