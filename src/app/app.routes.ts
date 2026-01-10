@@ -35,5 +35,10 @@ export const routes: Routes = [
         m => m.AllTvActorsComponent
       ),
   },
+  {
+    path: 'search',
+    loadComponent: () =>
+      import('./pages/search/search.component').then(m => m.SearchComponent),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

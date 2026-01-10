@@ -16,9 +16,10 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown-navbar">
                   <button class="dropbtn">Overview &#9662;</button>
                   <div class="dropdown-navbar_content">
-                    <a href="#">Link 1 </a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
+                    <a href="#">Popular</a>
+                    <a href="#">Now playing</a>
+                    <a href="#">Upcoming</a>
+                    <a href="#">Top rated</a>
                   </div>
                 </div>
               </li>

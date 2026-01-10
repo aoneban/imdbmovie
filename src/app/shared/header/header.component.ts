@@ -25,9 +25,10 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">Movies</button>
                   <div class="dropdown-content">
-                    <a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
+                    <a href="#">Popular</a>
+                    <a href="#">Now playing</a>
+                    <a href="#">Upcoming</a>
+                    <a href="#">Top rated</a>
                   </div>
                 </div>
               </li>
@@ -35,9 +36,10 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">TV Shows</button>
                   <div class="dropdown-content">
-                    <a href="#">Link 4</a>
-                    <a href="#">Link 5</a>
-                    <a href="#">Link 6</a>
+                    <a href="#">Popular</a>
+                    <a href="#">Airing today</a>
+                    <a href="#">On TV</a>
+                    <a href="#">Top rated</a>
                   </div>
                 </div>
               </li>
@@ -45,9 +47,7 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">People</button>
                   <div class="dropdown-content">
-                    <a href="#">Link 7</a>
-                    <a href="#">Link 8</a>
-                    <a href="#">Link 9</a>
+                    <a href="#">Popular</a>
                   </div>
                 </div>
               </li>
@@ -55,8 +55,9 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">More</button>
                   <div class="dropdown-content">
-                    <a href="#">Link 10</a>
-                    <a href="#">Link 11</a>
+                    <a href="#">Discussions</a>
+                    <a href="#">Leaderboard</a>
+                    <a href="#">Support</a>
                   </div>
                 </div>
               </li>

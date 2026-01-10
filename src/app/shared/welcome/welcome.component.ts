@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <section class="inner__content new__index">
       <div
@@ -19,8 +21,16 @@ import { TrendingService } from '../../services/trending.service';
             <input
               type="text"
               placeholder="Search for a movie, TV show, person..."
-              class="search-input" />
-            <button class="search-button">Search</button>
+              class="search-input"
+              [(ngModel)]="userInput"
+              (keyup.enter)="searchButton.click()" />
+            <button
+              #searchButton
+              class="search-button"
+              [routerLink]="['/search']"
+              [queryParams]="{ query: userInput }">
+              Search
+            </button>
           </div>
         </div>
       </div>
@@ -32,6 +42,7 @@ export class WelcomeComponent implements OnInit {
   apiUrl1 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w1280/';
   imgUrl = '';
+  userInput: string | undefined;
 
   constructor(private trendingService: TrendingService) {}
 
@@ -50,4 +61,8 @@ export class WelcomeComponent implements OnInit {
   getRandomNumber() {
     return Math.floor(Math.random() * 20);
   }
+
+  // showName(value: string | undefined) {
+  //   alert(value);
+  // }
 }

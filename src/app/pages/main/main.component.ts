@@ -4,9 +4,6 @@ import { WelcomeComponent } from '../../shared/welcome/welcome.component';
 import { TrendsComponent } from '../../shared/trends/trends.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
-// import { PopularComponent } from '../../shared/popular/popular.component';
-// import { FreeComponent } from '../../shared/free/free.component';
-// import { PopularPersonsComponent } from '../../shared/popularpersons/popularpersons.component';
 import { IntersectionObserverDirective } from '../../directives/intersection-observer.directive';
 
 @Component({
@@ -17,9 +14,6 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
     WelcomeComponent,
     TrendsComponent,
     TrailersComponent,
-    // PopularComponent,
-    // FreeComponent,
-    // PopularPersonsComponent,
     IntersectionObserverDirective,
   ],
 
@@ -28,7 +22,6 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
     <app-welcome></app-welcome>
     <app-trends></app-trends>
     <app-trailers></app-trailers>
-    <!--<app-popular></app-popular> -->
 
     <div
       appIntersectionObserver
@@ -36,7 +29,6 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       [rootMargin]="'50px'"
       style="height: 1px;"></div>
     <ng-template #popularContainer></ng-template>
-    <!-- <app-free></app-free> -->
 
     <div
       appIntersectionObserver
@@ -44,7 +36,7 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       [rootMargin]="'25px'"
       style="height: 1px;"></div>
     <ng-template #freeContainer></ng-template>
-    <!-- <app-popularpersons></app-popularpersons> -->
+
     <div
       appIntersectionObserver
       (visible)="loadPersons()"
@@ -70,7 +62,7 @@ export class MainPageComponent {
   private personsLoaded = false;
 
   async loadPopular() {
-    if (this.popularLoaded) return; // уже создан
+    if (this.popularLoaded) return; 
     this.popularLoaded = true;
 
     const { PopularComponent } = await import(
@@ -80,7 +72,7 @@ export class MainPageComponent {
   }
 
   async loadFree() {
-    if (this.freeLoaded) return; // уже создан
+    if (this.freeLoaded) return;
     this.freeLoaded = true;
 
     const { FreeComponent } = await import('../../shared/free/free.component');
@@ -88,7 +80,7 @@ export class MainPageComponent {
   }
 
   async loadPersons() {
-    if (this.personsLoaded) return; // уже создан
+    if (this.personsLoaded) return; 
     this.personsLoaded = true;
 
     const { PopularPersonsComponent } = await import(
