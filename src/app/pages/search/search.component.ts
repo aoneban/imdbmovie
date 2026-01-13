@@ -22,7 +22,9 @@ import { TruncateWordsPipe } from '../../../pipes/truncate-words.pipe';
   template: `
     <app-header></app-header>
     <section class="search">
-      <h1 class="text-4xl pt-4 pb-4 font-bold text-white-900 mb-4">{{ fromInput }}</h1>
+      <h1 class="text-4xl pt-4 pb-4 font-bold text-white-900 mb-4">
+        {{ fromInput }}
+      </h1>
       <ul>
         <li
           *ngFor="
@@ -45,7 +47,7 @@ import { TruncateWordsPipe } from '../../../pipes/truncate-words.pipe';
                 [src]="startUrl + (movie.poster_path || '')"
                 [alt]="movie?.title || ''" />
             </div>
-  
+
             <div class="basis-[92%] pt-2 pb-2">
               <a [routerLink]="['/movie', movie.id]">
                 <h3 class="text-xl font-bold tracking-tight text-gray-800">
@@ -60,7 +62,21 @@ import { TruncateWordsPipe } from '../../../pipes/truncate-words.pipe';
           </div>
         </li>
       </ul>
-      <div>Pagination will be soon...</div>
+      <div>
+        <button
+          [disabled]="numberPage === 1"
+          (click)="previousPage()"
+          class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
+          Previous
+        </button>
+        <span class="ml-6 mr-6">{{ numberPage }}</span>
+        <button
+          [disabled]="numberPage === totalPages"
+          (click)="nextPage()"
+          class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
+          Next
+        </button>
+      </div>
     </section>
     <app-footer></app-footer>
   `,
@@ -91,6 +107,7 @@ export class SearchComponent {
   startUrl = 'https://image.tmdb.org/t/p/w200';
   fromInput: string | undefined;
   numberPage: number = 1;
+  totalPages: number = 0;
   movieResponse = signal<MovieSearchResponse | undefined>(undefined);
   loadedImages = new Set<number>();
   private apiUrl1 = 'https://api.themoviedb.org/3/search/movie?query=';
@@ -123,6 +140,7 @@ export class SearchComponent {
     this.getDataMovie(text).subscribe(
       data => {
         this.movieResponse.set(data);
+        this.totalPages = data.total_pages;
         console.log('Movie data: ', this.movieResponse());
       },
       error => {
@@ -135,5 +153,18 @@ export class SearchComponent {
       this.loadedImages.add(id);
       this.cdr.markForCheck();
     }, 2000);
+  }
+  nextPage() {
+    this.numberPage += 1;
+    if (this.totalPages !== undefined || this.totalPages !== null) {
+      if (this.numberPage > this.totalPages) this.numberPage = this.totalPages;
+    }
+    if (this.fromInput !== undefined) this.fetchData(this.fromInput);
+  }
+
+  previousPage() {
+    this.numberPage -= 1;
+    if (this.numberPage === 0) this.numberPage = 1;
+    if (this.fromInput !== undefined) this.fetchData(this.fromInput);
   }
 }

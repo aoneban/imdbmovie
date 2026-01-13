@@ -251,6 +251,7 @@ export interface VideoResult {
 export interface MovieSearchResponse {
   page: number;
   results: MovieResult[];
+  total_pages: number;
 }
 
 export interface MovieResult {
