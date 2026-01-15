@@ -61,8 +61,4 @@ export class WelcomeComponent implements OnInit {
   getRandomNumber() {
     return Math.floor(Math.random() * 20);
   }
-
-  // showName(value: string | undefined) {
-  //   alert(value);
-  // }
 }

@@ -3,12 +3,10 @@ import { HeaderComponent } from '../../shared/header/header.component';
 import { FooterComponent } from '../../shared/footer/footer.component';
 import { ActivatedRoute } from '@angular/router';
 import { MovieSearchResponse } from '../../interfaces/interface';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TruncateWordsPipe } from '../../../pipes/truncate-words.pipe';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search',
@@ -110,14 +108,13 @@ export class SearchComponent {
   totalPages: number = 0;
   movieResponse = signal<MovieSearchResponse | undefined>(undefined);
   loadedImages = new Set<number>();
-  private apiUrl1 = 'https://api.themoviedb.org/3/search/movie?query=';
-  private apiUrl2 = '&include_adult=false&language=en-US&page=';
 
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private http: HttpClient
+    private searchService: SearchService
   ) {}
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const query = params['query'];
@@ -125,19 +122,9 @@ export class SearchComponent {
       this.fetchData(query);
     });
   }
-  getDataMovie(text: string): Observable<MovieSearchResponse> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${environment.apiKey}`,
-      Accept: 'application/json',
-    });
-    return this.http.get<MovieSearchResponse>(
-      `${this.apiUrl1}${text}${this.apiUrl2}${this.numberPage}`,
-      { headers }
-    );
-  }
 
   fetchData(text: string): void {
-    this.getDataMovie(text).subscribe(
+    this.searchService.getDataMovie(text, this.numberPage).subscribe(
       data => {
         this.movieResponse.set(data);
         this.totalPages = data.total_pages;
@@ -148,12 +135,14 @@ export class SearchComponent {
       }
     );
   }
+
   onImageLoad(id: number) {
     setTimeout(() => {
       this.loadedImages.add(id);
       this.cdr.markForCheck();
     }, 2000);
   }
+  
   nextPage() {
     this.numberPage += 1;
     if (this.totalPages !== undefined || this.totalPages !== null) {
