@@ -1,6 +1,4 @@
 import { ChangeDetectorRef, Component, signal } from '@angular/core';
-import { HeaderComponent } from '../../shared/header/header.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
 import { ActivatedRoute } from '@angular/router';
 import { MovieSearchResponse } from '../../interfaces/interface';
 import { CommonModule } from '@angular/common';
@@ -11,14 +9,11 @@ import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-search',
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     RouterModule,
     TruncateWordsPipe,
   ],
   template: `
-    <app-header></app-header>
     <section class="search">
       <h1 class="text-4xl pt-4 pb-4 font-bold text-white-900 mb-4">
         {{ fromInput }}
@@ -76,7 +71,6 @@ import { SearchService } from '../../services/search.service';
         </button>
       </div>
     </section>
-    <app-footer></app-footer>
   `,
   styles: `
     .search {

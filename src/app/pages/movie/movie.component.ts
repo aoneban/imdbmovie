@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
 import { MovieService } from '../../services/movie.service';
 import { CastService } from '../../services/cast.service';
 import {
@@ -20,13 +19,10 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
 import { AsideComponent } from './aside/aside.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
 
 @Component({
   selector: 'movie',
   imports: [
-    HeaderComponent,
-    FooterComponent,
     CommonModule,
     NavbarComponent,
     ActorsComponent,
@@ -37,7 +33,6 @@ import { FooterComponent } from '../../shared/footer/footer.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 
   template: `
-    <app-header></app-header>
     <app-navbar></app-navbar>
     <div *ngIf="isLoading" class="preloader">
       <div class="loader"></div>
@@ -89,7 +84,6 @@ import { FooterComponent } from '../../shared/footer/footer.component';
         [props]="movieData()"
         class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
-    <app-footer></app-footer>
   `,
   styles: `
     .preloader {

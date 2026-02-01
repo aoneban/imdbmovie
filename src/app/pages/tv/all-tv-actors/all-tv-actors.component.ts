@@ -1,6 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderComponent } from '../../../shared/header/header.component';
 import { TvService } from '../../../services/tv.service';
 import { CastService } from '../../../services/cast.service';
 import {
@@ -15,9 +14,8 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-all-tv-actors',
-  imports: [HeaderComponent, RouterModule, NavbarComponent, CommonModule],
+  imports: [RouterModule, NavbarComponent, CommonModule],
   template: `
-    <app-header></app-header>
     <app-navbar></app-navbar>
     <section>
       <div [ngStyle]="{ 'background-color': color }" class="mx-auto p-6">
@@ -59,7 +57,7 @@ import { CommonModule } from '@angular/common';
                       ? startUrl + item.profile_path
                       : '/icon-bg.svg'
                   "
-                  [alt]="item?.original_name || ''" />
+                  [alt]="item?.name || ''" />
                 <div>
                   <a [routerLink]="['/persons', item.id]">
                     <p>

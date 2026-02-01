@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
 import { TvService } from '../../services/tv.service';
 import { CastService } from '../../services/cast.service';
 import {
@@ -20,24 +19,20 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { TvActorsComponent } from './tv-actors/tv-actors.component';
 import { TvAsideComponent } from './tv-aside/tv-aside.component';
-import { FooterComponent } from "../../shared/footer/footer.component";
 
 @Component({
   selector: 'app-tv',
   imports: [
-    HeaderComponent,
     CommonModule,
     NavbarComponent,
     RouterModule,
     TvActorsComponent,
     TvAsideComponent,
-    FooterComponent
-],
+  ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 
   template: `
-    <app-header></app-header>
     <app-navbar></app-navbar>
     <section class="inner__content new__index">
       <div
@@ -83,7 +78,6 @@ import { FooterComponent } from "../../shared/footer/footer.component";
         [props]="tvData()"
         class="w-1/5 md:flex-row flex items-center"></app-tv-aside>
     </section>
-    <app-footer></app-footer>
   `,
   styles: ``,
 })

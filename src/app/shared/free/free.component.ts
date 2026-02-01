@@ -65,9 +65,8 @@ import { RouterModule } from '@angular/router';
               decoding="async"
               [routerLink]="['/tv', movie.id]"
               (load)="onImageLoad(movie.id)"
-              class="image transition-opacity duration-700 relative z-0"
+              class="image transition-opacity duration-700 relative z-0 min-h-[220px]"
               [class.opacity-0]="!loadedImages.has(movie.id)"
-              class="image"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
             <a [routerLink]="['/tv', movie.id]">

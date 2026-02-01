@@ -1,16 +1,12 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-import { HeaderComponent } from '../../shared/header/header.component';
 import { WelcomeComponent } from '../../shared/welcome/welcome.component';
 import { TrendsComponent } from '../../shared/trends/trends.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
 import { IntersectionObserverDirective } from '../../directives/intersection-observer.directive';
 
 @Component({
   selector: 'main',
   imports: [
-    HeaderComponent,
-    FooterComponent,
     WelcomeComponent,
     TrendsComponent,
     TrailersComponent,
@@ -18,7 +14,6 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
   ],
 
   template: `
-    <app-header></app-header>
     <app-welcome></app-welcome>
     <app-trends></app-trends>
     <app-trailers></app-trailers>
@@ -43,7 +38,6 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       [rootMargin]="'10px'"
       style="height: 1px;"></div>
     <ng-template #personsContainer></ng-template>
-    <app-footer></app-footer>
   `,
   styles: ``,
 })

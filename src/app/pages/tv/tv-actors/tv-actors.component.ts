@@ -7,28 +7,27 @@ import { CommonModule } from '@angular/common';
   selector: 'app-tv-actors',
   imports: [RouterModule, CommonModule],
   template: `
-    <p>app-tv-actors works!</p>
     <section class="average__content new__index-content">
       <div class="content-left">
         <h3 class="trending">Top Billed Cast</h3>
         <div class="movies__wrapper">
           <div class="movies__wrapper-block add">
-            <div class="movies__wrapper-cart" *ngFor="let person of cast">
+            <div class="movies__wrapper-cart rounded-lg overflow-hidden" *ngFor="let person of cast">
               <div class="wrapper_img">
                 <img
                   decoding="auto"
                   [routerLink]="['/persons', person.id]"
-                  class="image"
+                  class="image rounded-none"
                   src="{{ startUrl + person.profile_path }}"
                   alt="{{ person.name }}" />
               </div>
               <a [routerLink]="['/persons', person.id]">
                 <p>
-                  <b>{{ person.original_name }}</b>
+                  <b class="pl-2">{{ person.name }}</b>
                 </p>
               </a>
               <a>
-                <p>
+                <p class="p-2">
                   {{ person.character }}
                 </p>
               </a>
@@ -63,7 +62,6 @@ import { CommonModule } from '@angular/common';
 
     .movies__wrapper-cart {
       border: 1px solid lightgrey;
-      padding: 10px;
     }
   `,
 })

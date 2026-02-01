@@ -1,7 +1,5 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HeaderComponent } from '../../shared/header/header.component';
-import { FooterComponent } from '../../shared/footer/footer.component';
 import { SinglePerson, CastCombined } from '../../interfaces/interface';
 import { PersonService } from '../../services/person.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
@@ -12,19 +10,16 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'persons',
   imports: [
-    HeaderComponent,
-    FooterComponent,
     NavbarComponent,
     CommonModule,
     BiographyComponent,
     RouterModule,
   ],
   template: `
-    <app-header></app-header>
     <app-navbar></app-navbar>
     <section>
       <div class="w-[80%] flex m-[auto]">
-        <!-- Левый блок: 20% ширины -->
+        <!-- Left content: 20% width -->
         <div class="w-2/6 pr-12 pb-12 pt-12">
           <div>
             <img
@@ -33,10 +28,10 @@ import { RouterModule } from '@angular/router';
               [src]="startUrl + (personData()?.profile_path || '')"
               [alt]="personData()?.name || ''" />
           </div>
-          Левый блок
+          Left content
         </div>
 
-        <!-- Правый блок: 80% ширины -->
+        <!-- Right content: 80% width -->
         <div class="w-4/5">
           <div>
             <h1 class="text-3xl font-bold text-gray-800 pt-10">
@@ -53,11 +48,18 @@ import { RouterModule } from '@angular/router';
           <div class="movies__wrapper">
             <div class="movies__wrapper-block">
               <div class="movies__wrapper-cart" *ngFor="let movie of topCast()">
-                <img
-                  [routerLink]="['/movie', movie.id]"
-                  class="image"
-                  src="{{ startUrl + movie.poster_path }}"
-                  alt="{{ movie.title }}" />
+                <div class="h-[220px]">
+                  <img
+                    [routerLink]="['/movie', movie.id]"
+                    class="image"
+                    [src]="
+                      movie.poster_path
+                        ? startUrl + movie.poster_path
+                        : '/placeholder.svg'
+                    "
+                    src="{{ startUrl + movie.poster_path }}"
+                    alt="{{ movie.title }}" />
+                </div>
                 <a [routerLink]="['/movie', movie.id]">
                   <p>{{ movie.title }}</p>
                 </a>
@@ -67,7 +69,6 @@ import { RouterModule } from '@angular/router';
         </div>
       </div>
     </section>
-    <app-footer></app-footer>
   `,
   styles: ``,
 })

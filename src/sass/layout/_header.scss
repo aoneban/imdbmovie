@@ -1,5 +1,9 @@
 @use '../abstracts/variables';
 
+body {
+  height: 100%;
+}
+
 header {
   color: variables.$white-color;
   font-weight: 500;
@@ -29,6 +33,7 @@ header {
   font-family: inherit;
   margin: 0;
   transition: 0.5s ease;
+  width: 100%;
 }
 
 .dropdown-content {

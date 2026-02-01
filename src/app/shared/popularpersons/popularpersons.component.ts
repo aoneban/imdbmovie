@@ -26,12 +26,16 @@ import { RouterModule } from '@angular/router';
             class="movies__wrapper-cart"
             *ngFor="let person of newData()"
             [@fadeAnimation]>
-            <div class="wrapper_img">
+            <div class="wrapper_img border border-gray-300">
               <img
                 decoding="async"
                 [routerLink]="['/persons', person.id]"
                 class="image"
-                src="{{ startUrl + person.profile_path }}"
+                [src]="
+                    person.profile_path
+                      ? startUrl + person.profile_path
+                      : '/icon-bg.svg'
+                  "
                 alt="{{ person.name }}" />
             </div>
             <a [routerLink]="['/persons', person.id]">

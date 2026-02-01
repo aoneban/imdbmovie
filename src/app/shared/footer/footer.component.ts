@@ -6,12 +6,12 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <footer class="w-full bg-blue-950 mt-[20px] pt-[60px] pb-[50px]">
+    <footer class="w-full bg-blue-950 mt-[20px] pt-[60px] pb-[30px]">
       <div class="content">
         <div
-          class="content__wrapper flex justify-between max-w-screen-xl mx-auto">
-          <div class="content__wrapper-navbar_left">
-            <ul class="flex gap-x-5">
+          class="content__wrapper flex justify-center max-w-screen-xl mx-auto">
+          <div class="content__wrapper-navbar">
+            <ul class="flex justify-between gap-x-5">
               <li>
                 <a href="" [routerLink]="['/main']">
                   <img
@@ -23,45 +23,29 @@ import { RouterModule } from '@angular/router';
               </li>
               <li>
                 <div class="dropdown">
-                  <button class="dropbtn">footer</button>
-                  <div class="dropdown-content">
-                    <a href="#">Link 1</a>
-                    <a href="#">Link 2</a>
-                    <a href="#">Link 3</a>
-                  </div>
+                  <button class="dropbtn font-medium">Help</button>
                 </div>
               </li>
               <li>
                 <div class="dropdown">
-                  <button class="dropbtn">footer</button>
-                  <div class="dropdown-content">
-                    <a href="#">Link 4</a>
-                    <a href="#">Link 5</a>
-                    <a href="#">Link 6</a>
-                  </div>
+                  <button class="dropbtn font-medium">CinemaPro</button>
                 </div>
               </li>
               <li>
                 <div class="dropdown">
-                  <button class="dropbtn">footer</button>
-                  <div class="dropdown-content">
-                    <a href="#">Link 7</a>
-                    <a href="#">Link 8</a>
-                    <a href="#">Link 9</a>
-                  </div>
+                  <button class="dropbtn font-medium">Privacy Policy</button>
                 </div>
               </li>
               <li>
                 <div class="dropdown">
-                  <button class="dropbtn">footer</button>
-                  <div class="dropdown-content">
-                    <a href="#">Link 10</a>
-                    <a href="#">Link 11</a>
-                  </div>
+                  <button class="dropbtn font-medium">Conditions of Use</button>
                 </div>
               </li>
             </ul>
           </div>
+        </div>
+        <div>
+          <p class="italic text-gray-600 text-xs text-center">Design by TMDB, Developed by Ashot Bahiran</p>
         </div>
       </div>
     </footer>

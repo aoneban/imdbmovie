@@ -65,10 +65,16 @@ import { RouterModule } from '@angular/router';
           </div>
           <div class="content__wrapper-navbar_right flex">
             <ul class="flex gap-x-8">
-              <li><p>header</p></li>
-              <li><p>header</p></li>
-              <li><p>header</p></li>
-              <li><p>header</p></li>
+              <li>
+                <a href="#">
+                  <p>Watchlist</p>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <p>SignIn</p>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
