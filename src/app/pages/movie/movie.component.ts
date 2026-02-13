@@ -36,7 +36,6 @@ import { AsideComponent } from './aside/aside.component';
     <app-navbar></app-navbar>
     <div *ngIf="isLoading" class="preloader">
       <div class="loader"></div>
-      <p>Loading...</p>
     </div>
     <section *ngIf="!isLoading" class="inner__content new__index">
       <div
@@ -175,7 +174,7 @@ export class MovieComponent implements OnInit {
           this.fetchDataImages(this.movieId);
         }
       });
-    }, 1000);
+    }, 500);
   }
 
   fetchData(id: number): void {

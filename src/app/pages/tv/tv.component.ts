@@ -34,7 +34,10 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
 
   template: `
     <app-navbar></app-navbar>
-    <section class="inner__content new__index">
+    <div *ngIf="isLoading" class="preloader">
+      <div class="loader"></div>
+    </div>
+    <section *ngIf="!isLoading" class="inner__content new__index">
       <div
         [ngStyle]="{ 'background-image': backgroundImage() }"
         class="background-movie">
@@ -79,7 +82,59 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
         class="w-1/5 md:flex-row flex items-center"></app-tv-aside>
     </section>
   `,
-  styles: ``,
+    styles: `
+    .preloader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding-bottom: 150px;
+    }
+
+    .loader {
+      width: 150px;
+      aspect-ratio: 1;
+      display: grid;
+      border: 4px solid #0000;
+      border-radius: 150%;
+      border-right-color: #8225b0;
+      animation: l15 2s infinite linear;
+    }
+    .loader::before {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(231, 102, 177);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(174, 25, 191);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      margin: 8px;
+      animation-duration: 3s;
+    }
+    @keyframes l15 {
+      100% {
+        transform: rotate(1turn);
+      }
+    }
+
+    header,
+    main,
+    footer {
+      display: none;
+    }
+  `,
 })
 export class TvComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500';
@@ -89,6 +144,7 @@ export class TvComponent implements OnInit {
   tvDataImg = signal<ImagesResponse | undefined>(undefined);
   tvCast = signal<CastMember[] | undefined>(undefined);
   tvAllTeam = signal<MovieCast | undefined>(undefined);
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -105,15 +161,18 @@ export class TvComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.tvId = id ? Number(id) : undefined;
-      if (this.tvId !== undefined) {
-        this.fetchCast(this.tvId);
-        this.fetchData(this.tvId);
-        this.fetchDataImages(this.tvId);
-      }
-    });
+    this.isLoading = true;
+    setTimeout(() => {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        this.tvId = id ? Number(id) : undefined;
+        if (this.tvId !== undefined) {
+          this.fetchCast(this.tvId);
+          this.fetchData(this.tvId);
+          this.fetchDataImages(this.tvId);
+        }
+      });
+    }, 500)
   }
 
   fetchData(id: number): void {
@@ -121,9 +180,11 @@ export class TvComponent implements OnInit {
       data => {
         this.tvData.set(data);
         console.log('Tv data: ', this.tvData());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }
@@ -133,9 +194,11 @@ export class TvComponent implements OnInit {
       data => {
         this.tvDataImg.set(data);
         console.log('Tv images: ', this.tvDataImg());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }
@@ -145,9 +208,11 @@ export class TvComponent implements OnInit {
         this.tvCast.set(data.cast.filter((_, i) => i < 15));
         this.tvAllTeam.set(data);
         console.log('Tv Cast: ', this.tvAllTeam());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
+        this.isLoading = false;
       }
     );
   }
