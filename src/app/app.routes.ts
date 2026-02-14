@@ -66,5 +66,12 @@ export const routes: Routes = [
         m => m.NowPlayingComponent
       ),
   },
+    {
+    path: 'page-persons',
+    loadComponent: () =>
+      import('./pages/page-persons/page-persons.component').then(
+        m => m.PagePersonsComponent
+      ),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

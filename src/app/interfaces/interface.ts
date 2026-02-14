@@ -126,6 +126,7 @@ export interface MovieCast {
 export interface ApiResponsePerson {
   page: number;
   results: Person[];
+  total_pages: number;
 }
 
 export interface Person {

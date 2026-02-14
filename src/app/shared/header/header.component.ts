@@ -47,7 +47,7 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">People</button>
                   <div class="dropdown-content">
-                    <a href="#">Popular</a>
+                    <a [routerLink]="['/page-persons']">Popular</a>
                   </div>
                 </div>
               </li>

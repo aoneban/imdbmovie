@@ -10,11 +10,13 @@ import { ApiResponsePerson } from '../interfaces/interface';
 export class PopPersonService {
   constructor(private http: HttpClient) {}
 
-  getDataPopularPerson(apiUrl: string): Observable<ApiResponsePerson> {
+  getDataPopularPerson(apiUrl: string, page: number = 1): Observable<ApiResponsePerson> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<ApiResponsePerson>(apiUrl, { headers });
+    return this.http.get<ApiResponsePerson>(
+      `${apiUrl}${page}`, 
+      { headers });
   }
 }
