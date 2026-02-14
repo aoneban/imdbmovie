@@ -26,9 +26,9 @@ import { RouterModule } from '@angular/router';
                   <button class="dropbtn">Movies</button>
                   <div class="dropdown-content">
                     <a [routerLink]="['/movies']">Popular</a>
-                    <a [routerLink]="['/movies']">Now playing</a>
-                    <a href="#">Upcoming</a>
-                    <a href="#">Top rated</a>
+                    <a [routerLink]="['/top-rated']">Top rated</a>
+                    <a [routerLink]="['/upcoming']">Upcoming</a>
+                    <a [routerLink]="['/now-playing']">Now playing</a>
                   </div>
                 </div>
               </li>

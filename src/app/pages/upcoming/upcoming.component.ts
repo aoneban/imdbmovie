@@ -6,11 +6,11 @@ import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 
 @Component({
-  selector: 'app-movies',
+  selector: 'app-upcoming',
   imports: [CommonModule, RouterModule],
   template: `
     <section>
-      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Popular movies</h1>
+      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Upcoming movies</h1>
       <div class="flex w-[80%] mx-auto flex-wrap justify-center">
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
@@ -74,8 +74,8 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
   `,
   styles: ``,
 })
-export class MoviesComponent {
-  url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page='
+export class UpcomingComponent {
+  url = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page='
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;

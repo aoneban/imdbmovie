@@ -9,17 +9,15 @@ import { environment } from '../../environments/environment';
 })
 export class MoviesService {
 
-  private url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page='
-
   constructor(private http: HttpClient) {}
 
-  getDataMovies(page: number = 1): Observable<ApiResponse> {
+  getDataMovies(url: string, page: number = 1): Observable<ApiResponse> {
       const headers = new HttpHeaders({
         Authorization: `Bearer ${environment.apiKey}`,
         Accept: 'application/json',
       });
       return this.http.get<ApiResponse>(
-        `${this.url}${page}`,
+        `${url}${page}`,
         { headers }
       );
     }

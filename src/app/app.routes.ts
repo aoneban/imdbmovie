@@ -40,10 +40,31 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/search/search.component').then(m => m.SearchComponent),
   },
-    {
+  {
     path: 'movies',
     loadComponent: () =>
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+  },
+  {
+    path: 'top-rated',
+    loadComponent: () =>
+      import('./pages/top-rated/top-rated.component').then(
+        m => m.TopRatedComponent
+      ),
+  },
+  {
+    path: 'upcoming',
+    loadComponent: () =>
+      import('./pages/upcoming/upcoming.component').then(
+        m => m.UpcomingComponent
+      ),
+  },
+  {
+    path: 'now-playing',
+    loadComponent: () =>
+      import('./pages/now-playing/now-playing.component').then(
+        m => m.NowPlayingComponent
+      ),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];
