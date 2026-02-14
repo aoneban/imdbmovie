@@ -40,5 +40,10 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/search/search.component').then(m => m.SearchComponent),
   },
+    {
+    path: 'movies',
+    loadComponent: () =>
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

@@ -25,8 +25,8 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">Movies</button>
                   <div class="dropdown-content">
-                    <a href="#">Popular</a>
-                    <a href="#">Now playing</a>
+                    <a [routerLink]="['/movies']">Popular</a>
+                    <a [routerLink]="['/movies']">Now playing</a>
                     <a href="#">Upcoming</a>
                     <a href="#">Top rated</a>
                   </div>

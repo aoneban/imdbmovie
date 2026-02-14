@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
 import { Movie } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
+import { getReleaseDate } from '../../helpers/getReleaseDate';
 
 @Component({
   selector: 'app-popular',
@@ -84,7 +85,7 @@ import { RouterModule } from '@angular/router';
             <a [routerLink]="['/movie', movie.id]">
               <p class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ getMovieTitle(movie) }}</p>
             </a>
-            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getReleaseDate(movie) }}</p>
+            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getDate(movie) }}</p>
           </div>
         </div>
       </div>
@@ -187,12 +188,8 @@ export class PopularComponent implements OnInit {
     return movie.title || movie.name || 'Untitled';
   }
 
-  getReleaseDate(movie: Movie): string {
-    const dateMovie = movie.release_date || movie.first_air_date || 'Soon...';
-    const year = dateMovie.slice(0, 4);
-    const monthNumber = Number(dateMovie.slice(5, 7));
-    const monthName = new Date(2020, monthNumber - 1).toLocaleString('en', { month: 'long' });
-    const day = dateMovie.slice(-2);
-    return `${monthName.slice(0, 3)} ${day}, ${year}`;
+  getDate(movie: Movie): string {
+    const newDate = getReleaseDate(movie);
+    return newDate;
   }
 }
