@@ -6,11 +6,11 @@ import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 
 @Component({
-  selector: 'app-movies',
+  selector: 'app-tv-popular',
   imports: [CommonModule, RouterModule],
   template: `
     <section>
-      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Popular movies</h1>
+      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Tv Popular</h1>
       <div class="flex w-[80%] mx-auto flex-wrap justify-center">
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
@@ -45,8 +45,8 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
                 alt="{{ movie.name }}" />
               <h3
                 class="cursor-pointer font-bold relative top-4 left-3"
-                [routerLink]="['/movie', movie.id]">
-                {{ movie.title }}
+                [routerLink]="['/tv', movie.id]">
+                {{ movie.name }}
               </h3>
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
                 {{ getDate(movie) }}
@@ -74,8 +74,8 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
   `,
   styles: ``,
 })
-export class MoviesComponent {
-  url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page='
+export class TvPopularComponent {
+  url = 'https://api.themoviedb.org/3/tv/popular?language=en-US&page='
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;

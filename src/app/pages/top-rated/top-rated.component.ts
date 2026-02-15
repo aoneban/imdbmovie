@@ -15,7 +15,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
             <div
-              class="rating h-[40px] w-[40px] left-8 top-[30px]"
+              class="rating h-[40px] w-[40px] left-8 top-[30px] !z-[1]"
               [ngClass]="{
                 'border-2 border-green-500': movie.vote_average >= 7,
                 'border-2 border-yellow-500':
@@ -42,11 +42,11 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
                 "
                 (load)="onImageLoad(movie.id)"
                 [class.opacity-0]="!loadedImages.has(movie.id)"
-                alt="{{ movie.name }}" />
+                alt="{{ movie.title }}" />
               <h3
                 class="cursor-pointer font-bold relative top-4 left-3"
                 [routerLink]="['/movie', movie.id]">
-                {{ movie.name }}
+                {{ movie.title }}
               </h3>
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
                 {{ getDate(movie) }}
@@ -75,7 +75,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
   styles: ``,
 })
 export class TopRatedComponent {
-  url = 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page='
+  url = 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page='
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;

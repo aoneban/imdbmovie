@@ -53,6 +53,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'tv-top-rated',
+    loadComponent: () =>
+      import('./pages/tv-top-rated/tv-top-rated.component').then(
+        m => m.TvTopRatedComponent
+      ),
+  },
+  {
     path: 'upcoming',
     loadComponent: () =>
       import('./pages/upcoming/upcoming.component').then(
@@ -71,6 +78,27 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/page-persons/page-persons.component').then(
         m => m.PagePersonsComponent
+      ),
+  },
+  {
+    path: 'airing-today',
+    loadComponent: () =>
+      import('./pages/airing-today/airing-today.component').then(
+        m => m.AiringTodayComponent
+      ),
+  },
+  {
+    path: 'tv-popular',
+    loadComponent: () =>
+      import('./pages/tv-popular/tv-popular.component').then(
+        m => m.TvPopularComponent
+      ),
+  },
+    {
+    path: 'on-the-air',
+    loadComponent: () =>
+      import('./pages/on-the-air/on-the-air.component').then(
+        m => m.OnTheAirComponent
       ),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },

@@ -36,10 +36,10 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">TV Shows</button>
                   <div class="dropdown-content">
-                    <a href="#">Popular</a>
-                    <a href="#">Airing today</a>
-                    <a href="#">On TV</a>
-                    <a href="#">Top rated</a>
+                    <a [routerLink]="['/tv-popular']">Popular</a>
+                    <a [routerLink]="['/airing-today']">Airing today</a>
+                    <a [routerLink]="['/on-the-air']">On TV</a>
+                    <a [routerLink]="['/tv-top-rated']">Top rated</a>
                   </div>
                 </div>
               </li>

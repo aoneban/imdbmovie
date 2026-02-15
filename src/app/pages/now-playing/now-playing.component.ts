@@ -15,7 +15,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
             <div
-              class="rating h-[40px] w-[40px] left-8 top-[30px]"
+              class="rating h-[40px] w-[40px] left-8 top-[30px] !z-[1]"
               [ngClass]="{
                 'border-2 border-green-500': movie.vote_average >= 7,
                 'border-2 border-yellow-500':
