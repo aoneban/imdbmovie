@@ -23,16 +23,22 @@ import { RouterModule } from '@angular/router';
         <div class="w-2/6 pr-12 pb-12 pt-12">
           <div>
             <img
-              decoding="async"
-              class="rounded-xl"
+                *ngIf="!loadedImages.has(personData()!.id)"
+                class="w-[80%] h-[80%] bg-gray-300"
+                src="/icon-bg.svg"
+                alt="placeholder" />
+            <img
+              decoding="auto"
+              class="rounded-xl transition-opacity duration-700"
+              (load)="onImageLoad(personData()!.id)"
+              [class.opacity-0]="!loadedImages.has(personData()!.id)"
               [src]="startUrl + (personData()?.profile_path || '')"
               [alt]="personData()?.name || ''" />
           </div>
-          Left content
         </div>
 
         <!-- Right content: 80% width -->
-        <div class="w-4/5">
+        <div class="w-[77%]">
           <div>
             <h1 class="text-3xl font-bold text-gray-800 pt-10">
               {{ personData()?.name }}
@@ -61,7 +67,7 @@ import { RouterModule } from '@angular/router';
                     alt="{{ movie.title }}" />
                 </div>
                 <a [routerLink]="['/movie', movie.id]">
-                  <p>{{ movie.title }}</p>
+                  <p class="font-normal pt-3 pl-3 text-sm">{{ movie.title }}</p>
                 </a>
               </div>
             </div>
@@ -78,6 +84,7 @@ export class PersonsComponent implements OnInit {
   personId: number | undefined;
   personData = signal<SinglePerson | undefined>(undefined);
   personCombined = signal<CastCombined | undefined>(undefined);
+  loadedImages = new Set<number>();
   topCast = computed(() => {
     const combined = this.personCombined();
     return combined?.cast.slice(0, 15) ?? [];
@@ -120,5 +127,9 @@ export class PersonsComponent implements OnInit {
         console.error('Error fetching data: ', error);
       }
     );
+  }
+
+   onImageLoad(id: number) {
+    this.loadedImages.add(id);
   }
 }

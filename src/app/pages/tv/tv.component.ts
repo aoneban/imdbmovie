@@ -44,18 +44,30 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
         <div class="background-shadow"></div>
         <div class="content-movie">
           <img
+            decoding="auto"
+            *ngIf="!loadedImages.has(tvData()!.id)"
+            class="!w-[20%] !h-[200%] m-5 bg-gray-800"
+            src="/placeholder.svg"
+            alt="placeholder" />
+          <img
             decoding="async"
-            class="main-poster"
+            class="main-poster transition-opacity duration-700"
+            (load)="onImageLoad(tvData()!.id)"
+            [class.hidden]="!loadedImages.has(tvData()!.id)"
             [src]="startUrl + (tvData()?.poster_path || '')"
             [alt]="tvData()?.name || ''" />
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-4">
-              {{ tvData()?.name }} ({{ tvData()?.first_air_date?.slice(0, 4) }})
+              {{ tvData()?.name }} ({{
+                tvData()?.first_air_date?.slice(0, 4)
+                  ? tvData()?.first_air_date?.slice(0, 4)
+                  : '----'
+              }})
             </h1>
             <h3 class="italic text-gray-300">{{ tvData()?.tagline }}</h3>
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
-              {{ tvData()?.overview }}
+              {{ tvData()?.overview ? tvData()?.overview : 'Description will be added soon...' }}
             </p>
           </div>
         </div>
@@ -82,7 +94,7 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
         class="w-1/5 md:flex-row flex items-center"></app-tv-aside>
     </section>
   `,
-    styles: `
+  styles: `
     .preloader {
       display: flex;
       flex-direction: column;
@@ -145,6 +157,7 @@ export class TvComponent implements OnInit {
   tvCast = signal<CastMember[] | undefined>(undefined);
   tvAllTeam = signal<MovieCast | undefined>(undefined);
   isLoading = false;
+  loadedImages = new Set<number>();
 
   constructor(
     private route: ActivatedRoute,
@@ -172,7 +185,7 @@ export class TvComponent implements OnInit {
           this.fetchDataImages(this.tvId);
         }
       });
-    }, 500)
+    }, 500);
   }
 
   fetchData(id: number): void {
@@ -207,7 +220,7 @@ export class TvComponent implements OnInit {
       data => {
         this.tvCast.set(data.cast.filter((_, i) => i < 15));
         this.tvAllTeam.set(data);
-        console.log('Tv Cast: ', this.tvAllTeam());
+        console.log('Tv Cast: ', this.tvCast());
         this.isLoading = false;
       },
       error => {
@@ -215,5 +228,9 @@ export class TvComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  onImageLoad(id: number) {
+    this.loadedImages.add(id);
   }
 }

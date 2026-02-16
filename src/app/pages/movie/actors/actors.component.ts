@@ -12,30 +12,34 @@ import { CommonModule } from '@angular/common';
         <h3 class="trending">Top Billed Cast</h3>
         <div class="movies__wrapper">
           <div class="movies__wrapper-block add">
-            <div class="movies__wrapper-cart rounded-lg overflow-hidden" *ngFor="let person of cast">
-              <div class="wrapper_img">
-                <img
-                  decoding="auto"
-                  [routerLink]="['/persons', person.id]"
-                  class="image !h-[200px] rounded-none pb-4"
-                  [src]="
-                    person?.profile_path
-                      ? startUrl + person.profile_path
-                      : '/icon-bg.svg'
-                  "
-                  alt="{{ person.name }}" />
+            @if (!cast || cast.length === 0) {
+              <div class="text-black text-xl italic m-12 p-10">
+                No cast information available yet...
               </div>
-              <a [routerLink]="['/persons', person.id]">
-                <p>
-                  <b class="pl-2">{{ person.original_name }}</b>
-                </p>
-              </a>
-              <a>
-                <p class="p-2">
-                  {{ person.character }}
-                </p>
-              </a>
-            </div>
+            } @else {
+              @for (person of cast; track person.id) {
+                <div class="movies__wrapper-cart rounded-lg overflow-hidden">
+                  <div class="wrapper_img">
+                    <img
+                      decoding="auto"
+                      [routerLink]="['/persons', person.id]"
+                      class="image !h-[200px] rounded-none pb-4"
+                      [src]="
+                        person?.profile_path
+                          ? startUrl + person.profile_path
+                          : '/icon-bg.svg'
+                      "
+                      alt="{{ person.name }}" />
+                  </div>
+                  <a [routerLink]="['/persons', person.id]">
+                    <p>
+                      <b class="pl-2">{{ person.name }}</b>
+                    </p>
+                  </a>
+                  <p class="p-2">{{ person.character ? person.character : 'unknown' }}</p>
+                </div>
+              }
+            }
             <div class="flex justify-center h-full items-center">
               <button
                 [routerLink]="['/cast', id]"

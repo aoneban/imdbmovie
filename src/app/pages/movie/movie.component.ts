@@ -44,20 +44,28 @@ import { AsideComponent } from './aside/aside.component';
         <div class="background-shadow"></div>
         <div class="content-movie">
           <img
-            decoding="async"
-            class="main-poster"
+            decoding="auto"
+            *ngIf="!loadedImages.has(movieData()!.id)"
+            class="!w-[20%] !h-[200%] m-5 bg-gray-800"
+            src="/placeholder.svg"
+            alt="placeholder" />
+          <img
+            decoding="auto"
+            class="main-poster transition-opacity duration-700"
+            (load)="onImageLoad(movieData()!.id)"
+            [class.hidden]="!loadedImages.has(movieData()!.id)"
             [src]="startUrl + (movieData()?.poster_path || '')"
             [alt]="movieData()?.title || ''" />
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-4">
               {{ movieData()?.title }} ({{
-                movieData()?.release_date?.slice(0, 4)
+               movieData()?.release_date?.slice(0, 4) ? movieData()?.release_date?.slice(0, 4) : '----'
               }})
             </h1>
-            <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
+            <h3 class="italic text-gray-300">{{ movieData()?.tagline}}</h3>
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
-              {{ movieData()?.overview }}
+              {{ movieData()?.overview ? movieData()?.overview : 'Description will be added soon...'}}
             </p>
           </div>
         </div>
@@ -65,21 +73,27 @@ import { AsideComponent } from './aside/aside.component';
     </section>
     <section class="w-[80%] mx-auto flex">
       <div class="w-4/5 mx-auto flex flex-col">
-        <app-actors [cast]="movieCast()" [id]="movieId" class="md:flex-row">
+        <app-actors
+          *ngIf="movieData() && loadedImages.has(movieData()!.id)"
+          [cast]="movieCast()"
+          [id]="movieId"
+          class="md:flex-row">
         </app-actors>
         <div
           class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
           <button
+            *ngIf="movieData() && loadedImages.has(movieData()!.id)"
             [routerLink]="['/cast', movieAllTeam()?.id]"
             class="w-fit whitespace-nowrap">
             Full Cast & Crew
           </button>
         </div>
-        <div>
+        <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
           <h3 class="text-2xl font-semibold text-gray-900 mb-4">Social</h3>
         </div>
       </div>
       <app-aside
+        *ngIf="movieData() && loadedImages.has(movieData()!.id)"
         [props]="movieData()"
         class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
@@ -147,6 +161,8 @@ export class MovieComponent implements OnInit {
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
   movieCast = signal<CastMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
+  loadedImages = new Set<number>();
+  text: string | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -217,5 +233,9 @@ export class MovieComponent implements OnInit {
         this.isLoading = false;
       }
     );
+  }
+
+  onImageLoad(id: number) {
+    this.loadedImages.add(id);
   }
 }
