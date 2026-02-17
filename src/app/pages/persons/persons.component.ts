@@ -9,24 +9,22 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'persons',
-  imports: [
-    NavbarComponent,
-    CommonModule,
-    BiographyComponent,
-    RouterModule,
-  ],
+  imports: [NavbarComponent, CommonModule, BiographyComponent, RouterModule],
   template: `
     <app-navbar></app-navbar>
     <section>
-      <div class="w-[80%] flex m-[auto]">
+      <div *ngIf="isLoading" class="preloader">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!isLoading" class="w-[80%] flex m-[auto]">
         <!-- Left content: 20% width -->
         <div class="w-2/6 pr-12 pb-12 pt-12">
           <div>
             <img
-                *ngIf="!loadedImages.has(personData()!.id)"
-                class="w-[80%] h-[80%] bg-gray-300"
-                src="/icon-bg.svg"
-                alt="placeholder" />
+              *ngIf="!loadedImages.has(personData()!.id)"
+              class="w-[80%] h-[80%] bg-gray-300"
+              src="/icon-bg.svg"
+              alt="placeholder" />
             <img
               decoding="auto"
               class="rounded-xl transition-opacity duration-700"
@@ -76,9 +74,62 @@ import { RouterModule } from '@angular/router';
       </div>
     </section>
   `,
-  styles: ``,
+  styles: `
+   .preloader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding-bottom: 150px;
+    }
+
+    .loader {
+      width: 150px;
+      aspect-ratio: 1;
+      display: grid;
+      border: 4px solid #0000;
+      border-radius: 150%;
+      border-right-color: #8225b0;
+      animation: l15 2s infinite linear;
+    }
+    .loader::before {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(231, 102, 177);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      content: '';
+      grid-area: 1/1;
+      margin: 2px;
+      border: inherit;
+      border-radius: 100%;
+      border-right-color: rgb(174, 25, 191);
+      animation: l15 2s infinite;
+    }
+    .loader::after {
+      margin: 8px;
+      animation-duration: 3s;
+    }
+    @keyframes l15 {
+      100% {
+        transform: rotate(1turn);
+      }
+    }
+
+    header,
+    main,
+    footer {
+      display: none;
+    }`,
+  
 })
 export class PersonsComponent implements OnInit {
+  isLoading = false;
   showFull = false;
   startUrl = 'https://image.tmdb.org/t/p/w500';
   personId: number | undefined;
@@ -95,6 +146,7 @@ export class PersonsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.isLoading = true;
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.personId = id ? Number(id) : undefined;
@@ -110,6 +162,7 @@ export class PersonsComponent implements OnInit {
       data => {
         this.personData.set(data);
         console.log('Person data: ', this.personData());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -122,6 +175,7 @@ export class PersonsComponent implements OnInit {
       data => {
         this.personCombined.set(data);
         console.log('Person combined: ', this.personCombined());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -129,7 +183,7 @@ export class PersonsComponent implements OnInit {
     );
   }
 
-   onImageLoad(id: number) {
+  onImageLoad(id: number) {
     this.loadedImages.add(id);
   }
 }
