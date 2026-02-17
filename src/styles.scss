@@ -5,6 +5,7 @@
 @use 'sass/layout/header';
 @use 'sass/layout/navbar';
 @use 'sass/components/buttons';
+@use 'sass/components/loader';
 @use 'sass/pages/home';
 @use 'sass/themes/theme';
 @use 'sass/themes/trends';
@@ -17,4 +18,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-

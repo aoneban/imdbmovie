@@ -19,6 +19,7 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
 import { AsideComponent } from './aside/aside.component';
+import { RatingComponent } from './rating/rating.component';
 
 @Component({
   selector: 'movie',
@@ -27,6 +28,7 @@ import { AsideComponent } from './aside/aside.component';
     NavbarComponent,
     ActorsComponent,
     AsideComponent,
+    RatingComponent,
     RouterModule,
   ],
 
@@ -59,13 +61,22 @@ import { AsideComponent } from './aside/aside.component';
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-4">
               {{ movieData()?.title }} ({{
-               movieData()?.release_date?.slice(0, 4) ? movieData()?.release_date?.slice(0, 4) : '----'
+                movieData()?.release_date?.slice(0, 4)
+                  ? movieData()?.release_date?.slice(0, 4)
+                  : '----'
               }})
             </h1>
-            <h3 class="italic text-gray-300">{{ movieData()?.tagline}}</h3>
+            <app-rating [rat]="movieData()"></app-rating>
+
+            <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
+
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
-              {{ movieData()?.overview ? movieData()?.overview : 'Description will be added soon...'}}
+              {{
+                movieData()?.overview
+                  ? movieData()?.overview
+                  : 'Description will be added soon...'
+              }}
             </p>
           </div>
         </div>
@@ -98,59 +109,7 @@ import { AsideComponent } from './aside/aside.component';
         class="w-1/5 md:flex-row flex items-center"></app-aside>
     </section>
   `,
-  styles: `
-    .preloader {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding-bottom: 150px;
-    }
-
-    .loader {
-      width: 150px;
-      aspect-ratio: 1;
-      display: grid;
-      border: 4px solid #0000;
-      border-radius: 150%;
-      border-right-color: #8225b0;
-      animation: l15 2s infinite linear;
-    }
-    .loader::before {
-      content: '';
-      grid-area: 1/1;
-      margin: 2px;
-      border: inherit;
-      border-radius: 100%;
-      border-right-color: rgb(231, 102, 177);
-      animation: l15 2s infinite;
-    }
-    .loader::after {
-      content: '';
-      grid-area: 1/1;
-      margin: 2px;
-      border: inherit;
-      border-radius: 100%;
-      border-right-color: rgb(174, 25, 191);
-      animation: l15 2s infinite;
-    }
-    .loader::after {
-      margin: 8px;
-      animation-duration: 3s;
-    }
-    @keyframes l15 {
-      100% {
-        transform: rotate(1turn);
-      }
-    }
-
-    header,
-    main,
-    footer {
-      display: none;
-    }
-  `,
+  styles: ``,
 })
 export class MovieComponent implements OnInit {
   isLoading = false;
@@ -238,4 +197,5 @@ export class MovieComponent implements OnInit {
   onImageLoad(id: number) {
     this.loadedImages.add(id);
   }
+
 }

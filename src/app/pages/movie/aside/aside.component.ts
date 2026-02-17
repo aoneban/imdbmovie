@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { SingleMovie } from '../../../interfaces/interface';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-aside',
-  imports: [CommonModule],
+  imports: [],
   template: `
     <aside class="ml-14">
       <h3 class="font-bold">Status</h3>

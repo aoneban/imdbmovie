@@ -19,6 +19,7 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { TvActorsComponent } from './tv-actors/tv-actors.component';
 import { TvAsideComponent } from './tv-aside/tv-aside.component';
+import { RatingComponent } from './rating/rating.component';
 
 @Component({
   selector: 'app-tv',
@@ -27,6 +28,7 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
     NavbarComponent,
     RouterModule,
     TvActorsComponent,
+    RatingComponent,
     TvAsideComponent,
   ],
 
@@ -64,10 +66,16 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
                   : '----'
               }})
             </h1>
+            <app-rating [rat]="tvData()"></app-rating>
+ 
             <h3 class="italic text-gray-300">{{ tvData()?.tagline }}</h3>
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
-              {{ tvData()?.overview ? tvData()?.overview : 'Description will be added soon...' }}
+              {{
+                tvData()?.overview
+                  ? tvData()?.overview
+                  : 'Description will be added soon...'
+              }}
             </p>
           </div>
         </div>
@@ -94,59 +102,7 @@ import { TvAsideComponent } from './tv-aside/tv-aside.component';
         class="w-1/5 md:flex-row flex items-center"></app-tv-aside>
     </section>
   `,
-  styles: `
-    .preloader {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding-bottom: 150px;
-    }
-
-    .loader {
-      width: 150px;
-      aspect-ratio: 1;
-      display: grid;
-      border: 4px solid #0000;
-      border-radius: 150%;
-      border-right-color: #8225b0;
-      animation: l15 2s infinite linear;
-    }
-    .loader::before {
-      content: '';
-      grid-area: 1/1;
-      margin: 2px;
-      border: inherit;
-      border-radius: 100%;
-      border-right-color: rgb(231, 102, 177);
-      animation: l15 2s infinite;
-    }
-    .loader::after {
-      content: '';
-      grid-area: 1/1;
-      margin: 2px;
-      border: inherit;
-      border-radius: 100%;
-      border-right-color: rgb(174, 25, 191);
-      animation: l15 2s infinite;
-    }
-    .loader::after {
-      margin: 8px;
-      animation-duration: 3s;
-    }
-    @keyframes l15 {
-      100% {
-        transform: rotate(1turn);
-      }
-    }
-
-    header,
-    main,
-    footer {
-      display: none;
-    }
-  `,
+  styles: ``,
 })
 export class TvComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500';
@@ -233,4 +189,5 @@ export class TvComponent implements OnInit {
   onImageLoad(id: number) {
     this.loadedImages.add(id);
   }
+
 }

@@ -41,6 +41,7 @@ export interface SingleMovie {
   name: string;
   id: number;
   imdb_id: string;
+  vote_average: number;
   air_date: string;
   first_air_date: string;
   status?: string;
