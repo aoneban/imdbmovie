@@ -80,23 +80,20 @@ export class RatingComponent {
   radius = 16;
   circumference = 2 * Math.PI * this.radius;
 
-  /** Превращаем vote_average (0–10) → проценты (0–100) */
   get percent(): number {
     return (this.rat?.vote_average ?? 0) * 10;
   }
 
-  /** Правильный расчёт заполнения круга */
   get dashOffset(): number {
     return this.circumference - (this.percent / 100) * this.circumference;
   }
 
-  /** Цвет в зависимости от рейтинга */
   get color(): string {
     const rating = this.rat?.vote_average ?? 0;
 
-    if (rating >= 7) return '#21d07a';   // зелёный
-    if (rating >= 5) return '#d2d531';   // жёлтый
-    if (rating === 0) return '#db2360';   // красный
+    if (rating >= 7) return '#21d07a';   // green
+    if (rating >= 5) return '#d2d531';   // yellow
+    if (rating === 0) return '#db2360';   // red
     return '#db2360';                    
   }
 }

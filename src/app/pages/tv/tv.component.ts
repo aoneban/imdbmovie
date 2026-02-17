@@ -14,6 +14,7 @@ import {
   MovieCast,
   SingleMovie,
   ImagesResponse,
+  Genre
 } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
@@ -66,6 +67,11 @@ import { RatingComponent } from './rating/rating.component';
                   : '----'
               }})
             </h1>
+            <p class="text-gray-300 mb-3">
+              {{ formatDate(tvData()?.release_date) }} ●
+              {{ getGenres(tvData()?.genres) }} ●
+              {{ minutesToTime(tvData()?.runtime) }}
+            </p>
             <app-rating [rat]="tvData()"></app-rating>
  
             <h3 class="italic text-gray-300">{{ tvData()?.tagline }}</h3>
@@ -189,5 +195,35 @@ export class TvComponent implements OnInit {
   onImageLoad(id: number) {
     this.loadedImages.add(id);
   }
+
+    getGenres(item: Genre[] | undefined) {
+      if (item) {
+        const genres = item.map(el => ' ' + el.name);
+        return genres;
+      } else {
+        return 'Genres Unknown';
+      }
+    }
+  
+    minutesToTime(totalMinutes: number | undefined): string {
+      if (totalMinutes) {
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        const hh = hours.toString().padStart(2, '0');
+        const mm = minutes.toString().padStart(2, '0');
+        return `${hh}h ${mm}m`;
+      } else {
+        return 'Time unknown';
+      }
+    }
+  
+    formatDate(dateStr: string | undefined): string {
+      if (dateStr) {
+        const [year, month, day] = dateStr.split('-');
+        return `${day}/${month}/${year}`;
+      } else {
+        return 'Date unknown'
+      }
+    }
 
 }
