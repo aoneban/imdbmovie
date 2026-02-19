@@ -18,6 +18,9 @@ import { CommonModule } from '@angular/common';
   template: `
     <app-navbar></app-navbar>
     <section>
+      <div *ngIf="isLoading" class="preloader">
+        <div class="loader"></div>
+      </div>
       <div [ngStyle]="{ 'background-color': color }" class="mx-auto p-6">
         <div class="w-5/6 flex gap-5 mx-auto">
           <img
@@ -113,6 +116,7 @@ export class AllTvActorsComponent implements OnInit {
   tvCast = signal<CastMember[] | undefined>(undefined);
   tvAllTeam = signal<MovieCast | undefined>(undefined);
   color = 'grey';
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -122,6 +126,7 @@ export class AllTvActorsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.tvId = id ? Number(id) : undefined;
@@ -137,6 +142,7 @@ export class AllTvActorsComponent implements OnInit {
       data => {
         this.tvData.set(data);
         console.log('Tv data: ', this.tvData());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -150,6 +156,7 @@ export class AllTvActorsComponent implements OnInit {
         this.tvCast.set(data.cast.filter((_, i) => i < 15));
         this.tvAllTeam.set(data);
         console.log('Data Cast: ', this.tvAllTeam());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);

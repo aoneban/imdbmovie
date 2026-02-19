@@ -83,6 +83,24 @@ import { RatingComponent } from './rating/rating.component';
                   : 'Description will be added soon...'
               }}
             </p>
+                        <div class="management flex mt-6 gap-20">
+              <div class="dir1">
+                <a
+                  [routerLink]="['/persons', tvAllTeam()!.crew[0].id]"
+                  class="font-bold text-md underline"
+                  >{{ tvAllTeam()!.crew[0].name }}</a
+                >
+                <p>{{ tvAllTeam()!.crew[0].job }}</p>
+              </div>
+              <div class="dir2">
+                <a
+                  class="font-bold text-md underline"
+                  [routerLink]="['/persons', tvAllTeam()!.crew[1].id]"
+                  >{{ tvAllTeam()!.crew[1].name }}</a
+                >
+                <p>{{ tvAllTeam()!.crew[1].job }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

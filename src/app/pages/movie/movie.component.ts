@@ -11,6 +11,7 @@ import { MovieService } from '../../services/movie.service';
 import { CastService } from '../../services/cast.service';
 import {
   CastMember,
+  CrewMember,
   MovieCast,
   SingleMovie,
   ImagesResponse,
@@ -75,6 +76,10 @@ import { RatingComponent } from './rating/rating.component';
             <app-rating [rat]="movieData()"></app-rating>
 
             <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
+            
+            <div>
+              <a href="" class="underline">Play trailer</a>
+            </div>
 
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
@@ -84,6 +89,18 @@ import { RatingComponent } from './rating/rating.component';
                   : 'Description will be added soon...'
               }}
             </p>
+            <div class="flex mt-6 gap-20">
+              @for(worker of movieCrew(); track worker.id) {
+                <div class="direction">
+                  <a
+                    [routerLink]="['/persons', worker.id]"
+                    class="font-bold text-md underline"
+                    >{{ worker.name }}</a
+                  >
+                  <p>{{ worker.job }}</p>
+                </div>
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -125,6 +142,7 @@ export class MovieComponent implements OnInit {
   movieData = signal<SingleMovie | undefined>(undefined);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
   movieCast = signal<CastMember[] | undefined>(undefined);
+  movieCrew = signal<CrewMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
@@ -189,6 +207,7 @@ export class MovieComponent implements OnInit {
     this.castService.getDataCast(id).subscribe(
       data => {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
+        this.movieCrew.set(data.crew.filter((_, i) => i < 3));
         this.movieAllTeam.set(data);
         console.log('Data Cast: ', this.movieAllTeam());
         this.isLoading = false;
@@ -230,7 +249,7 @@ export class MovieComponent implements OnInit {
       const [year, month, day] = dateStr.split('-');
       return `${day}/${month}/${year}`;
     } else {
-      return 'Date unknown'
+      return 'Date unknown';
     }
   }
 }

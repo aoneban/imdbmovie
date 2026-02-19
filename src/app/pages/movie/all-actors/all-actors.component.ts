@@ -18,6 +18,9 @@ import { CommonModule } from '@angular/common';
   template: `
     <app-navbar></app-navbar>
     <section>
+      <div *ngIf="isLoading" class="preloader">
+        <div class="loader"></div>
+      </div>
       <div [ngStyle]="{ 'background-color': color }" class="mx-auto p-6">
         <div class="w-5/6 flex gap-5 mx-auto">
           <img
@@ -108,6 +111,7 @@ import { CommonModule } from '@angular/common';
   styles: ``,
 })
 export class AllActorsComponent implements OnInit {
+  isLoading = false;
   startUrl = 'https://image.tmdb.org/t/p/w200';
   startUrl2 = 'https://image.tmdb.org/t/p/w1920';
   movieId: number | undefined;
@@ -124,6 +128,7 @@ export class AllActorsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.movieId = id ? Number(id) : undefined;
@@ -139,6 +144,7 @@ export class AllActorsComponent implements OnInit {
       data => {
         this.movieData.set(data);
         console.log('Movie data: ', this.movieData());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -152,6 +158,7 @@ export class AllActorsComponent implements OnInit {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieAllTeam.set(data);
         console.log('Data Cast: ', this.movieAllTeam());
+        this.isLoading = false;
       },
       error => {
         console.error('Error fetching data: ', error);

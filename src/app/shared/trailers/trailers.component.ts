@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-// import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
 import { Movie, VideoResult, VideoResponse } from '../../interfaces/interface';

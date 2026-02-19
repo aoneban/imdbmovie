@@ -42,11 +42,9 @@ import { SingleMovie } from '../../../interfaces/interface';
           </text>
         </svg>
       </div>
-
-      <div class="rating-name ml-2">
+      <div class="rating-name ml-2 mr-4">
         <p>IMDB</p>
       </div>
-    </div>
   `,
   styles: `
     .rating-circle {

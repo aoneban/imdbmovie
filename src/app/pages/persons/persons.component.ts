@@ -54,7 +54,7 @@ import { RouterModule } from '@angular/router';
               <div class="movies__wrapper-cart" *ngFor="let movie of topCast()">
                 <div class="h-[220px]">
                   <img
-                    [routerLink]="['/movie', movie.id]"
+                    [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]"
                     class="image"
                     [src]="
                       movie.poster_path
@@ -64,7 +64,7 @@ import { RouterModule } from '@angular/router';
                     src="{{ startUrl + movie.poster_path }}"
                     alt="{{ movie.title }}" />
                 </div>
-                <a [routerLink]="['/movie', movie.id]">
+                <a [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]">
                   <p class="font-normal pt-3 pl-3 text-sm">{{ movie.title }}</p>
                 </a>
               </div>
