@@ -56,16 +56,36 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
                 class="img-wrapper relative w-full h-full"
                 role="button"
                 tabindex="0"
-                (click)="onImageClick(movie.id)"
-                (keydown.enter)="onImageClick(movie.id)"
-                (keydown.space)="onImageClick(movie.id)">
+                (click)="
+                  onImageClick(
+                    movie.media_type === 'movie' ? apiUrlMovie : apiUrlSeries,
+                    apiUrlEnd,
+                    movie.id
+                  )
+                "
+                (keydown.enter)="
+                  onImageClick(
+                    movie.media_type === 'movie' ? apiUrlMovie : apiUrlSeries,
+                    apiUrlEnd,
+                    movie.id
+                  )
+                "
+                (keydown.space)="
+                  onImageClick(
+                    movie.media_type === 'movie' ? apiUrlMovie : apiUrlSeries,
+                    apiUrlEnd,
+                    movie.id
+                  )
+                ">
                 <div class="play-triangle"></div>
                 <img
                   class="image relative z-10"
                   [src]="startUrl + movie.backdrop_path"
                   alt="{{ movie.title }}" />
               </div>
-              <p class="font-bold text-[16px] pl-[6px] pb-[2px]">{{ getMovieTitle(movie) }}</p>
+              <p class="font-bold text-[16px] pl-[6px] pb-[2px]">
+                {{ getMovieTitle(movie) }}
+              </p>
             </div>
           </div>
         </div>
@@ -85,28 +105,30 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
   styleUrls: ['../../../styles.scss'],
 })
 export class TrailersComponent implements OnInit {
+  apiUrlMovie = 'https://api.themoviedb.org/3/movie/';
+  apiUrlSeries = 'https://api.themoviedb.org/3/tv/';
+  apiUrlEnd = '/videos?language=en-US';
   newData: Movie[] = [];
   trailersData: VideoResult[] = [];
   selectedVideoId: string | null = null;
   startUrl = 'https://image.tmdb.org/t/p/w1280/';
   imgUrl = '';
-  apiUrl1 =
-    'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1';
-  apiUrl2 = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
-  apiUrl3 = 'https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=1';
-  apiUrl4 = 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+  apiUrl1 = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
+  apiUrl2 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
+  apiUrl3 = 'https://api.themoviedb.org/3/trending/tv/day?language=en-US';
+  apiUrl4 = 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1';
   activeButton = 'today';
 
   constructor(
     private trendingService: TrendingService,
-    private trailerMovie: TrailerMovieService,
-    private trailerSeries: TrailerMovieService
+    private trailerMovie: TrailerMovieService
   ) {}
 
   ngOnInit(): void {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
       data => {
         this.newData = data.results;
+        console.log('trailers data: ', this.newData);
         this.imgUrl = this.newData[0].backdrop_path;
       },
       error => {
@@ -144,31 +166,17 @@ export class TrailersComponent implements OnInit {
     return movie.title || movie.name || 'Untitled';
   }
 
-  onImageClick(id: number): void {
-    this.trailerMovie.getTrailersVideo(id).subscribe(
+  onImageClick(one: string, two: string, id: number): void {
+    this.trailerMovie.getTrailersVideo(one, two, id).subscribe(
       (data: VideoResponse) => {
         const video = data.results.find(v => v.site === 'YouTube');
         if (video) {
           this.selectedVideoId = video.key;
           this.stopScrolling();
-          console.log(this.selectedVideoId)
+          console.log(this.selectedVideoId);
         }
       },
-      error => {
-        console.log(id)
-        this.trailerSeries.getTrailersSeries(id).subscribe(
-          (data: VideoResponse) => {
-            const video2 = data.results.find(v => v.site === 'YouTube');
-            if (video2) {
-              this.selectedVideoId = video2.key;
-              this.stopScrolling();
-              console.log(id)
-              console.log(this.selectedVideoId)
-            }
-          },
-          error => console.error(error)
-        );
-      }
+      error => console.error(error)
     );
   }
 
