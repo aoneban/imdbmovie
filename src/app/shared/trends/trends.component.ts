@@ -85,8 +85,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
       </div>
     </section>
   `,
-  styleUrls: ['../../../styles.scss'],
-  animations: [
+   animations: [
     trigger('fadeAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),

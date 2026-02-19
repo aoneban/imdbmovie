@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
+import { trigger, style, transition, animate } from '@angular/animations';
 import { Movie, VideoResult, VideoResponse } from '../../interfaces/interface';
 import { TrailerMovieService } from '../../services/trailermovie.service';
 import { YouTubePlayerModule } from '@angular/youtube-player';
@@ -102,7 +103,22 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
       </section>
     </section>
   `,
-  styleUrls: ['../../../styles.scss'],
+  animations: [
+      trigger('fadeAnimation', [
+        transition(':enter', [
+          style({ opacity: 0 }),
+          animate('1000ms', style({ opacity: 1 })),
+        ]),
+        transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+      ]),
+      trigger('listAnimation', [
+        transition(':enter', [
+          style({ opacity: 0 }),
+          animate('1000ms', style({ opacity: 1 })),
+        ]),
+        transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+      ]),
+    ],
 })
 export class TrailersComponent implements OnInit {
   apiUrlMovie = 'https://api.themoviedb.org/3/movie/';
