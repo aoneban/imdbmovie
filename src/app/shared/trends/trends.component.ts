@@ -10,6 +10,7 @@ import { TrendingService } from '../../services/trending.service';
 import { Movie } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'app-trends',
@@ -65,13 +66,22 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
               alt="placeholder" />
             <img
               decoding="async"
-              [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]"
+              [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
               (load)="onImageLoad(movie.id)"
+              (click)="setType(movie.media_type)"
               class="image transition-opacity duration-700 min-h-[220px]"
               [class.opacity-0]="!loadedImages.has(movie.id)"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
-            <a [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]">
+            <a
+              [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
+              (click)="setType(movie.media_type)">
               <p
                 class="font-bold text-[15px] pl-[6px] pt-[15px] pb-[2px] break-words">
                 {{ getMovieTitle(movie) }}
@@ -85,7 +95,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
       </div>
     </section>
   `,
-   animations: [
+  animations: [
     trigger('fadeAnimation', [
       transition(':enter', [
         style({ opacity: 0 }),
@@ -105,16 +115,16 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
 export class TrendsComponent implements OnInit {
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
-  apiUrlToday =
-    'https://api.themoviedb.org/3/trending/all/day?language=en-US';
-  apiUrlWeek =
-    'https://api.themoviedb.org/3/trending/all/week?language=en-US';
+  apiUrlToday = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
+  apiUrlWeek = 'https://api.themoviedb.org/3/trending/all/week?language=en-US';
   activeButton = 'today';
   loadedImages = new Set<number>();
+  click: any;
 
   constructor(
     private trendingService: TrendingService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit(): void {
@@ -134,6 +144,10 @@ export class TrendsComponent implements OnInit {
 
   onImageLoad(id: number) {
     this.loadedImages.add(id);
+  }
+
+  setType(type: string) {
+    this.mediaTypeService.setMediaType(type);
   }
 
   getMovieTitle(movie: Movie): string {

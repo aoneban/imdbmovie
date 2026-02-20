@@ -8,29 +8,16 @@ import { MovieCast } from '../interfaces/interface';
   providedIn: 'root',
 })
 export class CastService {
-  private apiUrl1 = 'https://api.themoviedb.org/3/movie/';
-  private apiUrl0 = 'https://api.themoviedb.org/3/tv/';
-  private apiUrl2 = '/credits?language=en-US';
-
   constructor(private http: HttpClient) {}
 
-  getDataCast(id: number): Observable<MovieCast> {
+  getDataCast(apiOne: string, apiTwo: string, id: number): Observable<MovieCast> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<MovieCast>(`${this.apiUrl1}${id}${this.apiUrl2}`, {
+    return this.http.get<MovieCast>(`${apiOne}${id}${apiTwo}`, {
       headers,
     });
   }
 
-  getDataTvCast(id: number): Observable<MovieCast> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${environment.apiKey}`,
-      Accept: 'application/json',
-    });
-    return this.http.get<MovieCast>(`${this.apiUrl0}${id}${this.apiUrl2}`, {
-      headers,
-    });
-  }
 }

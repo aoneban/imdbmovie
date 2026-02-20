@@ -14,7 +14,7 @@ export const routes: Routes = [
   {
     path: 'tv/:id',
     loadComponent: () =>
-      import('./pages/tv/tv.component').then(m => m.TvComponent),
+      import('./pages/movie/movie.component').then(m => m.MovieComponent),
   },
   {
     path: 'persons/:id',
@@ -26,13 +26,6 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/movie/all-actors/all-actors.component').then(
         m => m.AllActorsComponent
-      ),
-  },
-  {
-    path: 'tv-cast/:id',
-    loadComponent: () =>
-      import('./pages/tv/all-tv-actors/all-tv-actors.component').then(
-        m => m.AllTvActorsComponent
       ),
   },
   {

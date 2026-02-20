@@ -10,6 +10,7 @@ import { TrendingService } from '../../services/trending.service';
 import { Movie } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'app-free',
@@ -22,7 +23,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
         <button
           (click)="switchTo('movies')"
           [class.active]="activeButton === 'movies'">
-          Movies
+          Airing
         </button>
         <div
           class="back"
@@ -64,16 +65,29 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
             </div>
             <img
               decoding="async"
-              [routerLink]="['/tv', movie.id]"
+              [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
               (load)="onImageLoad(movie.id)"
+              (click)="setType(movie.media_type)"
               class="image transition-opacity duration-700 relative z-0 min-h-[220px]"
               [class.opacity-0]="!loadedImages.has(movie.id)"
               src="{{ startUrl + movie.poster_path }}"
               alt="{{ movie.title }}" />
-            <a [routerLink]="['/tv', movie.id]">
-              <p class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ getMovieTitle(movie) }}</p>
+            <a [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
+              (click)="setType(movie.media_type)">
+              <p
+                class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">
+                {{ getMovieTitle(movie) }}
+              </p>
             </a>
-            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getDate(movie) }}</p>
+            <p class="italic text-[14px] pl-[6px] text-gray-400">
+              {{ getDate(movie) }}
+            </p>
           </div>
         </div>
       </div>
@@ -108,7 +122,8 @@ export class FreeComponent implements OnInit {
 
   constructor(
     private trendingService: TrendingService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit(): void {
@@ -141,6 +156,10 @@ export class FreeComponent implements OnInit {
         console.error('Error fetching data: ', error);
       }
     );
+  }
+
+  setType(type: string) {
+    this.mediaTypeService.setMediaType(type);
   }
 
   getMovieTitle(movie: Movie): string {

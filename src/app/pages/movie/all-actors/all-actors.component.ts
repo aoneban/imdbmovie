@@ -11,6 +11,7 @@ import { NavbarComponent } from '../../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
+import { MediaTypeService } from '../../../services/media-type.service';
 
 @Component({
   selector: 'app-all-actors',
@@ -30,8 +31,8 @@ import { CommonModule } from '@angular/common';
             [alt]="movieData()?.title || ''" />
           <div class="flex flex-col justify-center">
             <h2 class="text-4xl font-bold text-white !important mb-4">
-              {{ movieData()?.title }} ({{
-                movieData()?.release_date?.slice(0, 4)
+              {{ movieData()?.title || movieData()?.name }} ({{
+                movieData()?.release_date?.slice(0, 4) || movieData()?.first_air_date?.slice(0, 4)
               }})
             </h2>
             <button
@@ -111,6 +112,10 @@ import { CommonModule } from '@angular/common';
   styles: ``,
 })
 export class AllActorsComponent implements OnInit {
+  apiMovie = 'https://api.themoviedb.org/3/movie/';
+  apiTv = 'https://api.themoviedb.org/3/tv/'
+  apiUrlEnd = '?language=en-US';
+  apiCastEnd = '/credits?language=en-US';
   isLoading = false;
   startUrl = 'https://image.tmdb.org/t/p/w200';
   startUrl2 = 'https://image.tmdb.org/t/p/w1920';
@@ -124,23 +129,25 @@ export class AllActorsComponent implements OnInit {
     private route: ActivatedRoute,
     private movieService: MovieService,
     private castService: CastService,
-    private location: Location
+    private location: Location,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit(): void {
     this.isLoading = true;
+    const type = this.mediaTypeService.getMediaType();
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       this.movieId = id ? Number(id) : undefined;
       if (this.movieId !== undefined) {
-        this.fetchCast(this.movieId);
-        this.fetchData(this.movieId);
+        this.fetchCast(type === 'movie' ? this.apiMovie : this.apiTv, this.apiCastEnd, this.movieId);
+        this.fetchData(type === 'movie' ? this.apiMovie : this.apiTv, this.apiUrlEnd, this.movieId);
       }
     });
   }
 
-  fetchData(id: number): void {
-    this.movieService.getDataMovie(id).subscribe(
+  fetchData(apiOne: string, apiTwo: string, id: number): void {
+    this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
         console.log('Movie data: ', this.movieData());
@@ -152,8 +159,8 @@ export class AllActorsComponent implements OnInit {
     );
   }
 
-  fetchCast(id: number): void {
-    this.castService.getDataCast(id).subscribe(
+  fetchCast(linkOne: string, linkTwo: string, id: number): void {
+    this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
       data => {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieAllTeam.set(data);

@@ -10,6 +10,7 @@ import { TrendingService } from '../../services/trending.service';
 import { Movie } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'app-popular',
@@ -76,16 +77,29 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
             </div>
             <img
               decoding="async"
-              [routerLink]="['/movie', movie.id]"
+              [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
               (load)="onImageLoad(movie.id)"
+              (click)="setType(movie.media_type)"
               class="image transition-opacity duration-700 relative z-0 min-h-[220px]"
               [class.opacity-0]="!loadedImages.has(movie.id)"
               [src]="startUrl + movie.poster_path"
               alt="{{ movie.title }}" />
-            <a [routerLink]="['/movie', movie.id]">
-              <p class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ getMovieTitle(movie) }}</p>
+            <a [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]"
+              (click)="setType(movie.media_type)">
+              <p
+                class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">
+                {{ getMovieTitle(movie) }}
+              </p>
             </a>
-            <p class="italic text-[14px] pl-[6px] text-gray-400">{{ getDate(movie) }}</p>
+            <p class="italic text-[14px] pl-[6px] text-gray-400">
+              {{ getDate(movie) }}
+            </p>
           </div>
         </div>
       </div>
@@ -114,17 +128,18 @@ export class PopularComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   imgUrl = '';
   apiUrlPopular =
-    'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
-  apiUrlTv = 'https://api.themoviedb.org/3/movie/now_playing';
-  apiUrlTop = 'https://api.themoviedb.org/3/movie/top_rated';
+    'https://api.themoviedb.org/3/trending/all/day?language=en-US';
+  apiUrlTv = 'https://api.themoviedb.org/3/trending/tv/day?language=en-US';
+  apiUrlTop = 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1';
   apiUrlUpcoming =
-    'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1';
+    'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   activeButton = 'popular';
   loadedImages = new Set<number>();
 
   constructor(
     private trendingService: TrendingService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit(): void {
@@ -140,6 +155,10 @@ export class PopularComponent implements OnInit {
       this.loadedImages.add(id);
       this.cdr.markForCheck();
     }, 2000);
+  }
+
+  setType(type: string = 'movie') {
+    this.mediaTypeService.setMediaType(type);
   }
 
   switchTo(button: string): void {

@@ -22,6 +22,7 @@ import { RouterModule } from '@angular/router';
 import { ActorsComponent } from './actors/actors.component';
 import { AsideComponent } from './aside/aside.component';
 import { RatingComponent } from './rating/rating.component';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'movie',
@@ -62,14 +63,14 @@ import { RatingComponent } from './rating/rating.component';
             [alt]="movieData()?.title || ''" />
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-1">
-              {{ movieData()?.title }} ({{
+              {{ movieData()?.title || movieData()?.name}} ({{
                 movieData()?.release_date?.slice(0, 4)
                   ? movieData()?.release_date?.slice(0, 4)
-                  : '----'
+                  : movieData()?.first_air_date?.slice(0, 4)
               }})
             </h1>
             <p class="text-gray-300 mb-3">
-              {{ formatDate(movieData()?.release_date) }} ●
+              {{ movieData()?.release_date ? formatDate(movieData()?.release_date) : formatDate(movieData()?.first_air_date)}} ●
               {{ getGenres(movieData()?.genres) }} ●
               {{ minutesToTime(movieData()?.runtime) }}
             </p>
@@ -90,7 +91,7 @@ import { RatingComponent } from './rating/rating.component';
               }}
             </p>
             <div class="flex mt-6 gap-20">
-              @for(worker of movieCrew(); track worker.id) {
+              @for(worker of movieCrew(); track $index) {
                 <div class="direction">
                   <a
                     [routerLink]="['/persons', worker.id]"
@@ -135,9 +136,13 @@ import { RatingComponent } from './rating/rating.component';
   styles: ``,
 })
 export class MovieComponent implements OnInit {
-  isLoading = false;
+  apiMovie = 'https://api.themoviedb.org/3/movie/';
+  apiTv = 'https://api.themoviedb.org/3/tv/'
+  apiUrlEnd = '?language=en-US';
+  apiCastEnd = '/credits?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w500';
-  startUrl2 = 'https://image.tmdb.org/t/p/w1920';
+  startUrl2 = 'https://image.tmdb.org/t/p/w1920/';
+  isLoading = false;
   movieId: number | undefined;
   movieData = signal<SingleMovie | undefined>(undefined);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
@@ -146,11 +151,13 @@ export class MovieComponent implements OnInit {
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
+  
 
   constructor(
     private route: ActivatedRoute,
     private movieService: MovieService,
-    private castService: CastService
+    private castService: CastService,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   backgroundImage = computed(() => {
@@ -163,21 +170,22 @@ export class MovieComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    setTimeout(() => {
-      this.route.paramMap.subscribe(params => {
-        const id = params.get('id');
-        this.movieId = id ? Number(id) : undefined;
-        if (this.movieId !== undefined) {
-          this.fetchCast(this.movieId);
-          this.fetchData(this.movieId);
-          this.fetchDataImages(this.movieId);
-        }
-      });
-    }, 500);
+    const type = this.mediaTypeService.getMediaType();
+       setTimeout(() => {
+        this.route.paramMap.subscribe(params => {
+          const id = params.get('id');
+          this.movieId = id ? Number(id) : undefined;
+          if (this.movieId !== undefined && type) {
+            this.fetchCast(type === 'movie' ? this.apiMovie : this.apiTv, this.apiCastEnd, this.movieId);
+            this.fetchData(type === 'movie' ? this.apiMovie : this.apiTv, this.apiUrlEnd, this.movieId);
+            this.fetchDataImages(type === 'movie' ? this.apiMovie : this.apiTv, this.movieId);
+          }
+        });
+      }, 500);
   }
 
-  fetchData(id: number): void {
-    this.movieService.getDataMovie(id).subscribe(
+  fetchData(apiOne: string, apiTwo: string, id: number): void {
+    this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
         console.log('Movie data: ', this.movieData());
@@ -190,8 +198,8 @@ export class MovieComponent implements OnInit {
     );
   }
 
-  fetchDataImages(id: number): void {
-    this.movieService.getDataImage(id).subscribe(
+  fetchDataImages(apiStart: string, id: number): void {
+    this.movieService.getDataImage(apiStart, id).subscribe(
       data => {
         this.movieDataImg.set(data);
         console.log('Movie images: ', this.movieDataImg());
@@ -203,8 +211,8 @@ export class MovieComponent implements OnInit {
       }
     );
   }
-  fetchCast(id: number): void {
-    this.castService.getDataCast(id).subscribe(
+  fetchCast(linkOne: string, linkTwo: string, id: number): void {
+    this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
       data => {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieCrew.set(data.crew.filter((_, i) => i < 3));

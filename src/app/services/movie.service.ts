@@ -8,30 +8,27 @@ import { SingleMovie, ImagesResponse } from '../interfaces/interface';
   providedIn: 'root',
 })
 export class MovieService {
-  private apiUrlStart = 'https://api.themoviedb.org/3/movie/';
-  private apiUrlEnd = '?language=en-US';
-  private apiUrlEnd2 = '/images';
 
   constructor(private http: HttpClient) {}
 
-  getDataMovie(id: number): Observable<SingleMovie> {
+  getDataMovie(apiStart: string, apiEnd: string, id: number): Observable<SingleMovie> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
     return this.http.get<SingleMovie>(
-      `${this.apiUrlStart}${id}${this.apiUrlEnd}`,
+      `${apiStart}${id}${apiEnd}`,
       { headers }
     );
   }
 
-  getDataImage(id: number): Observable<ImagesResponse> {
+  getDataImage(apiStart: string, id: number): Observable<ImagesResponse> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
     return this.http.get<ImagesResponse>(
-      `${this.apiUrlStart}${id}${this.apiUrlEnd2}`,
+      `${apiStart}${id}/images`,
       { headers }
     );
   }
