@@ -39,7 +39,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=',
-      name: 'Popular Movies'
+      name: 'Popular Movies',
+      type: 'movie'
     },
   },
   {
@@ -48,7 +49,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=',
-      name: 'Top Rated Movies'
+      name: 'Top Rated Movies',
+      type: 'movie'
     },
   },
   {
@@ -57,7 +59,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=',
-      name: 'Upcoming Movies'
+      name: 'Upcoming Movies',
+      type: 'movie'
     },
   },
   {
@@ -66,7 +69,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=',
-      name: 'Now Playing Movies'
+      name: 'Now Playing Movies',
+      type: 'movie'
     },
   },
   {
@@ -75,7 +79,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=',
-      name: 'Top Rated TV'
+      name: 'Top Rated TV',
+      type: 'tv'
     },
   },
   {
@@ -84,7 +89,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=',
-      name: 'Airing Today'
+      name: 'Airing Today',
+      type: 'tv'
     },
   },
     {
@@ -93,7 +99,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=',
-      name: 'Popular TV'
+      name: 'Popular TV',
+      type: 'tv'
     },
   },
       {
@@ -102,7 +109,8 @@ export const routes: Routes = [
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=',
-      name: 'On The Air'
+      name: 'On TV',
+      type: 'tv'
     },
   },
   {

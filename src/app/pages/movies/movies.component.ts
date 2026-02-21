@@ -38,7 +38,6 @@ import { MediaTypeService } from '../../services/media-type.service';
               <img
                 decoding="auto"
                 class="w-[auto] transition-opacity duration-700 rounded-none"
-                (click)="setType(movie.media_type)"
                 [src]="
                   movie?.poster_path
                     ? startUrl + movie.poster_path
@@ -49,9 +48,9 @@ import { MediaTypeService } from '../../services/media-type.service';
                 alt="{{ movie.name }}" />
               <h3
                 class="cursor-pointer font-bold relative top-4 left-3"
-                (click)="setType(movie.media_type)"
+                (click)="setType(mediaType)"
                 [routerLink]="[
-                movie.media_type === 'movie' ? '/movie' : '/tv',
+                mediaType === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]">
                 {{ movie.title || movie.name }}
@@ -85,6 +84,7 @@ import { MediaTypeService } from '../../services/media-type.service';
 export class MoviesComponent {
   url!: string;
   namePage!: string;
+  mediaType!: string;
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;
@@ -101,6 +101,7 @@ export class MoviesComponent {
   ngOnInit(): void {
   this.url = this.route.snapshot.data['url'];
   this.namePage = this.route.snapshot.data['name'];
+  this.mediaType = this.route.snapshot.data['type'];
   this.fetchData(this.page);
 }
 
