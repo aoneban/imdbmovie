@@ -45,7 +45,7 @@ import { RouterModule } from '@angular/router';
           </div>
         </div>
         <div>
-          <p class="italic text-gray-600 text-xs text-center">Design by TMDB, Developed by Ashot Bahiran</p>
+          <p class="italic text-gray-600 text-xs text-center">Design by TMDB, Developed by A.Bahiran</p>
         </div>
       </div>
     </footer>

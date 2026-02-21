@@ -4,13 +4,16 @@ import { Movie } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'app-movies',
   imports: [CommonModule, RouterModule],
   template: `
     <section>
-      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Popular movies</h1>
+      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
+        Popular movies
+      </h1>
       <div class="flex w-[80%] mx-auto flex-wrap justify-center">
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
@@ -35,6 +38,7 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
               <img
                 decoding="auto"
                 class="w-[auto] transition-opacity duration-700 rounded-none"
+                (click)="setType(movie.media_type)"
                 [src]="
                   movie?.poster_path
                     ? startUrl + movie.poster_path
@@ -45,7 +49,11 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
                 alt="{{ movie.name }}" />
               <h3
                 class="cursor-pointer font-bold relative top-4 left-3"
-                [routerLink]="['/movie', movie.id]">
+                (click)="setType(movie.media_type)"
+                [routerLink]="[
+                movie.media_type === 'movie' ? '/movie' : '/tv',
+                movie.id,
+              ]">
                 {{ movie.title }}
               </h3>
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
@@ -75,14 +83,17 @@ import { getReleaseDate } from '../../helpers/getReleaseDate';
   styles: ``,
 })
 export class MoviesComponent {
-  url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page='
+  url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=';
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;
   movieData = signal<Movie[] | undefined>(undefined);
   loadedImages = new Set<number>();
 
-  constructor(private moviesService: MoviesService) {}
+  constructor(
+    private moviesService: MoviesService,
+    private mediaTypeService: MediaTypeService
+  ) {}
 
   ngOnInit(): void {
     if (this.movieData !== undefined) {
@@ -113,6 +124,10 @@ export class MoviesComponent {
   getDate(movie: Movie): string {
     const newDate = getReleaseDate(movie);
     return newDate;
+  }
+
+  setType(type: string = 'movie') {
+    this.mediaTypeService.setMediaType(type);
   }
 
   previousPage(): void {

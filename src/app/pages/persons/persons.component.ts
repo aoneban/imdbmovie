@@ -6,6 +6,7 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { BiographyComponent } from './biography/biography.component';
 import { RouterModule } from '@angular/router';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'persons',
@@ -54,8 +55,12 @@ import { RouterModule } from '@angular/router';
               <div class="movies__wrapper-cart" *ngFor="let movie of topCast()">
                 <div class="h-[220px]">
                   <img
-                    [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]"
+                    [routerLink]="[
+                      movie.media_type === 'movie' ? '/movie' : '/tv',
+                      movie.id,
+                    ]"
                     class="image"
+                    (click)="setType(movie.media_type)"
                     [src]="
                       movie.poster_path
                         ? startUrl + movie.poster_path
@@ -64,8 +69,13 @@ import { RouterModule } from '@angular/router';
                     src="{{ startUrl + movie.poster_path }}"
                     alt="{{ movie.title }}" />
                 </div>
-                <a [routerLink]="[movie.media_type === 'movie' ? '/movie' : '/tv', movie.id]">
-                  <p class="font-normal pt-3 pl-3 text-sm">{{ movie.title }}</p>
+                <a
+                  [routerLink]="[
+                    movie.media_type === 'movie' ? '/movie' : '/tv',
+                    movie.id,
+                  ]"
+                  (click)="setType(movie.media_type)">
+                  <p class="font-normal pt-3 pl-3 text-sm">{{ movie.title || movie.name }}</p>
                 </a>
               </div>
             </div>
@@ -75,7 +85,6 @@ import { RouterModule } from '@angular/router';
     </section>
   `,
   styles: ``,
-  
 })
 export class PersonsComponent implements OnInit {
   isLoading = false;
@@ -91,7 +100,8 @@ export class PersonsComponent implements OnInit {
   });
   constructor(
     private route: ActivatedRoute,
-    private personService: PersonService
+    private personService: PersonService,
+    private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit() {
@@ -130,6 +140,10 @@ export class PersonsComponent implements OnInit {
         console.error('Error fetching data: ', error);
       }
     );
+  }
+
+  setType(type: string) {
+    this.mediaTypeService.setMediaType(type);
   }
 
   onImageLoad(id: number) {

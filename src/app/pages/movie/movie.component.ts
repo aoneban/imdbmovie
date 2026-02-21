@@ -56,7 +56,7 @@ import { MediaTypeService } from '../../services/media-type.service';
             alt="placeholder" />
           <img
             decoding="auto"
-            class="main-poster transition-opacity duration-700"
+            class="main-poster transition-opacity duration-700 h-[29vw]"
             (load)="onImageLoad(movieData()!.id)"
             [class.hidden]="!loadedImages.has(movieData()!.id)"
             [src]="startUrl + (movieData()?.poster_path || '')"
