@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../interfaces/interface';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
@@ -12,7 +12,7 @@ import { MediaTypeService } from '../../services/media-type.service';
   template: `
     <section>
       <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
-        Popular movies
+        {{ namePage }}
       </h1>
       <div class="flex w-[80%] mx-auto flex-wrap justify-center">
         @for (movie of movieData(); track $index) {
@@ -54,7 +54,7 @@ import { MediaTypeService } from '../../services/media-type.service';
                 movie.media_type === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]">
-                {{ movie.title }}
+                {{ movie.title || movie.name }}
               </h3>
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
                 {{ getDate(movie) }}
@@ -83,23 +83,27 @@ import { MediaTypeService } from '../../services/media-type.service';
   styles: ``,
 })
 export class MoviesComponent {
-  url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=';
+  url!: string;
+  namePage!: string;
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;
+
   movieData = signal<Movie[] | undefined>(undefined);
   loadedImages = new Set<number>();
 
   constructor(
+    private route: ActivatedRoute,
     private moviesService: MoviesService,
     private mediaTypeService: MediaTypeService
   ) {}
 
   ngOnInit(): void {
-    if (this.movieData !== undefined) {
-      this.fetchData(this.page);
-    }
-  }
+  this.url = this.route.snapshot.data['url'];
+  this.namePage = this.route.snapshot.data['name'];
+  this.fetchData(this.page);
+}
+
 
   fetchData(page: number): void {
     this.moviesService.getDataMovies(this.url, page).subscribe(
@@ -126,7 +130,7 @@ export class MoviesComponent {
     return newDate;
   }
 
-  setType(type: string = 'movie') {
+  setType(type: string) {
     this.mediaTypeService.setMediaType(type);
   }
 

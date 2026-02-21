@@ -37,61 +37,79 @@ export const routes: Routes = [
     path: 'movies',
     loadComponent: () =>
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=',
+      name: 'Popular Movies'
+    },
   },
   {
     path: 'top-rated',
     loadComponent: () =>
-      import('./pages/top-rated/top-rated.component').then(
-        m => m.TopRatedComponent
-      ),
-  },
-  {
-    path: 'tv-top-rated',
-    loadComponent: () =>
-      import('./pages/tv-top-rated/tv-top-rated.component').then(
-        m => m.TvTopRatedComponent
-      ),
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=',
+      name: 'Top Rated Movies'
+    },
   },
   {
     path: 'upcoming',
     loadComponent: () =>
-      import('./pages/upcoming/upcoming.component').then(
-        m => m.UpcomingComponent
-      ),
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=',
+      name: 'Upcoming Movies'
+    },
   },
   {
     path: 'now-playing',
     loadComponent: () =>
-      import('./pages/now-playing/now-playing.component').then(
-        m => m.NowPlayingComponent
-      ),
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=',
+      name: 'Now Playing Movies'
+    },
   },
-    {
-    path: 'page-persons',
+  {
+    path: 'tv-top-rated',
     loadComponent: () =>
-      import('./pages/page-persons/page-persons.component').then(
-        m => m.PagePersonsComponent
-      ),
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=',
+      name: 'Top Rated TV'
+    },
   },
   {
     path: 'airing-today',
     loadComponent: () =>
-      import('./pages/airing-today/airing-today.component').then(
-        m => m.AiringTodayComponent
-      ),
-  },
-  {
-    path: 'tv-popular',
-    loadComponent: () =>
-      import('./pages/tv-popular/tv-popular.component').then(
-        m => m.TvPopularComponent
-      ),
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=',
+      name: 'Airing Today'
+    },
   },
     {
+    path: 'tv-popular',
+    loadComponent: () =>
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=',
+      name: 'Popular TV'
+    },
+  },
+      {
     path: 'on-the-air',
     loadComponent: () =>
-      import('./pages/on-the-air/on-the-air.component').then(
-        m => m.OnTheAirComponent
+      import('./pages/movies/movies.component').then(m => m.MoviesComponent),
+    data: {
+      url: 'https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=',
+      name: 'On The Air'
+    },
+  },
+  {
+    path: 'page-persons',
+    loadComponent: () =>
+      import('./pages/page-persons/page-persons.component').then(
+        m => m.PagePersonsComponent
       ),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },

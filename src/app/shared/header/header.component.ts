@@ -36,7 +36,7 @@ import { RouterModule } from '@angular/router';
                 <div class="dropdown">
                   <button class="dropbtn">TV Shows</button>
                   <div class="dropdown-content">
-                    <a [routerLink]="['/tv-popular']">Popular</a>
+                    <a [routerLink]="['/tv-popular']">Popular TV</a>
                     <a [routerLink]="['/airing-today']">Airing today</a>
                     <a [routerLink]="['/on-the-air']">On TV</a>
                     <a [routerLink]="['/tv-top-rated']">Top rated</a>
