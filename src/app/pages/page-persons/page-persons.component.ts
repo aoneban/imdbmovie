@@ -94,10 +94,16 @@ export class PagePersonsComponent {
     this.loadedImages.add(id);
   }
 
+   goTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
   previousPage(): void {
     this.page -= 1;
     if (this.page === 0) this.page = 1;
     this.fetchData(this.page);
+    this.goTop()
+
   }
 
   nextPage(): void {
@@ -106,5 +112,6 @@ export class PagePersonsComponent {
       if (this.page > this.totalPages) this.page = this.totalPages;
     }
     this.fetchData(this.page);
+    this.goTop()
   }
 }
