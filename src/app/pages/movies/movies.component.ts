@@ -112,8 +112,6 @@ export class MoviesComponent {
         if (data.total_pages) {
           this.totalPages = data.total_pages;
         }
-
-        console.log('Movie data: ', this.movieData());
       },
       error => {
         console.error('Error fetching data: ', error);

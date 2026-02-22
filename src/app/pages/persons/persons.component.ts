@@ -20,9 +20,9 @@ import { MediaTypeService } from '../../services/media-type.service';
       <div *ngIf="!isLoading" class="w-[80%] flex m-[auto]">
         <!-- Left content: 20% width -->
         <div class="w-2/6 pr-12 pb-12 pt-12">
-          <div>
+          <div *ngIf="personData() as p">
             <img
-              *ngIf="!loadedImages.has(personData()!.id)"
+              *ngIf="!loadedImages.has(p.id)"
               class="w-[80%] h-[80%] bg-gray-300"
               src="/icon-bg.svg"
               alt="placeholder" />
@@ -120,7 +120,6 @@ export class PersonsComponent implements OnInit {
     this.personService.getDataPerson(id).subscribe(
       data => {
         this.personData.set(data);
-        console.log('Person data: ', this.personData());
         this.isLoading = false;
       },
       error => {
@@ -133,7 +132,6 @@ export class PersonsComponent implements OnInit {
     this.personService.getCombinedCredits(id).subscribe(
       data => {
         this.personCombined.set(data);
-        console.log('Person combined: ', this.personCombined());
         this.isLoading = false;
       },
       error => {

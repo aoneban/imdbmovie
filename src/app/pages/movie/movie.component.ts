@@ -189,7 +189,6 @@ export class MovieComponent implements OnInit {
     this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
-        console.log('Movie data: ', this.movieData());
         this.isLoading = false;
       },
       error => {
@@ -203,7 +202,6 @@ export class MovieComponent implements OnInit {
     this.movieService.getDataImage(apiStart, id).subscribe(
       data => {
         this.movieDataImg.set(data);
-        console.log('Movie images: ', this.movieDataImg());
         this.isLoading = false;
       },
       error => {
@@ -218,7 +216,6 @@ export class MovieComponent implements OnInit {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieCrew.set(data.crew.filter((_, i) => i < 3));
         this.movieAllTeam.set(data);
-        console.log('Data Cast: ', this.movieAllTeam());
         this.isLoading = false;
       },
       error => {

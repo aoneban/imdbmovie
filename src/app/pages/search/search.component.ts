@@ -102,7 +102,6 @@ export class SearchComponent {
       data => {
         this.movieResponse.set(data);
         this.totalPages = data.total_pages;
-        console.log('Movie data: ', this.movieResponse());
       },
       error => {
         console.error('Error fetching data: ', error);

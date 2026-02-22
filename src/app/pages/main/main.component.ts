@@ -78,7 +78,7 @@ export class MainPageComponent {
     componentRef.setInput('config', {
       link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
       link2: 'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
-      link3: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
+      link3: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US',
       link4: 'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
       type: ['Popular', 'Now', 'Top Rated', 'Upcoming'],
       title: "What's Popular",

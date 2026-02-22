@@ -144,7 +144,6 @@ export class TrailersComponent implements OnInit {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
       data => {
         this.newData = data.results;
-        console.log('trailers data: ', this.newData);
         this.imgUrl = this.newData[0].backdrop_path;
       },
       error => {
@@ -189,7 +188,6 @@ export class TrailersComponent implements OnInit {
         if (video) {
           this.selectedVideoId = video.key;
           this.stopScrolling();
-          console.log(this.selectedVideoId);
         }
       },
       error => console.error(error)

@@ -150,7 +150,6 @@ export class AllActorsComponent implements OnInit {
     this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
-        console.log('Movie data: ', this.movieData());
         this.isLoading = false;
       },
       error => {
@@ -164,7 +163,6 @@ export class AllActorsComponent implements OnInit {
       data => {
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieAllTeam.set(data);
-        console.log('Data Cast: ', this.movieAllTeam());
         this.isLoading = false;
       },
       error => {
