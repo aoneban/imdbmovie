@@ -22,7 +22,8 @@ import { MediaTypeService } from '../../services/media-type.service';
             index as i;
             first as isFirst
           ">
-          <div class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
+          <div
+            class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
             <div class="basis-[8%]">
               <div
                 *ngIf="!loadedImages.has(movie.id)"
@@ -85,10 +86,10 @@ export class SearchComponent {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private searchService: SearchService,
-    private mediaTypeService: MediaTypeService,
+    private mediaTypeService: MediaTypeService
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const query = params['query'];
       this.fromInput = query;
@@ -109,32 +110,36 @@ export class SearchComponent {
     );
   }
 
-  onImageLoad(id: number) {
+  onImageLoad(id: number): void {
     setTimeout(() => {
       this.loadedImages.add(id);
       this.cdr.markForCheck();
     }, 2000);
   }
 
-  setType(type: string = 'movie') {
+  setType(type: string = 'movie'): void {
     this.mediaTypeService.setMediaType(type);
   }
 
-  nextPage() {
+  goTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  nextPage(): void {
     this.numberPage += 1;
     if (this.totalPages !== undefined || this.totalPages !== null) {
       if (this.numberPage > this.totalPages) this.numberPage = this.totalPages;
     }
     if (this.fromInput !== undefined)
       this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.goTop();
   }
 
-  previousPage() {
+  previousPage(): void {
     this.numberPage -= 1;
     if (this.numberPage === 0) this.numberPage = 1;
     if (this.fromInput !== undefined)
       this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    this.goTop();
   }
 }

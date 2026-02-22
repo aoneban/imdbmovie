@@ -50,9 +50,9 @@ import { MediaTypeService } from '../../services/media-type.service';
                 class="cursor-pointer font-bold relative top-4 left-3"
                 (click)="setType(mediaType)"
                 [routerLink]="[
-                mediaType === 'movie' ? '/movie' : '/tv',
-                movie.id,
-              ]">
+                  mediaType === 'movie' ? '/movie' : '/tv',
+                  movie.id,
+                ]">
                 {{ movie.title || movie.name }}
               </h3>
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
@@ -99,12 +99,11 @@ export class MoviesComponent {
   ) {}
 
   ngOnInit(): void {
-  this.url = this.route.snapshot.data['url'];
-  this.namePage = this.route.snapshot.data['name'];
-  this.mediaType = this.route.snapshot.data['type'];
-  this.fetchData(this.page);
-}
-
+    this.url = this.route.snapshot.data['url'];
+    this.namePage = this.route.snapshot.data['name'];
+    this.mediaType = this.route.snapshot.data['type'];
+    this.fetchData(this.page);
+  }
 
   fetchData(page: number): void {
     this.moviesService.getDataMovies(this.url, page).subscribe(
@@ -122,7 +121,7 @@ export class MoviesComponent {
     );
   }
 
-  onImageLoad(id: number) {
+  onImageLoad(id: number): void {
     this.loadedImages.add(id);
   }
 
@@ -131,14 +130,19 @@ export class MoviesComponent {
     return newDate;
   }
 
-  setType(type: string) {
+  setType(type: string): void {
     this.mediaTypeService.setMediaType(type);
+  }
+
+  goTop(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   previousPage(): void {
     this.page -= 1;
     if (this.page === 0) this.page = 1;
     this.fetchData(this.page);
+    this.goTop();
   }
 
   nextPage(): void {
@@ -147,5 +151,6 @@ export class MoviesComponent {
       if (this.page > this.totalPages) this.page = this.totalPages;
     }
     this.fetchData(this.page);
+    this.goTop();
   }
 }
