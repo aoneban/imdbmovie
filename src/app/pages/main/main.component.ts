@@ -1,6 +1,6 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { WelcomeComponent } from '../../shared/welcome/welcome.component';
-import { TrendsComponent } from '../../shared/trends/trends.component';
+import { PopularComponent } from '../../shared/popular/popular.component';
 import { TrailersComponent } from '../../shared/trailers/trailers.component';
 import { IntersectionObserverDirective } from '../../directives/intersection-observer.directive';
 
@@ -8,14 +8,23 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
   selector: 'main',
   imports: [
     WelcomeComponent,
-    TrendsComponent,
+    PopularComponent,
     TrailersComponent,
     IntersectionObserverDirective,
   ],
 
   template: `
     <app-welcome></app-welcome>
-    <app-trends></app-trends>
+
+    <app-popular 
+    [config]="{
+      link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
+      link2: 'https://api.themoviedb.org/3/trending/all/week?language=en-US',
+      type: ['Top Today', 'Top Week',],
+      title: 'Trending',
+      bgData: true,
+    }"></app-popular>
+
     <app-trailers></app-trailers>
 
     <div
@@ -23,14 +32,14 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       (visible)="loadPopular()"
       [rootMargin]="'50px'"
       style="height: 1px;"></div>
-    <ng-template #popularContainer></ng-template>
+    <ng-template #popularContainer ></ng-template>
 
     <div
       appIntersectionObserver
-      (visible)="loadFree()"
+      (visible)="loadPopular2()"
       [rootMargin]="'25px'"
       style="height: 1px;"></div>
-    <ng-template #freeContainer></ng-template>
+    <ng-template #popularContainer2></ng-template>
 
     <div
       appIntersectionObserver
@@ -42,17 +51,20 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
   styles: ``,
 })
 export class MainPageComponent {
+  @ViewChild('trendsContainer', { read: ViewContainerRef })
+  trendsVcr!: ViewContainerRef;
+
   @ViewChild('popularContainer', { read: ViewContainerRef })
   popularVcr!: ViewContainerRef;
 
-  @ViewChild('freeContainer', { read: ViewContainerRef })
-  freeVcr!: ViewContainerRef;
+  @ViewChild('popularContainer2', { read: ViewContainerRef })
+  popularVcr2!: ViewContainerRef;
 
   @ViewChild('personsContainer', { read: ViewContainerRef })
   personsVcr!: ViewContainerRef;
 
   private popularLoaded = false;
-  private freeLoaded = false;
+  private popularLoaded2 = false;
   private personsLoaded = false;
 
   async loadPopular() {
@@ -62,15 +74,34 @@ export class MainPageComponent {
     const { PopularComponent } = await import(
       '../../shared/popular/popular.component'
     );
-    this.popularVcr.createComponent(PopularComponent);
+    const componentRef = this.popularVcr.createComponent(PopularComponent);
+    componentRef.setInput('config', {
+      link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
+      link2: 'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
+      link3: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
+      link4: 'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
+      type: ['Popular', 'Now', 'Top Rated', 'Upcoming'],
+      title: "What's Popular",
+      bgData: false,
+    });
   }
 
-  async loadFree() {
-    if (this.freeLoaded) return;
-    this.freeLoaded = true;
+    async loadPopular2() {
+    if (this.popularLoaded2) return; 
+    this.popularLoaded2 = true;
 
-    const { FreeComponent } = await import('../../shared/free/free.component');
-    this.freeVcr.createComponent(FreeComponent);
+    const { PopularComponent } = await import(
+      '../../shared/popular/popular.component'
+    );
+    const componentRef = this.popularVcr2.createComponent(PopularComponent);
+    componentRef.setInput('config', {
+      link1: 'https://api.themoviedb.org/3/tv/airing_today',
+      link2: 'https://api.themoviedb.org/3/tv/on_the_air',
+      type: ['Airing', 'Tv'],
+      title: 'Free to watch',
+      mediaType: 'tv',
+      bgData: false,
+    });
   }
 
   async loadPersons() {

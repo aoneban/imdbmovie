@@ -8,18 +8,15 @@ import { MovieSearchResponse } from '../interfaces/interface';
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl1 = 'https://api.themoviedb.org/3/search/movie?query=';
-  private apiUrl2 = '&include_adult=false&language=en-US&page=';
-
   constructor(private http: HttpClient) { }
 
-  getDataMovie(text: string, page: number): Observable<MovieSearchResponse> {
+  getDataMovie(linkOne: string, linkTwo: string, text: string, page: number): Observable<MovieSearchResponse> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
     return this.http.get<MovieSearchResponse>(
-      `${this.apiUrl1}${text}${this.apiUrl2}${page}`,
+      `${linkOne}${text}${linkTwo}${page}`,
       { headers }
     );
   }

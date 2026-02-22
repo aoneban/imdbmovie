@@ -5,16 +5,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { TruncateWordsPipe } from '../../../pipes/truncate-words.pipe';
 import { SearchService } from '../../services/search.service';
+import { MediaTypeService } from '../../services/media-type.service';
 
 @Component({
   selector: 'app-search',
-  imports: [
-    CommonModule,
-    RouterModule,
-    TruncateWordsPipe,
-  ],
+  imports: [CommonModule, RouterModule, TruncateWordsPipe],
   template: `
-    <section class="search">
+    <section class="w-[80%] min-h-screen mx-auto">
       <h1 class="text-4xl pt-4 pb-4 font-bold text-white-900 mb-4">
         {{ fromInput }}
       </h1>
@@ -25,7 +22,7 @@ import { SearchService } from '../../services/search.service';
             index as i;
             first as isFirst
           ">
-          <div class="content full">
+          <div class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
             <div class="basis-[8%]">
               <div
                 *ngIf="!loadedImages.has(movie.id)"
@@ -34,7 +31,7 @@ import { SearchService } from '../../services/search.service';
               </div>
               <img
                 decoding="async"
-                class="poster"
+                class="w-[100%] h-[100%]"
                 (load)="onImageLoad(movie.id)"
                 [class.opacity-0]="!loadedImages.has(movie.id)"
                 [src]="startUrl + (movie.poster_path || '')"
@@ -42,7 +39,7 @@ import { SearchService } from '../../services/search.service';
             </div>
 
             <div class="basis-[92%] pt-2 pb-2">
-              <a [routerLink]="['/movie', movie.id]">
+              <a [routerLink]="['/movie', movie.id]" (click)="setType()">
                 <h3 class="text-xl font-bold tracking-tight text-gray-800">
                   {{ movie.title }}
                 </h3>
@@ -72,30 +69,11 @@ import { SearchService } from '../../services/search.service';
       </div>
     </section>
   `,
-  styles: `
-    .search {
-      width: 80%;
-      min-height: 100vh;
-      margin: 0 auto;
-    }
-    .content {
-      position: relative;
-      min-height: 150px;
-      display: flex;
-      gap: 15px;
-      margin: 20px;
-      border: 1px solid lightgray;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .poster {
-      width: 100%;
-      height: 100%;
-    }
-  `,
+  styles: ``,
 })
 export class SearchComponent {
+  apiUrl1 = 'https://api.themoviedb.org/3/search/movie?query=';
+  apiUrl2 = '&include_adult=false&language=en-US&page=';
   startUrl = 'https://image.tmdb.org/t/p/w200';
   fromInput: string | undefined;
   numberPage: number = 1;
@@ -106,19 +84,20 @@ export class SearchComponent {
   constructor(
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private searchService: SearchService
+    private searchService: SearchService,
+    private mediaTypeService: MediaTypeService,
   ) {}
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const query = params['query'];
       this.fromInput = query;
-      this.fetchData(query);
+      this.fetchData(this.apiUrl1, this.apiUrl2, query);
     });
   }
 
-  fetchData(text: string): void {
-    this.searchService.getDataMovie(text, this.numberPage).subscribe(
+  fetchData(one: string, two: string, text: string): void {
+    this.searchService.getDataMovie(one, two, text, this.numberPage).subscribe(
       data => {
         this.movieResponse.set(data);
         this.totalPages = data.total_pages;
@@ -136,18 +115,26 @@ export class SearchComponent {
       this.cdr.markForCheck();
     }, 2000);
   }
-  
+
+  setType(type: string = 'movie') {
+    this.mediaTypeService.setMediaType(type);
+  }
+
   nextPage() {
     this.numberPage += 1;
     if (this.totalPages !== undefined || this.totalPages !== null) {
       if (this.numberPage > this.totalPages) this.numberPage = this.totalPages;
     }
-    if (this.fromInput !== undefined) this.fetchData(this.fromInput);
+    if (this.fromInput !== undefined)
+      this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   previousPage() {
     this.numberPage -= 1;
     if (this.numberPage === 0) this.numberPage = 1;
-    if (this.fromInput !== undefined) this.fetchData(this.fromInput);
+    if (this.fromInput !== undefined)
+      this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

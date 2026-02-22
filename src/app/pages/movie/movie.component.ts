@@ -170,7 +170,7 @@ export class MovieComponent implements OnInit {
 
   ngOnInit(): void {
     this.isLoading = true;
-    const type = this.mediaTypeService.getMediaType();
+    let type = this.mediaTypeService.getMediaType();
        setTimeout(() => {
         this.route.paramMap.subscribe(params => {
           const id = params.get('id');
@@ -182,6 +182,7 @@ export class MovieComponent implements OnInit {
           }
         });
       }, 500);
+      
   }
 
   fetchData(apiOne: string, apiTwo: string, id: number): void {

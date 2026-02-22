@@ -273,3 +273,14 @@ export interface MovieResult {
   vote_average: number;
   vote_count: number;
 }
+
+export interface PopularConfig {
+  link1: string;
+  link2: string;
+  link3?: string;
+  link4?: string;
+  type: string[];
+  title: string;
+  mediaType?: 'movie' | 'tv';
+  bgData?: boolean;
+}

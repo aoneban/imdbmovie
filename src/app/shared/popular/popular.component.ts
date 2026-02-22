@@ -3,11 +3,12 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
+  Input,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
-import { Movie } from '../../interfaces/interface';
+import { Movie, PopularConfig } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
@@ -18,12 +19,12 @@ import { MediaTypeService } from '../../services/media-type.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
-      <h3 class="trending">What's Popular</h3>
+      <h3 class="trending">{{ config.title }}</h3>
       <div class="switch">
         <button
           (click)="switchTo('popular')"
           [class.active]="activeButton === 'popular'">
-          Popular
+          {{ config.type[0] }}
         </button>
         <div
           class="back"
@@ -34,21 +35,21 @@ import { MediaTypeService } from '../../services/media-type.service';
             upcoming: activeButton === 'upcoming',
           }"></div>
         <button (click)="switchTo('tv')" [class.active]="activeButton === 'tv'">
-          Now
+          {{ config.type[1] }}
         </button>
-        <button
+        <button *ngIf="config.type[2]"
           (click)="switchTo('top')"
           [class.active]="activeButton === 'top'">
-          Top Rated
+          {{ config.type[2] }}
         </button>
-        <button
+        <button *ngIf="config.type[3]"
           (click)="switchTo('upcoming')"
           [class.active]="activeButton === 'upcoming'">
-          Upcoming
+          {{ config.type[3] }}
         </button>
       </div>
     </div>
-    <section class="movies__main bg-none">
+    <section class="movies__main" [class.bg-none]="!config.bgData">
       <div class="movies__wrapper">
         <div class="movies__wrapper-block" [@listAnimation]="newData.length">
           <div
@@ -82,7 +83,7 @@ import { MediaTypeService } from '../../services/media-type.service';
                 movie.id,
               ]"
               (load)="onImageLoad(movie.id)"
-              (click)="setType(movie.media_type)"
+              (click)="setType(movie.media_type ? movie.media_type : type)"
               class="image transition-opacity duration-700 relative z-0 min-h-[220px]"
               [class.opacity-0]="!loadedImages.has(movie.id)"
               [src]="startUrl + movie.poster_path"
@@ -91,7 +92,7 @@ import { MediaTypeService } from '../../services/media-type.service';
                 movie.media_type === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]"
-              (click)="setType(movie.media_type)">
+              (click)="setType(movie.media_type ? movie.media_type : type)">
               <p
                 class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">
                 {{ getMovieTitle(movie) }}
@@ -124,15 +125,12 @@ import { MediaTypeService } from '../../services/media-type.service';
   ],
 })
 export class PopularComponent implements OnInit {
+  @Input() config!: PopularConfig;
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   imgUrl = '';
-  apiUrlPopular =
-    'https://api.themoviedb.org/3/trending/all/day?language=en-US';
-  apiUrlTv = 'https://api.themoviedb.org/3/trending/tv/day?language=en-US';
-  apiUrlTop = 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1';
-  apiUrlUpcoming =
-    'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
+  type!: string | undefined
+
   activeButton = 'popular';
   loadedImages = new Set<number>();
 
@@ -144,6 +142,7 @@ export class PopularComponent implements OnInit {
 
   ngOnInit(): void {
     this.switchTo(this.activeButton);
+    this.type = this.config.mediaType
   }
 
   trackByMovie(index: number, movie: Movie): number {
@@ -166,23 +165,25 @@ export class PopularComponent implements OnInit {
     let apiUrl = '';
     switch (button) {
       case 'popular':
-        apiUrl = this.apiUrlPopular;
+        apiUrl = this.config.link1;
         break;
 
       case 'tv':
-        apiUrl = this.apiUrlTv;
+        apiUrl = this.config.link2;
         break;
 
       case 'top':
-        apiUrl = this.apiUrlTop;
+        if(this.config.link3)
+        apiUrl = this.config.link3;
         break;
 
       case 'upcoming':
-        apiUrl = this.apiUrlUpcoming;
+        if(this.config.link4)
+        apiUrl = this.config.link4;
         break;
 
       default:
-        apiUrl = this.apiUrlPopular;
+        apiUrl = this.config.link1;
         break;
     }
 
