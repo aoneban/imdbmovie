@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../interfaces/interface';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -61,19 +61,10 @@ import { MediaTypeService } from '../../services/media-type.service';
             </div>
           </div>
         }
-        <div class="mt-10">
-          <button
-            [disabled]="page === 1"
-            (click)="previousPage()"
+        <div class="mt-20 mb-10">
+          <button (click)="loadMore()"
             class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-            Previous
-          </button>
-          <span class="ml-6 mr-6">{{ page }} from {{ totalPages }}</span>
-          <button
-            [disabled]="page === totalPages"
-            (click)="nextPage()"
-            class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-            Next
+            Load more...
           </button>
         </div>
       </div>
@@ -102,7 +93,7 @@ export class MoviesComponent {
     this.url = this.route.snapshot.data['url'];
     this.namePage = this.route.snapshot.data['name'];
     this.mediaType = this.route.snapshot.data['type'];
-    this.fetchData(this.page);
+    this.fetchData(1);
   }
 
   fetchData(page: number): void {
@@ -136,19 +127,15 @@ export class MoviesComponent {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  previousPage(): void {
-    this.page -= 1;
-    if (this.page === 0) this.page = 1;
-    this.fetchData(this.page);
-    this.goTop();
-  }
-
-  nextPage(): void {
+  loadMore() {
     this.page += 1;
-    if (this.totalPages !== undefined || this.totalPages !== null) {
-      if (this.page > this.totalPages) this.page = this.totalPages;
-    }
-    this.fetchData(this.page);
-    this.goTop();
+    this.moviesService.getDataMovies(this.url, this.page).subscribe(
+      data => {
+        this.movieData.update(prev => [...(prev ?? []), ...data.results])
+      },
+      error => {
+        console.error('Error fetching data: ', error);
+      }
+    );
   }
 }

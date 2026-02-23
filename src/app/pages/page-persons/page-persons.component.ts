@@ -9,7 +9,9 @@ import { Person } from '../../interfaces/interface';
   imports: [CommonModule, RouterModule],
   template: `
     <section>
-      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">Popular Persons</h1>
+      <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
+        Popular Persons
+      </h1>
       <div class="flex w-[80%] mx-auto flex-wrap justify-center">
         @for (person of personData(); track $index) {
           <div class="relative w-[20%] mt-5">
@@ -39,19 +41,11 @@ import { Person } from '../../interfaces/interface';
             </div>
           </div>
         }
-        <div class="mt-10">
+        <div class="mt-20 mb-10">
           <button
-            [disabled]="page === 1"
-            (click)="previousPage()"
+            (click)="loadMore()"
             class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-            Previous
-          </button>
-          <span class="ml-6 mr-6">{{ page }} from {{ totalPages }}</span>
-          <button
-            [disabled]="page === totalPages"
-            (click)="nextPage()"
-            class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-            Next
+            Load more...
           </button>
         </div>
       </div>
@@ -60,7 +54,7 @@ import { Person } from '../../interfaces/interface';
   styles: ``,
 })
 export class PagePersonsComponent {
-  url = 'https://api.themoviedb.org/3/person/popular?language=en-US&page='
+  url = 'https://api.themoviedb.org/3/person/popular?language=en-US&page=';
   startUrl = 'https://image.tmdb.org/t/p/w500';
   page = 1;
   totalPages: number = 0;
@@ -93,24 +87,19 @@ export class PagePersonsComponent {
     this.loadedImages.add(id);
   }
 
-   goTop(): void {
+  goTop(): void {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  previousPage(): void {
-    this.page -= 1;
-    if (this.page === 0) this.page = 1;
-    this.fetchData(this.page);
-    this.goTop()
-
-  }
-
-  nextPage(): void {
+  loadMore() {
     this.page += 1;
-    if (this.totalPages !== undefined || this.totalPages !== null) {
-      if (this.page > this.totalPages) this.page = this.totalPages;
-    }
-    this.fetchData(this.page);
-    this.goTop()
+    this.popPersonService.getDataPopularPerson(this.url, this.page).subscribe(
+      data => {
+        this.personData.update(prev => [...(prev ?? []), ...data.results]);
+      },
+      error => {
+        console.error('Error fetching data: ', error);
+      }
+    );
   }
 }
