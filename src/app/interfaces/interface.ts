@@ -284,3 +284,7 @@ export interface PopularConfig {
   mediaType?: 'movie' | 'tv';
   bgData?: boolean;
 }
+
+export interface HasRating {
+  vote_average: number;
+}

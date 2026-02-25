@@ -12,10 +12,11 @@ import { Movie, PopularConfig } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
+import { RatingComponent } from '../../pages/movie/rating/rating.component';
 
 @Component({
   selector: 'app-popular',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RatingComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
@@ -37,12 +38,14 @@ import { MediaTypeService } from '../../services/media-type.service';
         <button (click)="switchTo('tv')" [class.active]="activeButton === 'tv'">
           {{ config.type[1] }}
         </button>
-        <button *ngIf="config.type[2]"
+        <button
+          *ngIf="config.type[2]"
           (click)="switchTo('top')"
           [class.active]="activeButton === 'top'">
           {{ config.type[2] }}
         </button>
-        <button *ngIf="config.type[3]"
+        <button
+          *ngIf="config.type[3]"
           (click)="switchTo('upcoming')"
           [class.active]="activeButton === 'upcoming'">
           {{ config.type[3] }}
@@ -65,17 +68,11 @@ import { MediaTypeService } from '../../services/media-type.service';
                 src="/placeholder.svg"
                 alt="placeholder" />
             </div>
-            <div
-              class="rating"
-              [ngClass]="{
-                'border-2 border-green-500': movie.vote_average >= 7,
-                'border-2 border-yellow-500':
-                  movie.vote_average >= 5 && movie.vote_average < 7,
-                'border-2 border-red-500': movie.vote_average < 5,
-              }">
-              <span class="imdb">imdb</span>
-              <span class="mark">{{ movie.vote_average.toFixed(1) }}</span>
-            </div>
+            <!--Rating component start-->
+            <app-rating
+              [rat]="movie"
+              class="absolute bottom-[1.4rem] left-2 !z-[11]"></app-rating>
+            <!--Rating component end-->
             <img
               decoding="async"
               [routerLink]="[
@@ -88,7 +85,8 @@ import { MediaTypeService } from '../../services/media-type.service';
               [class.opacity-0]="!loadedImages.has(movie.id)"
               [src]="startUrl + movie.poster_path"
               alt="{{ movie.title }}" />
-            <a [routerLink]="[
+            <a
+              [routerLink]="[
                 movie.media_type === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]"
@@ -129,7 +127,7 @@ export class PopularComponent implements OnInit {
   newData: Movie[] = [];
   startUrl = 'https://image.tmdb.org/t/p/w500/';
   imgUrl = '';
-  type!: string | undefined
+  type!: string | undefined;
 
   activeButton = 'popular';
   loadedImages = new Set<number>();
@@ -142,7 +140,7 @@ export class PopularComponent implements OnInit {
 
   ngOnInit(): void {
     this.switchTo(this.activeButton);
-    this.type = this.config.mediaType
+    this.type = this.config.mediaType;
   }
 
   trackByMovie(index: number, movie: Movie): number {
@@ -173,13 +171,11 @@ export class PopularComponent implements OnInit {
         break;
 
       case 'top':
-        if(this.config.link3)
-        apiUrl = this.config.link3;
+        if (this.config.link3) apiUrl = this.config.link3;
         break;
 
       case 'upcoming':
-        if(this.config.link4)
-        apiUrl = this.config.link4;
+        if (this.config.link4) apiUrl = this.config.link4;
         break;
 
       default:

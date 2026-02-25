@@ -63,21 +63,33 @@ import { MediaTypeService } from '../../services/media-type.service';
             [alt]="movieData()?.title || ''" />
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-1">
-              {{ movieData()?.title || movieData()?.name}} ({{
+              {{ movieData()?.title || movieData()?.name }} ({{
                 movieData()?.release_date?.slice(0, 4)
                   ? movieData()?.release_date?.slice(0, 4)
                   : movieData()?.first_air_date?.slice(0, 4)
               }})
             </h1>
             <p class="text-gray-300 mb-3">
-              {{ movieData()?.release_date ? formatDate(movieData()?.release_date) : formatDate(movieData()?.first_air_date)}} ●
-              {{ getGenres(movieData()?.genres) }} ●
+              {{
+                movieData()?.release_date
+                  ? formatDate(movieData()?.release_date)
+                  : formatDate(movieData()?.first_air_date)
+              }}
+              ● {{ getGenres(movieData()?.genres) }} ●
               {{ minutesToTime(movieData()?.runtime) }}
             </p>
-            <app-rating [rat]="movieData()"></app-rating>
+
+            <div class="rating-block flex items-center mb-3">
+              <!--Rating component start-->
+              <app-rating [rat]="movieData()"></app-rating>
+              <!--Rating component end-->
+              <div class="rating-name ml-2 mr-4 relative bottom-[5px]">
+                <p>IMDB</p>
+              </div>
+            </div>
 
             <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
-            
+
             <div>
               <a href="" class="underline">Play trailer</a>
             </div>
@@ -91,7 +103,7 @@ import { MediaTypeService } from '../../services/media-type.service';
               }}
             </p>
             <div class="flex mt-6 gap-20">
-              @for(worker of movieCrew(); track $index) {
+              @for (worker of movieCrew(); track $index) {
                 <div class="direction">
                   <a
                     [routerLink]="['/persons', worker.id]"
@@ -137,7 +149,7 @@ import { MediaTypeService } from '../../services/media-type.service';
 })
 export class MovieComponent implements OnInit {
   apiMovie = 'https://api.themoviedb.org/3/movie/';
-  apiTv = 'https://api.themoviedb.org/3/tv/'
+  apiTv = 'https://api.themoviedb.org/3/tv/';
   apiUrlEnd = '?language=en-US';
   apiCastEnd = '/credits?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w500';
@@ -151,7 +163,6 @@ export class MovieComponent implements OnInit {
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
-  
 
   constructor(
     private route: ActivatedRoute,
@@ -171,18 +182,28 @@ export class MovieComponent implements OnInit {
   ngOnInit(): void {
     this.isLoading = true;
     let type = this.mediaTypeService.getMediaType();
-       setTimeout(() => {
-        this.route.paramMap.subscribe(params => {
-          const id = params.get('id');
-          this.movieId = id ? Number(id) : undefined;
-          if (this.movieId !== undefined && type) {
-            this.fetchCast(type === 'movie' ? this.apiMovie : this.apiTv, this.apiCastEnd, this.movieId);
-            this.fetchData(type === 'movie' ? this.apiMovie : this.apiTv, this.apiUrlEnd, this.movieId);
-            this.fetchDataImages(type === 'movie' ? this.apiMovie : this.apiTv, this.movieId);
-          }
-        });
-      }, 500);
-      
+    setTimeout(() => {
+      this.route.paramMap.subscribe(params => {
+        const id = params.get('id');
+        this.movieId = id ? Number(id) : undefined;
+        if (this.movieId !== undefined && type) {
+          this.fetchCast(
+            type === 'movie' ? this.apiMovie : this.apiTv,
+            this.apiCastEnd,
+            this.movieId
+          );
+          this.fetchData(
+            type === 'movie' ? this.apiMovie : this.apiTv,
+            this.apiUrlEnd,
+            this.movieId
+          );
+          this.fetchDataImages(
+            type === 'movie' ? this.apiMovie : this.apiTv,
+            this.movieId
+          );
+        }
+      });
+    }, 500);
   }
 
   fetchData(apiOne: string, apiTwo: string, id: number): void {
@@ -190,6 +211,7 @@ export class MovieComponent implements OnInit {
       data => {
         this.movieData.set(data);
         this.isLoading = false;
+        console.log('Movie data: ', this.movieData());
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -203,6 +225,7 @@ export class MovieComponent implements OnInit {
       data => {
         this.movieDataImg.set(data);
         this.isLoading = false;
+        console.log('Movie dataImg: ', this.movieDataImg());
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -217,6 +240,7 @@ export class MovieComponent implements OnInit {
         this.movieCrew.set(data.crew.filter((_, i) => i < 3));
         this.movieAllTeam.set(data);
         this.isLoading = false;
+        console.log('Movie all team: ', this.movieAllTeam());
       },
       error => {
         console.error('Error fetching data: ', error);

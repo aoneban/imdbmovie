@@ -65,14 +65,18 @@ import { RouterModule } from '@angular/router';
           </div>
           <div class="content__wrapper-navbar_right flex">
             <ul class="flex gap-x-8">
-              <li>
+              <li
+                class="
+              hover:border-blue-400 hover:text-blue-300 transition-colors duration-200">
                 <a href="#">
-                  <p>Watchlist</p>
+                  <p>Log in</p>
                 </a>
               </li>
-              <li>
+              <li
+                class="border-2 relative bottom-2 border-white rounded-md pl-3 pt-2 pr-3
+              hover:border-blue-400 hover:bg-white/10 hover:text-blue-300 transition-colors duration-200">
                 <a href="#">
-                  <p>SignIn</p>
+                  <p>Sign up</p>
                 </a>
               </li>
             </ul>
@@ -81,6 +85,5 @@ import { RouterModule } from '@angular/router';
       </div>
     </header>
   `,
-  styleUrls: ['../../../styles.scss'],
 })
 export class HeaderComponent {}

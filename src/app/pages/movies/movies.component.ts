@@ -5,10 +5,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
+import { RatingComponent } from '../movie/rating/rating.component';
 
 @Component({
   selector: 'app-movies',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, RatingComponent],
   template: `
     <section>
       <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
@@ -18,23 +19,13 @@ import { MediaTypeService } from '../../services/media-type.service';
         @for (movie of movieData(); track $index) {
           <div class="relative w-[20%] mt-5">
             <div
-              class="rating h-[40px] w-[40px] left-8 top-[30px] !z-[1]"
-              [ngClass]="{
-                'border-2 border-green-500': movie.vote_average >= 7,
-                'border-2 border-yellow-500':
-                  movie.vote_average >= 5 && movie.vote_average < 7,
-                'border-2 border-red-500': movie.vote_average < 5,
-              }">
-              <span class="imdb">imdb</span>
-              <span class="mark">{{ movie.vote_average.toFixed(1) }}</span>
-            </div>
-            <div
               class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
               <img
                 *ngIf="!loadedImages.has(movie.id)"
                 class="absolute inset-0 w-[80%] h-[80%] p-5 m-5 object-cover bg-gray-300"
                 src="/placeholder.svg"
                 alt="placeholder" />
+
               <img
                 decoding="auto"
                 class="w-[auto] transition-opacity duration-700 rounded-none"
@@ -46,6 +37,13 @@ import { MediaTypeService } from '../../services/media-type.service';
                 (load)="onImageLoad(movie.id)"
                 [class.opacity-0]="!loadedImages.has(movie.id)"
                 alt="{{ movie.name }}" />
+                
+              <!--Rating component start-->
+              <app-rating
+                [rat]="movie"
+                class="absolute top-[6%] left-[10%]"></app-rating>
+              <!--Rating component end -->
+
               <h3
                 class="cursor-pointer font-bold relative top-4 left-3"
                 (click)="setType(mediaType)"
@@ -55,6 +53,7 @@ import { MediaTypeService } from '../../services/media-type.service';
                 ]">
                 {{ movie.title || movie.name }}
               </h3>
+
               <p class="relative top-4 left-3 italic text-[14px] text-gray-400">
                 {{ getDate(movie) }}
               </p>
@@ -62,7 +61,8 @@ import { MediaTypeService } from '../../services/media-type.service';
           </div>
         }
         <div class="mt-20 mb-10">
-          <button (click)="loadMore()"
+          <button
+            (click)="loadMore()"
             class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
             Load more...
           </button>
@@ -103,6 +103,7 @@ export class MoviesComponent {
         if (data.total_pages) {
           this.totalPages = data.total_pages;
         }
+        console.log('Movie data2: ', this.movieData());
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -131,7 +132,7 @@ export class MoviesComponent {
     this.page += 1;
     this.moviesService.getDataMovies(this.url, this.page).subscribe(
       data => {
-        this.movieData.update(prev => [...(prev ?? []), ...data.results])
+        this.movieData.update(prev => [...(prev ?? []), ...data.results]);
       },
       error => {
         console.error('Error fetching data: ', error);

@@ -1,21 +1,17 @@
 import { Component, Input } from '@angular/core';
-import { SingleMovie } from '../../../interfaces/interface';
+import { SingleMovie, HasRating } from '../../../interfaces/interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-rating',
   standalone: true,
+  imports: [CommonModule],
   template: `
-    <div class="rating-block flex items-center mb-3">
+    <div [ngClass]="class">
       <div class="rating-circle">
         <svg width="40" height="40">
           <!-- Background circle -->
-          <circle
-            class="bg"
-            cx="20"
-            cy="20"
-            r="16"
-            stroke-width="3">
-          </circle>
+          <circle class="bg" cx="20" cy="20" r="16" stroke-width="3"></circle>
 
           <!-- Progress -->
           <circle
@@ -26,8 +22,7 @@ import { SingleMovie } from '../../../interfaces/interface';
             stroke-width="3"
             [attr.stroke]="color"
             [attr.stroke-dasharray]="circumference"
-            [attr.stroke-dashoffset]="dashOffset">
-          </circle>
+            [attr.stroke-dashoffset]="dashOffset"></circle>
 
           <!-- Text -->
           <text
@@ -37,14 +32,13 @@ import { SingleMovie } from '../../../interfaces/interface';
             dy=".3em"
             fill="white"
             font-size="12"
+            font-weight="bold"
             transform="rotate(90, 20, 20)">
-            {{ (percent / 10).toFixed(1) }}
+            {{ rat?.vote_average ? (percent / 10).toFixed(1) : 'N/A' }}
           </text>
         </svg>
       </div>
-      <div class="rating-name ml-2 mr-4">
-        <p>IMDB</p>
-      </div>
+    </div>
   `,
   styles: `
     .rating-circle {
@@ -73,7 +67,8 @@ import { SingleMovie } from '../../../interfaces/interface';
   `,
 })
 export class RatingComponent {
-  @Input() rat: SingleMovie | undefined;
+  @Input() rat!: SingleMovie | HasRating | undefined;
+  @Input() class = '';
 
   radius = 16;
   circumference = 2 * Math.PI * this.radius;
@@ -89,9 +84,9 @@ export class RatingComponent {
   get color(): string {
     const rating = this.rat?.vote_average ?? 0;
 
-    if (rating >= 7) return '#21d07a';   // green
-    if (rating >= 5) return '#d2d531';   // yellow
-    if (rating === 0) return '#db2360';   // red
-    return '#db2360';                    
+    if (rating >= 7) return '#21d07a'; // green
+    if (rating >= 5) return '#d2d531'; // yellow
+    if (rating === 0) return '#db2360'; // red
+    return '#db2360';
   }
 }
