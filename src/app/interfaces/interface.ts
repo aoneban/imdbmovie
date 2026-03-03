@@ -205,6 +205,7 @@ export interface Backdrop {
 
 export interface ImagesResponse {
   backdrops: Backdrop[];
+  posters: Backdrop[];
 }
 
 export interface CastCredits {
@@ -287,4 +288,34 @@ export interface PopularConfig {
 
 export interface HasRating {
   vote_average: number;
+}
+
+export interface ReviewsResponse {
+  id: number;
+  page: number;
+  results: ReviewItem[];
+  total_pages: number,
+  total_results: number
+}
+
+export interface ReviewItem {
+  author: string;
+  author_details: AuthorDetails;
+  content: string;
+  created_at: string;
+  id: string;
+  updated_at: string;
+  url: string;
+}
+
+export interface AuthorDetails {
+  name: string;
+  username: string;
+  avatar_path: string | null;
+  rating: number | null;
+}
+
+export interface ShortReviewItem {
+  id: string;
+  content: string;
 }

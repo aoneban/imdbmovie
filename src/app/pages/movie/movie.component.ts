@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { CastService } from '../../services/cast.service';
+import { CommonService } from '../../services/common.service';
 import {
   CastMember,
   CrewMember,
@@ -16,6 +17,8 @@ import {
   SingleMovie,
   ImagesResponse,
   Genre,
+  ReviewItem,
+  ReviewsResponse,
 } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
@@ -23,6 +26,7 @@ import { ActorsComponent } from './actors/actors.component';
 import { AsideComponent } from './aside/aside.component';
 import { RatingComponent } from './rating/rating.component';
 import { MediaTypeService } from '../../services/media-type.service';
+import { ReviewComponent } from './review/review.component';
 
 @Component({
   selector: 'movie',
@@ -33,6 +37,7 @@ import { MediaTypeService } from '../../services/media-type.service';
     AsideComponent,
     RatingComponent,
     RouterModule,
+    ReviewComponent
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -120,12 +125,14 @@ import { MediaTypeService } from '../../services/media-type.service';
     </section>
     <section class="w-[80%] mx-auto flex">
       <div class="w-4/5 mx-auto flex flex-col">
+        <!--Actors component start-->
         <app-actors
           *ngIf="movieData() && loadedImages.has(movieData()!.id)"
           [cast]="movieCast()"
           [id]="movieId"
           class="md:flex-row">
         </app-actors>
+        <!--Actors component end-->
         <div
           class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
           <button
@@ -136,7 +143,18 @@ import { MediaTypeService } from '../../services/media-type.service';
           </button>
         </div>
         <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
-          <h3 class="text-2xl font-semibold text-gray-900 mb-4">Social</h3>
+          <div class="flex mb-4 justify-start items-center gap-[4%]">
+            <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
+            <button class="text-xl w-[auto] font-semibold">
+              Reviews ({{ dataReview()?.length }})
+            </button>
+            <button class="text-xl w-[auto] font-semibold">
+              Discussions ({{ dataReview()?.length }})
+            </button>
+          </div>
+          <!--Reviews component start-->
+      <app-review [review]="dataReview()" [all]="dataReviewResponse()"></app-review>
+          <!--Reviews component end-->
         </div>
       </div>
       <app-aside
@@ -149,6 +167,7 @@ import { MediaTypeService } from '../../services/media-type.service';
 })
 export class MovieComponent implements OnInit {
   apiMovie = 'https://api.themoviedb.org/3/movie/';
+  apiReviewEnd = '/reviews?language=en-US&page=1';
   apiTv = 'https://api.themoviedb.org/3/tv/';
   apiUrlEnd = '?language=en-US';
   apiCastEnd = '/credits?language=en-US';
@@ -161,6 +180,8 @@ export class MovieComponent implements OnInit {
   movieCast = signal<CastMember[] | undefined>(undefined);
   movieCrew = signal<CrewMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
+  dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
+  dataReview = signal<ReviewItem[] | undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
 
@@ -168,7 +189,8 @@ export class MovieComponent implements OnInit {
     private route: ActivatedRoute,
     private movieService: MovieService,
     private castService: CastService,
-    private mediaTypeService: MediaTypeService
+    private mediaTypeService: MediaTypeService,
+    private commonService: CommonService
   ) {}
 
   backgroundImage = computed(() => {
@@ -176,7 +198,7 @@ export class MovieComponent implements OnInit {
     if (imgData && imgData.backdrops && imgData.backdrops.length > 1) {
       return `url(${this.startUrl2}${imgData.backdrops[2].file_path})`;
     }
-    return 'none';
+    return '';
   });
 
   ngOnInit(): void {
@@ -199,6 +221,11 @@ export class MovieComponent implements OnInit {
           );
           this.fetchDataImages(
             type === 'movie' ? this.apiMovie : this.apiTv,
+            this.movieId
+          );
+          this.fetchCommon(
+            type === 'movie' ? this.apiMovie : this.apiTv,
+            this.apiReviewEnd,
             this.movieId
           );
         }
@@ -241,6 +268,21 @@ export class MovieComponent implements OnInit {
         this.movieAllTeam.set(data);
         this.isLoading = false;
         console.log('Movie all team: ', this.movieAllTeam());
+      },
+      error => {
+        console.error('Error fetching data: ', error);
+        this.isLoading = false;
+      }
+    );
+  }
+
+  fetchCommon(linkOne: string, linkTwo: string, id: number): void {
+    this.commonService.getCommonData(linkOne, linkTwo, id).subscribe(
+      data => {
+        this.dataReviewResponse.set(data);
+        this.dataReview.set(data.results);
+        this.isLoading = false;
+        console.log('Reviews: ', this.dataReviewResponse());
       },
       error => {
         console.error('Error fetching data: ', error);

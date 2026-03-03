@@ -40,7 +40,7 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=',
       name: 'Popular Movies',
-      type: 'movie'
+      type: 'movie',
     },
   },
   {
@@ -50,7 +50,7 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=',
       name: 'Top Rated Movies',
-      type: 'movie'
+      type: 'movie',
     },
   },
   {
@@ -60,7 +60,7 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=',
       name: 'Upcoming Movies',
-      type: 'movie'
+      type: 'movie',
     },
   },
   {
@@ -70,7 +70,7 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=',
       name: 'Now Playing Movies',
-      type: 'movie'
+      type: 'movie',
     },
   },
   {
@@ -80,7 +80,7 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=',
       name: 'Top Rated TV',
-      type: 'tv'
+      type: 'tv',
     },
   },
   {
@@ -90,27 +90,27 @@ export const routes: Routes = [
     data: {
       url: 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=',
       name: 'Airing Today',
-      type: 'tv'
+      type: 'tv',
     },
   },
-    {
+  {
     path: 'tv-popular',
     loadComponent: () =>
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=',
       name: 'Popular TV',
-      type: 'tv'
+      type: 'tv',
     },
   },
-      {
+  {
     path: 'on-the-air',
     loadComponent: () =>
       import('./pages/movies/movies.component').then(m => m.MoviesComponent),
     data: {
       url: 'https://api.themoviedb.org/3/tv/on_the_air?language=en-US&page=',
       name: 'On TV',
-      type: 'tv'
+      type: 'tv',
     },
   },
   {
@@ -118,6 +118,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/page-persons/page-persons.component').then(
         m => m.PagePersonsComponent
+      ),
+  },
+  {
+    path: 'single-review/:movieId/:reviewId',
+    loadComponent: () =>
+      import('./pages/movie/review/single-review/single-review.component').then(
+        m => m.SingleReviewComponent
       ),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
