@@ -12,37 +12,21 @@ import { RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { MediaTypeService } from '../../../services/media-type.service';
+import { TitleMovieComponent } from '../title-movie/title-movie.component';
 
 @Component({
   selector: 'app-all-actors',
-  imports: [RouterModule, NavbarComponent, CommonModule],
+  imports: [RouterModule, NavbarComponent, CommonModule, TitleMovieComponent],
   template: `
     <app-navbar></app-navbar>
     <section>
       <div *ngIf="isLoading" class="preloader">
         <div class="loader"></div>
       </div>
-      <div [ngStyle]="{ 'background-color': color }" class="mx-auto p-6">
-        <div class="w-5/6 flex gap-5 mx-auto">
-          <img
-            decoding="async"
-            class="rounded-xl w-28 h-auto"
-            [src]="startUrl + (movieData()?.poster_path || '')"
-            [alt]="movieData()?.title || ''" />
-          <div class="flex flex-col justify-center">
-            <h2 class="text-4xl font-bold text-white !important mb-4">
-              {{ movieData()?.title || movieData()?.name }} ({{
-                movieData()?.release_date?.slice(0, 4) || movieData()?.first_air_date?.slice(0, 4)
-              }})
-            </h2>
-            <button
-              (click)="goBack()"
-              class="w-fit whitespace-nowrap text-gray-200 hover:text-gray-300 font-bold px-4 py-2 rounded transition-colors duration-300 ease-in-out">
-              &#8592; Back to main
-            </button>
-          </div>
-        </div>
-      </div>
+
+      <app-title-movie [property]="movieData()"></app-title-movie>
+
+
     </section>
     <section>
       <div class="w-[80%] flex mx-auto py-6">
@@ -116,13 +100,13 @@ export class AllActorsComponent implements OnInit {
   apiTv = 'https://api.themoviedb.org/3/tv/'
   apiUrlEnd = '?language=en-US';
   apiCastEnd = '/credits?language=en-US';
-  isLoading = false;
   startUrl = 'https://image.tmdb.org/t/p/w200';
   startUrl2 = 'https://image.tmdb.org/t/p/w1920';
   movieId: number | undefined;
   movieData = signal<SingleMovie | undefined>(undefined);
   movieCast = signal<CastMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
+  isLoading = false;
   color = 'grey';
 
   constructor(
@@ -169,9 +153,5 @@ export class AllActorsComponent implements OnInit {
         console.error('Error fetching data: ', error);
       }
     );
-  }
-
-  goBack(): void {
-    this.location.back();
   }
 }

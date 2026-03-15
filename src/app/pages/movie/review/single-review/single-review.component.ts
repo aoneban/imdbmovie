@@ -5,10 +5,11 @@ import { CommonService } from '../../../../services/common.service';
 import { MediaTypeService } from '../../../../services/media-type.service';
 import { MovieService } from '../../../../services/movie.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-single-review',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div *ngIf="isLoading" class="preloader">
       <div class="loader"></div>
@@ -16,7 +17,7 @@ import { CommonModule } from '@angular/common';
     <section *ngIf="!isLoading">
       <div class="flex h-[50px] items-center bg-gray-100">
         <div class="w-[80%] mx-auto">
-          <a href="#"><- Back to main</a>
+          <a [routerLink]="['/all-reviews', this.movieData?.id]"><- Back to main</a>
         </div>
       </div>
       <div class="flex w-[80%] mx-auto gap-[35px] mt-10">

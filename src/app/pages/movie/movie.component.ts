@@ -149,10 +149,10 @@ import { ReviewComponent } from './review/review.component';
             <div class="flex mb-4 justify-start items-center gap-[4%]">
               <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
               <button class="text-xl w-[auto] font-semibold">
-                Reviews ({{ dataReview() }})
+                Reviews ({{ dataReviewResponse()?.results?.length }})
               </button>
               <button class="text-xl w-[auto] font-semibold">
-                Discussions ({{ dataReview() }})
+                Discussions ({{ dataReviewResponse()?.results?.length }})
               </button>
             </div>
             <!--Reviews component start-->
