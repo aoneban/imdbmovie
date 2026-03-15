@@ -11,25 +11,26 @@ import { ReviewDataService } from '../../../services/review-data.service';
   selector: 'app-review',
   imports: [CommonModule, RouterModule],
   template: `
-    <div *ngIf="review" class="mt-4 p-6 border border-gray-300 rounded-[10px]">
+  <section>
+    <div *ngIf="review" class="mt-4 mb-4 p-6 border border-gray-300 rounded-[10px]">
       <div class="flex">
         <img
           decoding="auto"
           [src]="getAvatar(item)"
           class="w-11 h-11 rounded-full"
-          alt="{{ review[item]?.author }}" />
+          alt="{{ review.author }}" />
 
         <div class="ml-4 mb-4 mt-[-5px]">
           <a
-            [routerLink]="['/single-review', all?.id, review[item]?.id]"
-            (click)="sendReview(review[item])"
+            [routerLink]="['/single-review', allReviews?.id, review.id]"
+            (click)="sendReview(review)"
             class="font-bold text-gray-800 text-xl underline underline-offset-2"
-            >A review by {{ review[item]?.author }}</a
+            >A review by {{ review.author }}</a
           >
           <p class="text-sm text-gray-600">
-            Rating {{ review[item]?.author_details?.rating }}/10 Written by
-            {{ review[item]?.author }} on
-            {{ review[item]?.created_at?.slice(0, 10) }}
+            Rating {{ review.author_details.rating }}/10 Written by
+            {{ review.author }} on
+            {{ review.created_at.slice(0, 10) }}
           </p>
         </div>
       </div>
@@ -38,49 +39,41 @@ import { ReviewDataService } from '../../../services/review-data.service';
         {{ reviewContent() }}
         <ng-container *ngIf="isTruncated">
           <a
-            [href]="review[0]?.url"
-            target="_blank"
+            [routerLink]="['/single-review', allReviews?.id, review.id]"
+            (click)="sendReview(review)"
             class="text-blue-400 underline ml-1">
-            Read more...
+            Read more
           </a>
         </ng-container>
       </p>
     </div>
+  </section>
   `,
   styles: ``,
 })
 export class ReviewComponent {
   startUrl = 'https://image.tmdb.org/t/p/w200';
-  @Input() review!: ReviewItem[] | undefined;
-  @Input() all!: ReviewsResponse | undefined;
+  @Input() review!: ReviewItem | undefined;
+  @Input() allReviews!: ReviewsResponse | undefined;
   maxLength: number = 300;
   item: number = 0;
 
   constructor(private reviewDataService: ReviewDataService) {}
 
   ngOnInit(): void {
-    this.item = this.randomReview();
+
   }
 
   reviewContent() {
-    const text = this.review?.[this.item]?.content ?? '';
+    const text = this.review?.content ?? '';
     return text.length > this.maxLength
       ? text.slice(0, this.maxLength) + '...'
       : text;
   }
 
   get isTruncated() {
-    const text = this.review?.[this.item]?.content ?? '';
+    const text = this.review?.content ?? '';
     return text.length > this.maxLength;
-  }
-
-  randomReview(): number {
-    let len = this.review?.length;
-
-    if (len) {
-      return Math.floor(Math.random() * len);
-    }
-    return 0;
   }
 
   sendReview(item: ReviewItem): void {
@@ -90,7 +83,7 @@ export class ReviewComponent {
   }
 
   getAvatar(item: number) {
-    const path = this.review?.[item]?.author_details?.avatar_path;
+    const path = this.review?.author_details?.avatar_path;
 
     if (!path) {
       return './placeholder.svg';

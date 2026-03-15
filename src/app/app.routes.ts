@@ -127,5 +127,12 @@ export const routes: Routes = [
         m => m.SingleReviewComponent
       ),
   },
+  {
+    path: 'all-reviews/:id',
+    loadComponent: () =>
+      import('./pages/movie/review/all-reviews/all-reviews.component').then(
+        m => m.AllReviewsComponent
+      ),
+  },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

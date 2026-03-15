@@ -4,6 +4,8 @@ import {
   ChangeDetectionStrategy,
   signal,
   computed,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -37,130 +39,142 @@ import { ReviewComponent } from './review/review.component';
     AsideComponent,
     RatingComponent,
     RouterModule,
-    ReviewComponent
+    ReviewComponent,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 
   template: `
     <app-navbar></app-navbar>
-    <div *ngIf="isLoading" class="preloader">
-      <div class="loader"></div>
-    </div>
-    <section *ngIf="!isLoading" class="inner__content new__index">
-      <div
-        [ngStyle]="{ 'background-image': backgroundImage() }"
-        class="background-movie">
-        <div class="background-shadow"></div>
-        <div class="content-movie">
-          <img
-            decoding="auto"
-            *ngIf="!loadedImages.has(movieData()!.id)"
-            class="!w-[20%] !h-[200%] m-5 bg-gray-800"
-            src="/placeholder.svg"
-            alt="placeholder" />
-          <img
-            decoding="auto"
-            class="main-poster transition-opacity duration-700 h-[29vw]"
-            (load)="onImageLoad(movieData()!.id)"
-            [class.hidden]="!loadedImages.has(movieData()!.id)"
-            [src]="startUrl + (movieData()?.poster_path || '')"
-            [alt]="movieData()?.title || ''" />
-          <div class="text-content">
-            <h1 class="text-4xl font-bold text-white-900 mb-1">
-              {{ movieData()?.title || movieData()?.name }} ({{
-                movieData()?.release_date?.slice(0, 4)
-                  ? movieData()?.release_date?.slice(0, 4)
-                  : movieData()?.first_air_date?.slice(0, 4)
-              }})
-            </h1>
-            <p class="text-gray-300 mb-3">
-              {{
-                movieData()?.release_date
-                  ? formatDate(movieData()?.release_date)
-                  : formatDate(movieData()?.first_air_date)
-              }}
-              ● {{ getGenres(movieData()?.genres) }} ●
-              {{ minutesToTime(movieData()?.runtime) }}
-            </p>
+    <section>
+      <div *ngIf="isLoading" class="preloader">
+        <div class="loader"></div>
+      </div>
+      <div *ngIf="!isLoading" class="inner__content new__index">
+        <div
+          [ngStyle]="{ 'background-image': backgroundImage() }"
+          class="background-movie">
+          <div class="background-shadow"></div>
+          <div class="content-movie">
+            <img
+              decoding="auto"
+              *ngIf="!loadedImages.has(movieData()!.id)"
+              class="!w-[20%] !h-[200%] m-5 bg-gray-800"
+              src="/placeholder.svg"
+              alt="placeholder" />
+            <img
+              decoding="auto"
+              class="main-poster transition-opacity duration-700 h-[29vw]"
+              (load)="onImageLoad(movieData()!.id)"
+              [class.hidden]="!loadedImages.has(movieData()!.id)"
+              [src]="startUrl + (movieData()?.poster_path || '')"
+              [alt]="movieData()?.title || ''" />
+            <div class="text-content">
+              <h1 class="text-4xl font-bold text-white-900 mb-1">
+                {{ movieData()?.title || movieData()?.name }} ({{
+                  movieData()?.release_date?.slice(0, 4)
+                    ? movieData()?.release_date?.slice(0, 4)
+                    : movieData()?.first_air_date?.slice(0, 4)
+                }})
+              </h1>
+              <p class="text-gray-300 mb-3">
+                {{
+                  movieData()?.release_date
+                    ? formatDate(movieData()?.release_date)
+                    : formatDate(movieData()?.first_air_date)
+                }}
+                ● {{ getGenres(movieData()?.genres) }} ●
+                {{ minutesToTime(movieData()?.runtime) }}
+              </p>
 
-            <div class="rating-block flex items-center mb-3">
-              <!--Rating component start-->
-              <app-rating [rat]="movieData()"></app-rating>
-              <!--Rating component end-->
-              <div class="rating-name ml-2 mr-4 relative bottom-[5px]">
-                <p>IMDB</p>
+              <div class="rating-block flex items-center mb-3">
+                <!--Rating component start-->
+                <app-rating [rat]="movieData()"></app-rating>
+                <!--Rating component end-->
+                <div class="rating-name ml-2 mr-4 relative bottom-[5px]">
+                  <p>IMDB</p>
+                </div>
+              </div>
+
+              <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
+
+              <div>
+                <a href="" class="underline">Play trailer</a>
+              </div>
+
+              <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
+              <p class="w-[80%]">
+                {{
+                  movieData()?.overview
+                    ? movieData()?.overview
+                    : 'Description will be added soon...'
+                }}
+              </p>
+              <div class="flex mt-6 gap-20">
+                @for (worker of movieCrew(); track $index) {
+                  <div class="direction">
+                    <a
+                      [routerLink]="['/persons', worker.id]"
+                      class="font-bold text-md underline"
+                      >{{ worker.name }}</a
+                    >
+                    <p>{{ worker.job }}</p>
+                  </div>
+                }
               </div>
             </div>
-
-            <h3 class="italic text-gray-300">{{ movieData()?.tagline }}</h3>
-
-            <div>
-              <a href="" class="underline">Play trailer</a>
-            </div>
-
-            <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
-            <p class="w-[80%]">
-              {{
-                movieData()?.overview
-                  ? movieData()?.overview
-                  : 'Description will be added soon...'
-              }}
-            </p>
-            <div class="flex mt-6 gap-20">
-              @for (worker of movieCrew(); track $index) {
-                <div class="direction">
-                  <a
-                    [routerLink]="['/persons', worker.id]"
-                    class="font-bold text-md underline"
-                    >{{ worker.name }}</a
-                  >
-                  <p>{{ worker.job }}</p>
-                </div>
-              }
-            </div>
           </div>
         </div>
       </div>
-    </section>
-    <section class="w-[80%] mx-auto flex">
-      <div class="w-4/5 mx-auto flex flex-col">
-        <!--Actors component start-->
-        <app-actors
-          *ngIf="movieData() && loadedImages.has(movieData()!.id)"
-          [cast]="movieCast()"
-          [id]="movieId"
-          class="md:flex-row">
-        </app-actors>
-        <!--Actors component end-->
-        <div
-          class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
-          <button
+      <div class="w-[80%] mx-auto flex">
+        <div class="w-4/5 mx-auto flex flex-col">
+          <!--Actors component start-->
+          <app-actors
             *ngIf="movieData() && loadedImages.has(movieData()!.id)"
-            [routerLink]="['/cast', movieAllTeam()?.id]"
-            class="w-fit whitespace-nowrap">
-            Full Cast & Crew
-          </button>
-        </div>
-        <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
-          <div class="flex mb-4 justify-start items-center gap-[4%]">
-            <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
-            <button class="text-xl w-[auto] font-semibold">
-              Reviews ({{ dataReview()?.length }})
-            </button>
-            <button class="text-xl w-[auto] font-semibold">
-              Discussions ({{ dataReview()?.length }})
+            [cast]="movieCast()"
+            [id]="movieId"
+            class="md:flex-row">
+          </app-actors>
+          <!--Actors component end-->
+          <div
+            class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
+            <button
+              *ngIf="movieData() && loadedImages.has(movieData()!.id)"
+              [routerLink]="['/cast', movieAllTeam()?.id]"
+              class="w-fit whitespace-nowrap">
+              Full Cast & Crew
             </button>
           </div>
-          <!--Reviews component start-->
-      <app-review [review]="dataReview()" [all]="dataReviewResponse()"></app-review>
-          <!--Reviews component end-->
+          <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
+            <div class="flex mb-4 justify-start items-center gap-[4%]">
+              <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
+              <button class="text-xl w-[auto] font-semibold">
+                Reviews ({{ dataReview() }})
+              </button>
+              <button class="text-xl w-[auto] font-semibold">
+                Discussions ({{ dataReview() }})
+              </button>
+            </div>
+            <!--Reviews component start-->
+            <app-review
+              [review]="dataReview()"
+              [allReviews]="dataReviewResponse()"></app-review>
+            <!--Reviews component end-->
+          </div>
         </div>
+        <app-aside
+          *ngIf="movieData() && loadedImages.has(movieData()!.id)"
+          [props]="movieData()"
+          class="w-1/5 md:flex-row flex items-center">
+        </app-aside>
       </div>
-      <app-aside
-        *ngIf="movieData() && loadedImages.has(movieData()!.id)"
-        [props]="movieData()"
-        class="w-1/5 md:flex-row flex items-center"></app-aside>
+      <div class="w-[80%] mx-auto">
+        <a
+          [routerLink]="['/all-reviews', this.movieData()?.id]"
+          class="underline underline-offset-4 text-blue-400 font-bold"
+          >Read all reviews</a
+        >
+      </div>
     </section>
   `,
   styles: ``,
@@ -181,7 +195,7 @@ export class MovieComponent implements OnInit {
   movieCrew = signal<CrewMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
-  dataReview = signal<ReviewItem[] | undefined>(undefined);
+  dataReview = signal<ReviewItem| undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
 
@@ -280,9 +294,10 @@ export class MovieComponent implements OnInit {
     this.commonService.getCommonData(linkOne, linkTwo, id).subscribe(
       data => {
         this.dataReviewResponse.set(data);
-        this.dataReview.set(data.results);
+        this.dataReview.set(data.results[0]);
         this.isLoading = false;
-        console.log('Reviews: ', this.dataReviewResponse());
+        console.log('Review response: ', this.dataReviewResponse());
+        console.log('Data Review: ', this.dataReview());
       },
       error => {
         console.error('Error fetching data: ', error);

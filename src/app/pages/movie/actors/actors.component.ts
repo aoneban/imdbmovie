@@ -60,7 +60,6 @@ import { CommonModule } from '@angular/common';
       height: auto;
     }
     .trending {
-      margin-top: 8rem;
       margin-bottom: 1rem;
     }
 

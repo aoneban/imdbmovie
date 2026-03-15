@@ -1,28 +1,49 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ReviewItem } from '../../../../interfaces/interface';
+import { ReviewItem, SingleMovie } from '../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 import { MediaTypeService } from '../../../../services/media-type.service';
 import { MovieService } from '../../../../services/movie.service';
-import { ImagesResponse } from '../../../../interfaces/interface';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-single-review',
+  imports: [CommonModule],
   template: `
-    <p>id: {{ movieId }}</p>
-    <p>Author Name: {{ name }}</p>
-    <p>Data: {{ currentDate }}</p>
-    <p>Rating: {{ rating }}</p>
-    <p>Opinion: {{ opinion }}</p>
-    <p>Img: {{ img }}</p>
-    <img
-      decoding="auto"
-      class="main-poster transition-opacity duration-700"
-      [src]="startUrl + (img || '')"
-      [alt]="name" />
+    <div *ngIf="isLoading" class="preloader">
+      <div class="loader"></div>
+    </div>
+    <section *ngIf="!isLoading">
+      <div class="flex h-[50px] items-center bg-gray-100">
+        <div class="w-[80%] mx-auto">
+          <a href="#"><- Back to main</a>
+        </div>
+      </div>
+      <div class="flex w-[80%] mx-auto gap-[35px] mt-10">
+        <div>
+          <img
+            decoding="auto"
+            class="main-poster min-w-[13vw] max-w-[13vw] h-[auto] transition-opacity duration-700"
+            [src]="startUrl + (movieData?.poster_path || '')"
+            [alt]="name" />
+        </div>
+        <div>
+          <p>
+            Movie: {{ movieData?.name || movieData?.title }}
+            {{ movieData?.release_date || movieData?.first_air_date }}
+          </p>
+          <p>id: {{ movieId }}</p>
+          <p>Author Name: {{ name }}</p>
+          <p>Data: {{ currentDate }}</p>
+          <p>Rating: {{ rating }}</p>
+          <p>Opinion: {{ opinion }}</p>
+        </div>
+      </div>
+    </section>
   `,
 })
 export class SingleReviewComponent implements OnInit {
+  isLoading = false;
   dataReview: ReviewItem[] | undefined;
   movieId: number | string | undefined;
   reviewId: string = '';
@@ -33,9 +54,10 @@ export class SingleReviewComponent implements OnInit {
   startUrl = 'https://image.tmdb.org/t/p/w500';
   apiMovie = 'https://api.themoviedb.org/3/movie/';
   apiReviewEnd = '/reviews?language=en-US&page=1';
+  apiUrlEnd = '?language=en-US';
   apiTv = 'https://api.themoviedb.org/3/tv/';
-  img = '';
   type: string | null;
+  movieData: SingleMovie | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +69,7 @@ export class SingleReviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoading = true;
     this.getMainData();
     this.fetchReviews();
     this.fetchImg();
@@ -68,6 +91,7 @@ export class SingleReviewComponent implements OnInit {
         data => {
           this.dataReview = data.results;
           this.getTargetReview(this.dataReview);
+          this.isLoading = false;
         },
         error => {
           console.error('Error fetching data: ', error);
@@ -77,13 +101,16 @@ export class SingleReviewComponent implements OnInit {
 
   fetchImg() {
     this.movieService
-      .getDataImage(
+      .getDataMovie(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
+        this.apiUrlEnd,
         Number(this.movieId)
       )
       .subscribe(
         data => {
-          this.img = data.posters?.[0]?.file_path;
+          console.log('this is data', data);
+          this.movieData = data;
+          this.isLoading = false;
         },
         error => {
           console.error('Error fetching data: ', error);
