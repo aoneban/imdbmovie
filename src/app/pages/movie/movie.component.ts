@@ -148,12 +148,14 @@ import { ReviewComponent } from './review/review.component';
           <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
             <div class="flex mb-4 justify-start items-center gap-[4%]">
               <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
-              <button class="text-xl w-[auto] font-semibold">
+              <a
+                [routerLink]="['/all-reviews', this.movieData()?.id]"
+                class="text-xl w-[auto] font-semibold underline underline-offset-2">
                 Reviews ({{ dataReviewResponse()?.results?.length }})
-              </button>
-              <button class="text-xl w-[auto] font-semibold">
+              </a>
+              <!-- <button class="text-xl w-[auto] font-semibold">
                 Discussions ({{ dataReviewResponse()?.results?.length }})
-              </button>
+              </button> -->
             </div>
             <!--Reviews component start-->
             <app-review
@@ -195,7 +197,7 @@ export class MovieComponent implements OnInit {
   movieCrew = signal<CrewMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
-  dataReview = signal<ReviewItem| undefined>(undefined);
+  dataReview = signal<ReviewItem | undefined>(undefined);
   loadedImages = new Set<number>();
   text: string | undefined;
 

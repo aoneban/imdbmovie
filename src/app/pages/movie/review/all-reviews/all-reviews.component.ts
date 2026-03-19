@@ -26,7 +26,7 @@ import { TitleMovieComponent } from '../../title-movie/title-movie.component';
         <div *ngIf="!isLoading">
           <app-navbar></app-navbar>
           <app-title-movie [property]="movieData()"></app-title-movie>
-          <section>
+          <section class="mt-[2rem]">
             <div class="w-[80%] mx-auto">
               <app-review
                 *ngFor="let item of allReviews?.results"

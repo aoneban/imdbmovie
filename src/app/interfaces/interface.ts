@@ -218,9 +218,11 @@ export interface CastCredits {
   overview: string;
   popularity: number;
   poster_path: string;
-  release_date: string;
+  release_date: string | number;
   title: string;
   name: string;
+  first_air_date: string | number;
+  first_credit_air_date: string | number;
   video: boolean;
   vote_average: number;
   vote_count: number;

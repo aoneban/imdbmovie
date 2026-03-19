@@ -17,10 +17,10 @@ import { RouterModule } from '@angular/router';
     <section *ngIf="!isLoading">
       <div class="flex h-[50px] items-center bg-gray-100">
         <div class="w-[80%] mx-auto">
-          <a [routerLink]="['/all-reviews', this.movieData?.id]"><- Back to main</a>
+          <a [routerLink]="['/all-reviews', this.movieData?.id]">&#8592; Back to main</a>
         </div>
       </div>
-      <div class="flex w-[80%] mx-auto gap-[35px] mt-10">
+      <div class="flex w-[80%] mx-auto gap-[20px] mt-10">
         <div>
           <img
             decoding="auto"

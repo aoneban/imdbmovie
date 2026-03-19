@@ -86,7 +86,7 @@ export class ReviewComponent {
     const path = this.review?.author_details?.avatar_path;
 
     if (!path) {
-      return './placeholder.svg';
+      return './user_icon.png';
     }
     if (path.startsWith('/https')) {
       return path.slice(1);

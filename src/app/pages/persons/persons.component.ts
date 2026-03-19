@@ -1,6 +1,10 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SinglePerson, CastCombined } from '../../interfaces/interface';
+import {
+  SinglePerson,
+  CastCombined,
+  CastCredits,
+} from '../../interfaces/interface';
 import { PersonService } from '../../services/person.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
@@ -75,11 +79,37 @@ import { MediaTypeService } from '../../services/media-type.service';
                     movie.id,
                   ]"
                   (click)="setType(movie.media_type)">
-                  <p class="font-normal pt-3 pl-3 text-sm">{{ movie.title || movie.name }}</p>
+                  <p class="font-normal pt-3 pl-3 text-sm">
+                    {{ movie.title || movie.name }}
+                  </p>
                 </a>
               </div>
             </div>
           </div>
+          <!-- Start acting component -->
+          <div>
+            <h3>Acting</h3>
+            <div class="border-2 border-solid rounded-lg">
+              @for (item of release; track $index) {
+                <li class="list-none p-4">
+                  <a
+                    [routerLink]="[
+                      item.media_type === 'movie' ? '/movie' : '/tv',
+                      item.id,
+                    ]">
+                    {{
+                      item.release_date || 'Unknown'
+                    }}
+                    | {{ item.title || item.name || item.original_title }} |
+                    {{ item.character }}
+                  </a>
+                </li>
+              } @empty {
+                <li>There are no items.</li>
+              }
+            </div>
+          </div>
+          <!-- End acting component -->
         </div>
       </div>
     </section>
@@ -94,10 +124,39 @@ export class PersonsComponent implements OnInit {
   personData = signal<SinglePerson | undefined>(undefined);
   personCombined = signal<CastCombined | undefined>(undefined);
   loadedImages = new Set<number>();
+  release: CastCredits[] = [];
   topCast = computed(() => {
     const combined = this.personCombined();
     return combined?.cast.slice(0, 15) ?? [];
   });
+
+  carrier = computed(() => {
+    const newArr: CastCredits[] = [];
+    const lifeWay = this.personCombined()?.cast;
+    lifeWay?.map(item => {
+      if (item.release_date && typeof item.release_date === 'string') {
+        item.release_date = Number(item.release_date.slice(0, 4));
+        newArr.push(item);
+        return;
+      } else if (
+        item.first_air_date &&
+        typeof item.first_air_date === 'string'
+      ) {
+        item.release_date = Number(item.first_air_date.slice(0, 4));
+        newArr.push(item);
+        return;
+      } else if (
+        item.first_credit_air_date &&
+        typeof item.first_credit_air_date === 'string'
+      ) {
+        item.release_date = Number(item.first_credit_air_date.slice(0, 4));
+        newArr.push(item);
+        return;
+      }
+    });
+    return newArr;
+  });
+
   constructor(
     private route: ActivatedRoute,
     private personService: PersonService,
@@ -121,6 +180,7 @@ export class PersonsComponent implements OnInit {
       data => {
         this.personData.set(data);
         this.isLoading = false;
+        console.log('Person data: ', this.personData());
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -133,6 +193,8 @@ export class PersonsComponent implements OnInit {
       data => {
         this.personCombined.set(data);
         this.isLoading = false;
+        console.log('Person combined: ', this.personCombined());
+        this.sorted();
       },
       error => {
         console.error('Error fetching data: ', error);
@@ -146,5 +208,17 @@ export class PersonsComponent implements OnInit {
 
   onImageLoad(id: number) {
     this.loadedImages.add(id);
+  }
+
+  sorted() {
+    this.release = Array.from(this.carrier()).sort(function (a, b) {
+      if (a.release_date > b.release_date) {
+        return -1;
+      }
+      if (a.release_date < b.release_date) {
+        return 1;
+      }
+      return 0;
+    });
   }
 }
