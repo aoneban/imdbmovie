@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
         <svg width="40" height="40">
           <!-- Background circle -->
           <circle class="bg" cx="20" cy="20" r="16" stroke-width="3"></circle>
-
           <!-- Progress -->
           <circle
             class="progress"
@@ -23,7 +22,6 @@ import { CommonModule } from '@angular/common';
             [attr.stroke]="color"
             [attr.stroke-dasharray]="circumference"
             [attr.stroke-dashoffset]="dashOffset"></circle>
-
           <!-- Text -->
           <text
             x="50%"

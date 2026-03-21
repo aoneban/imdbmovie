@@ -7,6 +7,7 @@ import { SinglePerson } from '../../../interfaces/interface';
   imports: [CommonModule, SlicePipe],
   template: `
     <div class="relative">
+      <h4 class="text-xl font-semibold text-gray-900 mt-6">Biography</h4>
       <div
         class="transition-all duration-500 ease-in-out overflow-hidden relative"
         [class.max-h-28]="!show"

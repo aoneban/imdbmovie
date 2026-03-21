@@ -153,9 +153,6 @@ import { ReviewComponent } from './review/review.component';
                 class="text-xl w-[auto] font-semibold underline underline-offset-2">
                 Reviews ({{ dataReviewResponse()?.results?.length }})
               </a>
-              <!-- <button class="text-xl w-[auto] font-semibold">
-                Discussions ({{ dataReviewResponse()?.results?.length }})
-              </button> -->
             </div>
             <!--Reviews component start-->
             <app-review
