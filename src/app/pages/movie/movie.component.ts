@@ -126,7 +126,7 @@ import { ReviewComponent } from './review/review.component';
           </div>
         </div>
       </div>
-      <div class="w-[80%] mx-auto flex">
+      <div class="w-[80%] mx-auto flex gap-[5rem]">
         <div class="w-4/5 mx-auto flex flex-col">
           <!--Actors component start-->
           <app-actors
@@ -161,11 +161,13 @@ import { ReviewComponent } from './review/review.component';
             <!--Reviews component end-->
           </div>
         </div>
+        <!--Aside component start-->
         <app-aside
           *ngIf="movieData() && loadedImages.has(movieData()!.id)"
           [props]="movieData()"
-          class="w-1/5 md:flex-row flex items-center">
+          class="w-1/5 md:flex-row flex items-start mt-[3rem] relative">
         </app-aside>
+        <!--Aside component end-->
       </div>
       <div class="w-[80%] mx-auto">
         <a
@@ -174,6 +176,11 @@ import { ReviewComponent } from './review/review.component';
           >Read all reviews</a
         >
       </div>
+      <section>
+        <div class="w-[80%] mx-auto">
+          <h3 class="text-2xl font-semibold text-gray-900 mt-6">Similar</h3>
+        </div>
+      </section>
     </section>
   `,
   styles: ``,

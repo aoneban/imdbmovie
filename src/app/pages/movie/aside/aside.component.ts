@@ -5,15 +5,23 @@ import { SingleMovie } from '../../../interfaces/interface';
   selector: 'app-aside',
   imports: [],
   template: `
-    <aside class="ml-14">
-      <h3 class="font-bold">Status</h3>
-      <p>{{ props?.status }}</p>
-      <h3 class="font-bold">Original language</h3>
-      <p>{{ language(props?.original_language) }}</p>
-      <h3 class="font-bold">Budget</h3>
-      <p>&dollar;{{ reduceNumber(props?.budget) }}.00</p>
-      <h3 class="font-bold">Revenue</h3>
-      <p>&dollar;{{ reduceNumber(props?.revenue) }}.00</p>
+    <aside class="sticky top-[30px]">
+      <div class="mt-4">
+        <h3 class="font-bold">Status</h3>
+        <p>{{ props?.status }}</p>
+      </div>
+      <div class="mt-4">
+        <h3 class="font-bold">Original language</h3>
+        <p>{{ language(props?.original_language) }}</p>
+      </div>
+      <div class="mt-4">
+        <h3 class="font-bold">Budget</h3>
+        <p>&dollar;{{ reduceNumber(props?.budget) }}.00</p>
+      </div>
+      <div class="mt-4">
+        <h3 class="font-bold">Revenue</h3>
+        <p>&dollar;{{ reduceNumber(props?.revenue) }}.00</p>
+      </div>
     </aside>
   `,
   styles: ``,
