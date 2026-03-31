@@ -70,7 +70,7 @@ export class AllReviewsComponent {
 
   fetchReviews() {
     this.commonService
-      .getCommonData(
+      .getCommonData<ReviewsResponse>(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
         this.apiReviewEnd,
         Number(this.movieId)
@@ -88,7 +88,7 @@ export class AllReviewsComponent {
 
   fetchData() {
     this.movieService
-      .getDataMovie(
+      .getDataMovie<SingleMovie>(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
         this.apiUrlEnd,
         Number(this.movieId)

@@ -10,12 +10,12 @@ import { ReviewsResponse } from '../interfaces/interface';
 export class CommonService {
   constructor(private http: HttpClient) {}
 
-  getCommonData(apiStart: string, apiEnd: string,id: number): Observable<ReviewsResponse> {
+  getCommonData<T>(apiStart: string, apiEnd: string,id: number): Observable<T> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<ReviewsResponse>(`${apiStart}${id}${apiEnd}`, {
+    return this.http.get<T>(`${apiStart}${id}${apiEnd}`, {
       headers,
     });
   }

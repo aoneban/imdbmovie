@@ -4,8 +4,6 @@ import {
   ChangeDetectionStrategy,
   signal,
   computed,
-  Output,
-  EventEmitter,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +19,8 @@ import {
   Genre,
   ReviewItem,
   ReviewsResponse,
+  ApiResponse,
+  Movie,
 } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
@@ -29,6 +29,7 @@ import { AsideComponent } from './aside/aside.component';
 import { RatingComponent } from './rating/rating.component';
 import { MediaTypeService } from '../../services/media-type.service';
 import { ReviewComponent } from './review/review.component';
+import { SimilarMoviesComponent } from './similar-movies/similar-movies.component';
 
 @Component({
   selector: 'movie',
@@ -40,6 +41,7 @@ import { ReviewComponent } from './review/review.component';
     RatingComponent,
     RouterModule,
     ReviewComponent,
+    SimilarMoviesComponent,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -146,7 +148,9 @@ import { ReviewComponent } from './review/review.component';
             </button>
           </div>
           <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
-            <div class="flex mb-4 justify-start items-center gap-[4%]">
+            <div
+              *ngIf="dataReview()"
+              class="flex mb-4 justify-start items-center gap-[4%]">
               <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
               <a
                 [routerLink]="['/all-reviews', this.movieData()?.id]"
@@ -169,7 +173,7 @@ import { ReviewComponent } from './review/review.component';
         </app-aside>
         <!--Aside component end-->
       </div>
-      <div class="w-[80%] mx-auto">
+      <div *ngIf="dataReview()" class="w-[80%] mx-auto">
         <a
           [routerLink]="['/all-reviews', this.movieData()?.id]"
           class="underline underline-offset-4 text-blue-400 font-bold"
@@ -179,6 +183,13 @@ import { ReviewComponent } from './review/review.component';
       <section>
         <div class="w-[80%] mx-auto">
           <h3 class="text-2xl font-semibold text-gray-900 mt-6">Similar</h3>
+
+          <!--Similar movies component start-->
+          <app-similar-movies
+            [similar]="similarMovies()"
+            [url]="startUrl"></app-similar-movies>
+            <!--Similar movies component end-->
+
         </div>
       </section>
     </section>
@@ -196,6 +207,7 @@ export class MovieComponent implements OnInit {
   isLoading = false;
   movieId: number | undefined;
   movieData = signal<SingleMovie | undefined>(undefined);
+  similarMovies = signal<Movie[] | undefined>(undefined);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
   movieCast = signal<CastMember[] | undefined>(undefined);
   movieCrew = signal<CrewMember[] | undefined>(undefined);
@@ -248,13 +260,18 @@ export class MovieComponent implements OnInit {
             this.apiReviewEnd,
             this.movieId
           );
+          this.fetchSimilar(
+            type === 'movie' ? this.apiMovie : this.apiTv,
+            '/recommendations',
+            this.movieId
+          );
         }
       });
     }, 500);
   }
 
   fetchData(apiOne: string, apiTwo: string, id: number): void {
-    this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
+    this.movieService.getDataMovie<SingleMovie>(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
         this.isLoading = false;
@@ -262,7 +279,6 @@ export class MovieComponent implements OnInit {
       },
       error => {
         console.error('Error fetching data: ', error);
-        this.isLoading = false;
       }
     );
   }
@@ -276,40 +292,54 @@ export class MovieComponent implements OnInit {
       },
       error => {
         console.error('Error fetching data: ', error);
-        this.isLoading = false;
       }
     );
   }
   fetchCast(linkOne: string, linkTwo: string, id: number): void {
     this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
       data => {
+        this.isLoading = false;
         this.movieCast.set(data.cast.filter((_, i) => i < 15));
         this.movieCrew.set(data.crew.filter((_, i) => i < 3));
         this.movieAllTeam.set(data);
-        this.isLoading = false;
         console.log('Movie all team: ', this.movieAllTeam());
       },
       error => {
         console.error('Error fetching data: ', error);
-        this.isLoading = false;
       }
     );
   }
 
   fetchCommon(linkOne: string, linkTwo: string, id: number): void {
-    this.commonService.getCommonData(linkOne, linkTwo, id).subscribe(
-      data => {
-        this.dataReviewResponse.set(data);
-        this.dataReview.set(data.results[0]);
-        this.isLoading = false;
-        console.log('Review response: ', this.dataReviewResponse());
-        console.log('Data Review: ', this.dataReview());
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-        this.isLoading = false;
-      }
-    );
+    this.commonService
+      .getCommonData<ReviewsResponse>(linkOne, linkTwo, id)
+      .subscribe(
+        data => {
+          this.dataReviewResponse.set(data);
+          this.dataReview.set(data.results[0]);
+          this.isLoading = false;
+          console.log('Review response: ', this.dataReviewResponse());
+          console.log('Data Review: ', this.dataReview());
+        },
+        error => {
+          console.error('Error fetching data: ', error);
+        }
+      );
+  }
+
+  fetchSimilar(linkOne: string, linkTwo: string, id: number): void {
+    this.commonService
+      .getCommonData<ApiResponse>(linkOne, linkTwo, id)
+      .subscribe(
+        data => {
+          this.similarMovies.set(data.results);
+          console.log('similar: ', this.similarMovies());
+          this.isLoading = false;
+        },
+        error => {
+          console.error('Error fetching data: ', error);
+        }
+      );
   }
 
   onImageLoad(id: number) {

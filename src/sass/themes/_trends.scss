@@ -18,7 +18,7 @@
   margin: 0 auto;
   justify-content: flex-start;
   overflow: hidden;
-  bottom: 30px;
+  bottom: 26px;
 }
 
 .movies__wrapper-block {
@@ -38,7 +38,7 @@
 .movies__wrapper::after {
   content: '';
   width: 60px;
-  height: 100%;
+  height: 90%;
   position: absolute;
   top: 25px;
   right: 0;
@@ -56,41 +56,6 @@
   flex: 0 0 auto;
   width: 9rem;
   scroll-snap-align: start;
-}
-
-.rating {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 35px;
-  min-height: 35px;
-  font-size: 14px;
-  border-radius: 50px;
-  background-color: #1a1a1a;
-  line-height: 80%;
-  left: 15px;
-  bottom: 53px;
-  z-index: 100000;
-  border: 2px solid green;
-}
-
-.imdb {
-  font-size: 8px;
-  font-weight: normal;
-  color: #f3efef;
-  margin: 0;
-  padding: 0;
-  gap: 0;
-}
-
-.mark {
-  font-weight: bold;
-  color: #f3efef;
-  margin: 0;
-  padding: 0;
-  gap: 0;
 }
 
 .image {

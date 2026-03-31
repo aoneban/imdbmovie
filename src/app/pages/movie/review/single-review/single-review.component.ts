@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ReviewItem, SingleMovie } from '../../../../interfaces/interface';
+import { ReviewItem, ReviewsResponse, SingleMovie } from '../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 import { MediaTypeService } from '../../../../services/media-type.service';
@@ -83,7 +83,7 @@ export class SingleReviewComponent implements OnInit {
 
   fetchReviews() {
     this.commonService
-      .getCommonData(
+      .getCommonData<ReviewsResponse>(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
         this.apiReviewEnd,
         Number(this.movieId)
@@ -102,7 +102,7 @@ export class SingleReviewComponent implements OnInit {
 
   fetchImg() {
     this.movieService
-      .getDataMovie(
+      .getDataMovie<SingleMovie>(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
         this.apiUrlEnd,
         Number(this.movieId)

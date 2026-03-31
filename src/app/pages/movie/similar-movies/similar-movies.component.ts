@@ -1,0 +1,90 @@
+import { Component, Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { Movie } from '../../../interfaces/interface';
+
+@Component({
+  selector: 'app-similar-movies',
+  imports: [RouterModule],
+  template: `
+    <div class="blur-right max-w-[80%]">
+      <div
+        class="scroll-container overflow-x-auto new-block mt-5 mb-2 flex max-w-[100%] gap-4 justify-start">
+        @for (item of similar; track $index) {
+          <li class="list-none">
+            <img
+              decoding="async"
+              [routerLink]="[
+                item.media_type === 'movie' ? '/movie' : '/tv',
+                item.id,
+              ]"
+              class="cursor-pointer transition-opacity duration-700 rounded-lg relative min-w-[230px] h-[130px]"
+              [src]="
+                item.backdrop_path
+                  ? url + item.backdrop_path
+                  : '/placeholder.svg'
+              "
+              alt="{{ item.title }}" />
+            <p
+              class="text-sm pt-3 pb-3 pl-3 cursor-pointer font-medium hover:text-gray-400 transition-easy duration-500"
+              [routerLink]="[
+                item.media_type === 'movie' ? '/movie' : '/tv',
+                item.id,
+              ]">
+              {{ item.title || item.name }}
+            </p>
+          </li>
+        } @empty {
+          <li>There are no items.</li>
+        }
+      </div>
+    </div>
+  `,
+  styles: `
+    .blur-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blur-right::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60px;
+      height: 100%;
+      background: linear-gradient(
+        to left,
+        rgba(255, 255, 255, 0.9),
+        transparent
+      );
+      pointer-events: none;
+    }
+
+    .scroll-container::-webkit-scrollbar-button {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    .scroll-container::-webkit-scrollbar-button:horizontal:start {
+      display: none;
+    }
+
+    .scroll-container::-webkit-scrollbar-button:horizontal:end {
+      display: none;
+    }
+
+    .scroll-container::-webkit-scrollbar {
+      height: 8px;
+    }
+  `,
+})
+export class SimilarMoviesComponent {
+  @Input() similar: Movie[] | undefined;
+  @Input() url: string | undefined;
+}

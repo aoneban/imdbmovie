@@ -131,7 +131,7 @@ export class AllActorsComponent implements OnInit {
   }
 
   fetchData(apiOne: string, apiTwo: string, id: number): void {
-    this.movieService.getDataMovie(apiOne, apiTwo, id).subscribe(
+    this.movieService.getDataMovie<SingleMovie>(apiOne, apiTwo, id).subscribe(
       data => {
         this.movieData.set(data);
         this.isLoading = false;

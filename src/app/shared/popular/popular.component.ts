@@ -104,7 +104,6 @@ import { RatingComponent } from '../../pages/movie/rating/rating.component';
       </div>
     </section>
   `,
-  styleUrls: ['../../../styles.scss'],
   animations: [
     trigger('fadeAnimation', [
       transition(':enter', [

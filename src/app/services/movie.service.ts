@@ -11,12 +11,12 @@ export class MovieService {
 
   constructor(private http: HttpClient) {}
 
-  getDataMovie(apiStart: string, apiEnd: string, id: number): Observable<SingleMovie> {
+  getDataMovie<T>(apiStart: string, apiEnd: string, id: number): Observable<T> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<SingleMovie>(
+    return this.http.get<T>(
       `${apiStart}${id}${apiEnd}`,
       { headers }
     );
