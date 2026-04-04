@@ -1,5 +1,10 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ReviewItem, ReviewsResponse, SingleMovie } from '../../../../interfaces/interface';
+import {
+  Movie,
+  ReviewItem,
+  ReviewsResponse,
+  SingleMovie,
+} from '../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 import { MediaTypeService } from '../../../../services/media-type.service';
@@ -15,9 +20,11 @@ import { RouterModule } from '@angular/router';
       <div class="loader"></div>
     </div>
     <section *ngIf="!isLoading">
-      <div class="flex h-[50px] items-center bg-gray-100">
+      <div class="duration-200 easy flex h-[50px] font-bold text-gray-700 items-center bg-gray-100 hover:text-gray-500">
         <div class="w-[80%] mx-auto">
-          <a [routerLink]="['/all-reviews', this.movieData?.id]">&#8592; Back to main</a>
+          <a [routerLink]="['/all-reviews', this.movieData?.id]"
+            >&#8592; Back to main</a
+          >
         </div>
       </div>
       <div class="flex w-[80%] mx-auto gap-[20px] mt-10">
@@ -29,15 +36,24 @@ import { RouterModule } from '@angular/router';
             [alt]="name" />
         </div>
         <div>
-          <p>
-            Movie: {{ movieData?.name || movieData?.title }}
-            {{ movieData?.release_date || movieData?.first_air_date }}
+          <a
+            class="duration-200 easy text-2xl font-bold underline underline-offset-2 hover:text-gray-500"
+            [routerLink]="['/all-reviews', this.movieData?.id]">
+            {{ movieData?.name || movieData?.title }}
+            <span class="text-gray-500">
+              ({{
+                movieData?.release_date?.slice(0, 4) ||
+                  movieData?.first_air_date?.slice(0, 4)
+              }})</span
+            >
+          </a>
+          <p class="mt-1 mb-1 text-lg font-medium italic text-gray-700">
+            Written by {{ name }} on {{ currentDate }}
           </p>
-          <p>id: {{ movieId }}</p>
-          <p>Author Name: {{ name }}</p>
-          <p>Data: {{ currentDate }}</p>
-          <p>Rating: {{ rating }}</p>
-          <p>Opinion: {{ opinion }}</p>
+          @if (rating) {
+            <p class="mb-4 font-medium text-md">Rating: {{ rating }}/10</p>
+          }
+          <p class="mt-6 mb-6">{{ opinion }}</p>
         </div>
       </div>
     </section>
@@ -125,12 +141,22 @@ export class SingleReviewComponent implements OnInit {
         if (el.id === this.reviewId) {
           this.opinion = el.content;
           this.name = el.author;
-          this.currentDate = el.created_at.slice(0, 10);
+          this.currentDate = this.getOpinionDate(el.created_at);
           this.rating = el.author_details.rating
             ? el.author_details.rating
-            : 'N/R';
+            : '';
         }
+        console.log('rating', this.rating)
       });
     }
+  }
+
+  getOpinionDate(item: string) {
+    let newDate = item.slice(0, 10);
+    const [year, month, day] = newDate.split('-');
+    const monthName = new Date(2020, Number(month) - 1).toLocaleString('en', {
+      month: 'long',
+    });
+    return `${monthName} ${day}, ${year}`;
   }
 }

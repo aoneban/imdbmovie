@@ -32,7 +32,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
               movie.id,
             ]"
             (click)="setType(movie.media_type)">
-            <p class="font-normal pt-3 pl-3 text-sm">
+            <p class="duration-200 easy font-medium pt-3 pl-3 text-sm hover:text-gray-500 hover:underline hover:underline-offset-1">
               {{ movie.title || movie.name }}
             </p>
           </a>

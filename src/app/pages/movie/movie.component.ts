@@ -117,7 +117,7 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
                   <div class="direction">
                     <a
                       [routerLink]="['/persons', worker.id]"
-                      class="font-bold text-md underline"
+                      class="font-bold text-md underline duration-300 easy hover:text-gray-300"
                       >{{ worker.name }}</a
                     >
                     <p>{{ worker.job }}</p>
@@ -143,25 +143,34 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
             <button
               *ngIf="movieData() && loadedImages.has(movieData()!.id)"
               [routerLink]="['/cast', movieAllTeam()?.id]"
-              class="w-fit whitespace-nowrap">
+              class="w-fit whitespace-nowrap text-lg duration-300 easy font-bold underline underline-offset-2 hover:text-gray-300">
               Full Cast & Crew
             </button>
           </div>
           <div *ngIf="movieData() && loadedImages.has(movieData()!.id)">
-            <div
-              *ngIf="dataReview()"
-              class="flex mb-4 justify-start items-center gap-[4%]">
+            <div class="flex mb-4 justify-start items-center gap-[4%]">
               <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
               <a
-                [routerLink]="['/all-reviews', this.movieData()?.id]"
-                class="text-xl w-[auto] font-semibold underline underline-offset-2">
+                *ngIf="dataReviewResponse()?.results?.length"
+                [routerLink]="['/all-reviews', movieData()?.id]"
+                class="duration-200 easy text-xl w-[auto] font-semibold underline underline-offset-2 hover:text-gray-500">
                 Reviews ({{ dataReviewResponse()?.results?.length }})
               </a>
+
+              <span
+                *ngIf="!dataReviewResponse()?.results?.length"
+                class="text-xl w-[auto] font-semibold text-gray-400 cursor-not-allowed">
+                Reviews (0)
+              </span>
             </div>
             <!--Reviews component start-->
-            <app-review
-              [review]="dataReview()"
-              [allReviews]="dataReviewResponse()"></app-review>
+            @if (dataReview()) {
+              <app-review
+                [review]="dataReview()"
+                [allReviews]="dataReviewResponse()"></app-review>
+            } @else {
+              <p>There are no reviews at the moment...</p>
+            }
             <!--Reviews component end-->
           </div>
         </div>
@@ -176,7 +185,7 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
       <div *ngIf="dataReview()" class="w-[80%] mx-auto">
         <a
           [routerLink]="['/all-reviews', this.movieData()?.id]"
-          class="underline underline-offset-4 text-blue-400 font-bold"
+          class="duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500"
           >Read all reviews</a
         >
       </div>
@@ -188,8 +197,7 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
           <app-similar-movies
             [similar]="similarMovies()"
             [url]="startUrl"></app-similar-movies>
-            <!--Similar movies component end-->
-
+          <!--Similar movies component end-->
         </div>
       </section>
     </section>

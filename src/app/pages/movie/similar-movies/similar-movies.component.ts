@@ -25,7 +25,7 @@ import { Movie } from '../../../interfaces/interface';
               "
               alt="{{ item.title }}" />
             <p
-              class="text-sm pt-3 pb-3 pl-3 cursor-pointer font-medium hover:text-gray-400 transition-easy duration-500"
+              class="text-sm pt-3 pb-3 pl-3 cursor-pointer font-medium hover:text-gray-400 easy duration-300 hover:underline hover:underline-offset-1"
               [routerLink]="[
                 item.media_type === 'movie' ? '/movie' : '/tv',
                 item.id,

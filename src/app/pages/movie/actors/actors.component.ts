@@ -33,19 +33,26 @@ import { CommonModule } from '@angular/common';
                   </div>
                   <a [routerLink]="['/persons', person.id]">
                     <p>
-                      <b class="pl-2">{{ person.name }}</b>
+                      <b
+                        class="pl-2 duration-300 ease hover:text-gray-500 hover:underline hover:underline-offset-2"
+                        >{{ person.name }}</b
+                      >
                     </p>
                   </a>
-                  <p class="p-2">{{ person.character ? person.character : 'unknown' }}</p>
+                  <p class="pl-2 pb-2 text-sm text-gray-700">
+                    {{ person.character ? person.character : 'unknown' }}
+                  </p>
                 </div>
               }
             }
             <div class="flex justify-center h-full items-center">
-              <button
-                [routerLink]="['/cast', id]"
-                class="w-fit whitespace-nowrap">
-                View more &#10230;
-              </button>
+              @if (cast !== undefined && cast.length > 0) {
+                <button
+                  [routerLink]="['/cast', id]"
+                  class="w-fit whitespace-nowrap text-md font-bold duration-200 ease hover:underline hover:underline-offset-2 hover:text-gray-500">
+                  View more &#10230;
+                </button>
+              }
             </div>
           </div>
         </div>
@@ -76,4 +83,8 @@ export class ActorsComponent {
   startUrl = 'https://image.tmdb.org/t/p/w500';
   @Input() cast: CastMember[] | undefined;
   @Input() id: number | undefined;
+
+  ngOnInit(){
+    console.log('cast', this.cast)
+  }
 }

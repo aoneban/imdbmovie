@@ -37,7 +37,7 @@ import { MainImageComponent } from './main-image/main-image.component';
       </div>
       <div *ngIf="!isLoading" class="w-[80%] flex m-[auto]">
         <!-- Left content: 20% width -->
-        <div class="w-2/6 pr-12 pb-12 pt-12">
+        <div class="w-2/6 pr-6 pb-12 pt-12">
           <section>
             <app-main-image
               [data]="personData()"
@@ -48,7 +48,7 @@ import { MainImageComponent } from './main-image/main-image.component';
           </section>
         </div>
         <!-- Right content: 80% width -->
-        <div class="w-[77%]">
+        <div class="w-[70%]">
           <div>
             <section>
               <app-nameactor [actorName]="personData()"></app-nameactor>
@@ -122,6 +122,7 @@ export class PersonsComponent implements OnInit {
         this.personCombined.set(data);
         console.log('Person combined: ', this.personCombined());
         this.sorted();
+        console.log('released', this.release)
       },
       error => {
         console.error('Error fetching data: ', error);
