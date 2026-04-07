@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
 import { RatingComponent } from '../movie/rating/rating.component';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'app-movies',
@@ -19,7 +20,7 @@ import { RatingComponent } from '../movie/rating/rating.component';
       } @else {
         <div>
           <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
-            {{ namePage }}
+            {{ namePage() }}
           </h1>
           <div class="flex w-[80%] mx-auto flex-wrap justify-center">
             @for (movie of movieData(); track $index) {
@@ -27,7 +28,7 @@ import { RatingComponent } from '../movie/rating/rating.component';
                 <div
                   class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
                   <img
-                    *ngIf="!loadedImages.has(movie.id)"
+                    *ngIf="!loadedImages().has(movie.id)"
                     class="absolute inset-0 w-[80%] h-[80%] p-5 m-5 object-cover bg-gray-300"
                     src="/placeholder.svg"
                     alt="placeholder" />
@@ -41,7 +42,7 @@ import { RatingComponent } from '../movie/rating/rating.component';
                         : '/placeholder.svg'
                     "
                     (load)="onImageLoad(movie.id)"
-                    [class.opacity-0]="!loadedImages.has(movie.id)"
+                    [class.opacity-0]="!loadedImages().has(movie.id)"
                     alt="{{ movie.name }}" />
 
                   <!--Rating component start-->
@@ -52,9 +53,9 @@ import { RatingComponent } from '../movie/rating/rating.component';
 
                   <h3
                     class="cursor-pointer font-bold relative top-4 left-3"
-                    (click)="setType(mediaType)"
+                    (click)="setType(mediaType())"
                     [routerLink]="[
-                      mediaType === 'movie' ? '/movie' : '/tv',
+                      mediaType() === 'movie' ? '/movie' : '/tv',
                       movie.id,
                     ]">
                     {{ movie.title || movie.name }}
@@ -82,16 +83,16 @@ import { RatingComponent } from '../movie/rating/rating.component';
   styles: ``,
 })
 export class MoviesComponent {
-  url!: string;
-  namePage!: string;
-  mediaType!: string;
-  startUrl = 'https://image.tmdb.org/t/p/w500';
+  url = signal<string>('');
+  namePage = signal<string>('');
+  mediaType = signal<string>('');
+  startUrl = TMDB.imageBaseUrl;
   page = signal<number>(1);
   totalPages: number | undefined = 0;
 
   isLoading = computed(() => this.movieData().length === 0);
   movieData = signal<Movie[]>([]);
-  loadedImages = new Set<number>();
+  loadedImages = signal<Set<number>>(new Set());
 
   constructor(
     private route: ActivatedRoute,
@@ -99,12 +100,13 @@ export class MoviesComponent {
     private mediaTypeService: MediaTypeService
   ) {
     effect(() => {
-      this.url = this.route.snapshot.data['url'];
-      this.namePage = this.route.snapshot.data['name'];
-      this.mediaType = this.route.snapshot.data['type'];
+      const data = this.route.snapshot.data;
+      this.url.set(data['url']);
+      this.namePage.set(data['name']);
+      this.mediaType.set(data['type']);
 
       const page = this.page();
-      this.moviesService.getDataMovies(this.url, page).subscribe(data => {
+      this.moviesService.getDataMovies(this.url(), page).subscribe(data => {
         if (page === 1) {
           this.movieData.set(data.results);
         } else {
@@ -115,8 +117,12 @@ export class MoviesComponent {
     });
   }
 
+  loadMore() {
+    this.page.update(p => p + 1);
+  }
+
   onImageLoad(id: number): void {
-    this.loadedImages.add(id);
+    this.loadedImages.update(set => new Set([...set, id]));
   }
 
   getDate(movie: Movie): string {
@@ -126,13 +132,5 @@ export class MoviesComponent {
 
   setType(type: string): void {
     this.mediaTypeService.setMediaType(type);
-  }
-
-  goTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  loadMore() {
-    this.page.update(p => p + 1);
   }
 }
