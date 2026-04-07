@@ -166,8 +166,8 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
             <!--Reviews component start-->
             @if (dataReview()) {
               <app-review
-                [review]="dataReview()"
-                [allReviews]="dataReviewResponse()"></app-review>
+                [review]="dataReview()!"
+                [allReviews]="dataReviewResponse()!"></app-review>
             } @else {
               <p>There are no reviews at the moment...</p>
             }
@@ -206,10 +206,7 @@ import { SimilarMoviesComponent } from './similar-movies/similar-movies.componen
 })
 export class MovieComponent implements OnInit {
   apiMovie = 'https://api.themoviedb.org/3/movie/';
-  apiReviewEnd = '/reviews?language=en-US&page=1';
   apiTv = 'https://api.themoviedb.org/3/tv/';
-  apiUrlEnd = '?language=en-US';
-  apiCastEnd = '/credits?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w500';
   startUrl2 = 'https://image.tmdb.org/t/p/w1920/';
   isLoading = false;
@@ -251,12 +248,12 @@ export class MovieComponent implements OnInit {
         if (this.movieId !== undefined && type) {
           this.fetchCast(
             type === 'movie' ? this.apiMovie : this.apiTv,
-            this.apiCastEnd,
+            '/credits?language=en-US',
             this.movieId
           );
           this.fetchData(
             type === 'movie' ? this.apiMovie : this.apiTv,
-            this.apiUrlEnd,
+            '?language=en-US',
             this.movieId
           );
           this.fetchDataImages(
@@ -265,7 +262,7 @@ export class MovieComponent implements OnInit {
           );
           this.fetchCommon(
             type === 'movie' ? this.apiMovie : this.apiTv,
-            this.apiReviewEnd,
+            '/reviews?language=en-US&page=1',
             this.movieId
           );
           this.fetchSimilar(
