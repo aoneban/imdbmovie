@@ -73,7 +73,7 @@ export class MovieCardComponent {
 
   constructor(private mediaTypeService: MediaTypeService) {}
 
-  loadMore() {
+  loadMore(): void {
     this.loadMoreClick.emit();
   }
 

@@ -51,11 +51,9 @@ export class MoviesComponent {
 
       const page = this.page();
       this.moviesService.getDataMovies(this.url(), page).subscribe(data => {
-        if (page === 1) {
-          this.movieData.set(data.results);
-        } else {
-          this.movieData.update(prev => [...prev, ...data.results]);
-        }
+        page === 1
+          ? this.movieData.set(data.results)
+          : this.movieData.update(prev => [...prev, ...data.results]);
         this.totalPages = data.total_pages;
       });
     });

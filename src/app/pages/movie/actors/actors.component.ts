@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
                 No cast information available yet...
               </div>
             } @else {
-              @for (person of cast; track person.id) {
+              @for (person of cast; track $index) {
                 <div class="movies__wrapper-cart rounded-lg overflow-hidden">
                   <div class="wrapper_img">
                     <img

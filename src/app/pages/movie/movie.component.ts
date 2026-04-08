@@ -219,11 +219,8 @@ export class MovieComponent implements OnInit {
   movieData = signal<SingleMovie | undefined>(undefined);
   similarMovies = signal<Movie[]>([]);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
-  movieCast = signal<CastMember[]>([]);
-  movieCrew = signal<CrewMember[]>([]);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
-  dataReview = signal<ReviewItem | undefined>(undefined);
   loadedImages = signal<Set<number>>(new Set());
   text: string | undefined;
 
@@ -242,6 +239,22 @@ export class MovieComponent implements OnInit {
     }
     return '';
   });
+
+  movieCast = computed(() => {
+    const amountOfActors = 15;
+    return this.movieAllTeam()?.cast.filter((_, i) => i < amountOfActors);
+  });
+
+  movieCrew = computed(() => {
+    const amountOfPersonal = 3;
+    return this.movieAllTeam()?.crew.filter((_, i) => i < amountOfPersonal);
+  })
+
+  dataReview = computed(() => {
+    const len = this.dataReviewResponse()?.results.length as number;
+    const random = Math.floor(Math.random() * len) as number;
+    return this.dataReviewResponse()?.results[random]
+  })
 
   isLoading = computed(() => this.movieData());
 
@@ -307,8 +320,6 @@ export class MovieComponent implements OnInit {
   fetchCast(linkOne: string, linkTwo: string, id: number): void {
     this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
       data => {
-        this.movieCast.set(data.cast.filter((_, i) => i < 15));
-        this.movieCrew.set(data.crew.filter((_, i) => i < 3));
         this.movieAllTeam.set(data);
         console.log('Movie all team: ', this.movieAllTeam());
       },
@@ -324,9 +335,7 @@ export class MovieComponent implements OnInit {
       .subscribe(
         data => {
           this.dataReviewResponse.set(data);
-          this.dataReview.set(data.results[0]);
           console.log('Review response: ', this.dataReviewResponse());
-          console.log('Data Review: ', this.dataReview());
         },
         error => {
           console.error('Error fetching data: ', error);
