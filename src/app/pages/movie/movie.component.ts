@@ -1,23 +1,19 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   signal,
   computed,
+  effect,
+  inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
-import { CastService } from '../../services/cast.service';
-import { CommonService } from '../../services/common.service';
 import {
-  CastMember,
-  CrewMember,
   MovieCast,
   SingleMovie,
   ImagesResponse,
   Genre,
-  ReviewItem,
   ReviewsResponse,
   ApiResponse,
   Movie,
@@ -31,6 +27,8 @@ import { MediaTypeService } from '../../services/media-type.service';
 import { ReviewComponent } from './review/review.component';
 import { SimilarMoviesComponent } from './similar-movies/similar-movies.component';
 import { TMDB } from '../../config/tmdb.config';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'movie',
@@ -140,7 +138,7 @@ import { TMDB } from '../../config/tmdb.config';
               <app-actors
                 *ngIf="movieData() && loadedImages().has(movieData()!.id)"
                 [cast]="movieCast()"
-                [id]="movieId"
+                [id]="movieId()"
                 class="md:flex-row">
               </app-actors>
               <!--Actors component end-->
@@ -212,10 +210,10 @@ import { TMDB } from '../../config/tmdb.config';
   `,
   styles: ``,
 })
-export class MovieComponent implements OnInit {
+export class MovieComponent {
+  route = inject(ActivatedRoute);
   startUrl = TMDB.imageBaseUrl;
-  startUrlTwo = TMDB.imageBigUrl;
-  movieId: number | undefined;
+  secondUrl = TMDB.imageBigUrl;
   movieData = signal<SingleMovie | undefined>(undefined);
   similarMovies = signal<Movie[]>([]);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
@@ -223,19 +221,72 @@ export class MovieComponent implements OnInit {
   dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
   loadedImages = signal<Set<number>>(new Set());
   text: string | undefined;
+  movieId = toSignal(
+    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
+  );
 
   constructor(
-    private route: ActivatedRoute,
     private movieService: MovieService,
-    private castService: CastService,
-    private mediaTypeService: MediaTypeService,
-    private commonService: CommonService
-  ) {}
+    private mediaTypeService: MediaTypeService
+  ) {
+    effect(() => {
+      const type = this.mediaTypeService.getMediaType();
+      const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
+      this.movieService
+        .getDataMovie<SingleMovie>(apiOne, TMDB.apiLanguage, this.movieId()!)
+        .subscribe(
+          data => {
+            this.movieData.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+      this.movieService
+        .getDataMovie<ReviewsResponse>(apiOne, TMDB.apiReviews, this.movieId()!)
+        .subscribe(
+          data => {
+            this.dataReviewResponse.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+      this.movieService
+        .getDataMovie<MovieCast>(apiOne, TMDB.apiCredits, this.movieId()!)
+        .subscribe(
+          data => {
+            this.movieAllTeam.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+      this.movieService
+        .getDataMovie<ApiResponse>(apiOne, TMDB.apiRecommend, this.movieId()!)
+        .subscribe(
+          data => {
+            this.similarMovies.set(data.results);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+      this.movieService.getDataImage(apiOne, this.movieId()!).subscribe(
+        data => {
+          this.movieDataImg.set(data);
+        },
+        error => {
+          console.error('Error fetching data: ', error);
+        }
+      );
+    });
+  }
 
   backgroundImage = computed(() => {
     const imgData = this.movieDataImg();
     if (imgData && imgData.backdrops && imgData.backdrops.length > 1) {
-      return `url(${this.startUrlTwo}${imgData.backdrops[2].file_path})`;
+      return `url(${this.secondUrl}${imgData.backdrops[2].file_path})`;
     }
     return '';
   });
@@ -248,114 +299,15 @@ export class MovieComponent implements OnInit {
   movieCrew = computed(() => {
     const amountOfPersonal = 3;
     return this.movieAllTeam()?.crew.filter((_, i) => i < amountOfPersonal);
-  })
+  });
 
   dataReview = computed(() => {
     const len = this.dataReviewResponse()?.results.length as number;
     const random = Math.floor(Math.random() * len) as number;
-    return this.dataReviewResponse()?.results[random]
-  })
+    return this.dataReviewResponse()?.results[random];
+  });
 
   isLoading = computed(() => this.movieData());
-
-  ngOnInit() {
-    let type = this.mediaTypeService.getMediaType();
-    setTimeout(() => {
-      this.route.paramMap.subscribe(params => {
-        const id = params.get('id');
-        this.movieId = id ? Number(id) : undefined;
-        if (this.movieId !== undefined && type) {
-          this.fetchCast(
-            type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV,
-            '/credits?language=en-US',
-            this.movieId
-          );
-          this.fetchData(
-            type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV,
-            '?language=en-US',
-            this.movieId
-          );
-          this.fetchDataImages(
-            type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV,
-            this.movieId
-          );
-          this.fetchCommon(
-            type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV,
-            '/reviews?language=en-US&page=1',
-            this.movieId
-          );
-          this.fetchSimilar(
-            type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV,
-            '/recommendations',
-            this.movieId
-          );
-        }
-      });
-    }, 500);
-  }
-
-  fetchData(apiOne: string, apiTwo: string, id: number): void {
-    this.movieService.getDataMovie<SingleMovie>(apiOne, apiTwo, id).subscribe(
-      data => {
-        this.movieData.set(data);
-        console.log('Movie data: ', this.movieData());
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
-  }
-
-  fetchDataImages(apiStart: string, id: number): void {
-    this.movieService.getDataImage(apiStart, id).subscribe(
-      data => {
-        this.movieDataImg.set(data);
-        console.log('Movie dataImg: ', this.movieDataImg());
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
-  }
-  fetchCast(linkOne: string, linkTwo: string, id: number): void {
-    this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
-      data => {
-        this.movieAllTeam.set(data);
-        console.log('Movie all team: ', this.movieAllTeam());
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
-  }
-
-  fetchCommon(linkOne: string, linkTwo: string, id: number): void {
-    this.commonService
-      .getCommonData<ReviewsResponse>(linkOne, linkTwo, id)
-      .subscribe(
-        data => {
-          this.dataReviewResponse.set(data);
-          console.log('Review response: ', this.dataReviewResponse());
-        },
-        error => {
-          console.error('Error fetching data: ', error);
-        }
-      );
-  }
-
-  fetchSimilar(linkOne: string, linkTwo: string, id: number): void {
-    this.commonService
-      .getCommonData<ApiResponse>(linkOne, linkTwo, id)
-      .subscribe(
-        data => {
-          this.similarMovies.set(data.results);
-          console.log('similar: ', this.similarMovies());
-        },
-        error => {
-          console.error('Error fetching data: ', error);
-        }
-      );
-  }
 
   onImageLoad(id: number) {
     this.loadedImages.update(set => new Set([...set, id]));
