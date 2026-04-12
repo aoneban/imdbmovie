@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CastCredits } from '../../../interfaces/interface';
 import { MediaTypeService } from '../../../services/media-type.service';
@@ -11,7 +11,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
     <div>
       <h3 class="font-medium text-xl mb-3">Acting</h3>
       <div class="border-2 p-3 border-solid rounded-lg">
-        @for (item of release; track $index) {
+        @for (item of previousReleases(); track $index) {
           <li
             class="list-none pt-3 cursor-pointer"
             (click)="setType(item.media_type)"
@@ -35,8 +35,8 @@ import { MediaTypeService } from '../../../services/media-type.service';
           </li>
 
           @if (
-            $index < release!.length - 1 &&
-            item.release_date !== release![$index + 1].release_date
+            $index < previousReleases()!.length - 1 &&
+            item.release_date !== previousReleases()![$index + 1].release_date
           ) {
             <div class="w-full border-b border-gray-300 my-4"></div>
           }
@@ -50,11 +50,10 @@ import { MediaTypeService } from '../../../services/media-type.service';
   styles: ``,
 })
 export class PreviousComponent {
-  @Input() release: CastCredits[] | undefined = [];
+  previousReleases = input<CastCredits[] | undefined>([]);
   constructor(private mediaTypeService: MediaTypeService) {}
 
-  setType(type: string){
-    this.mediaTypeService.setMediaType(type)
+  setType(type: string) {
+    this.mediaTypeService.setMediaType(type);
   }
-
 }

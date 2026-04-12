@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SingleMovie, HasRating } from '../../../interfaces/interface';
+import { SingleMovie, HasRating } from '../../../../interfaces/interface';
 import { CommonModule } from '@angular/common';
 
 @Component({

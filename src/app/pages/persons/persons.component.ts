@@ -64,7 +64,7 @@ import { TMDB } from '../../config/tmdb.config';
             <app-knownfor [cast]="topCast()" [url]="startUrl"></app-knownfor>
           </section>
           <section>
-            <app-previous [release]="release"></app-previous>
+            <app-previous [previousReleases]="previousReleases()"></app-previous>
           </section>
         </div>
       </section>
@@ -78,17 +78,9 @@ export class PersonsComponent {
   startUrl = TMDB.imageBaseUrl;
   personData = signal<SinglePerson | undefined>(undefined);
   personCombined = signal<CastCombined | undefined>(undefined);
-  release: CastCredits[] | undefined = [];
   personId = toSignal(
     this.route.paramMap.pipe(map(params => Number(params.get('id'))))
   );
-
-  isLoading = computed(() => this.personData());
-
-  topCast = computed(() => {
-    const combined = this.personCombined();
-    return combined?.cast.slice(2, 17) ?? [];
-  });
 
   constructor(private personService: PersonService) {
     effect(() => {
@@ -115,7 +107,6 @@ export class PersonsComponent {
         .subscribe(
           data => {
             this.personCombined.set(data);
-            this.sorted();
           },
           error => {
             console.error('Error fetching data: ', error);
@@ -124,31 +115,39 @@ export class PersonsComponent {
     });
   }
 
-  sorted(): void {
+  isLoading = computed(() => this.personData());
+
+  topCast = computed(() => {
+    const combined = this.personCombined();
+    return combined?.cast.slice(2, 17) ?? [];
+  });
+
+  previousReleases = computed(() => {
+    const rel: CastCredits[] = [];
     const temp = this.personCombined()?.cast;
     temp?.map(item => {
       if (item.release_date && typeof item.release_date === 'string') {
         item.release_date = Number(item.release_date.slice(0, 4));
-        this.release?.push(item);
+        rel?.push(item);
         return;
       } else if (
         item.first_air_date &&
         typeof item.first_air_date === 'string'
       ) {
         item.release_date = Number(item.first_air_date.slice(0, 4));
-        this.release?.push(item);
+        rel?.push(item);
         return;
       } else if (
         item.first_credit_air_date &&
         typeof item.first_credit_air_date === 'string'
       ) {
         item.release_date = Number(item.first_credit_air_date.slice(0, 4));
-        this.release?.push(item);
+        rel?.push(item);
         return;
       }
     });
 
-    this.release = temp?.sort((a, b) => {
+    rel.sort((a, b) => {
       if (a.release_date > b.release_date) {
         return -1;
       }
@@ -157,5 +156,6 @@ export class PersonsComponent {
       }
       return 0;
     });
-  }
+    return rel;
+  });
 }

@@ -1,18 +1,14 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MovieService } from '../../../services/movie.service';
-import { CastService } from '../../../services/cast.service';
-import {
-  CastMember,
-  MovieCast,
-  SingleMovie,
-} from '../../../interfaces/interface';
-import { NavbarComponent } from '../../../shared/navbar/navbar.component';
+import { MovieService } from '../../services/movie.service';
+import { CastService } from '../../services/cast.service';
+import { CastMember, MovieCast, SingleMovie } from '../../interfaces/interface';
+import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
-import { MediaTypeService } from '../../../services/media-type.service';
-import { TitleMovieComponent } from '../block-hero/title-movie/title-movie.component';
+import { MediaTypeService } from '../../services/media-type.service';
+import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie.component';
 
 @Component({
   selector: 'app-all-actors',

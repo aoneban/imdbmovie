@@ -24,7 +24,7 @@ export const routes: Routes = [
   {
     path: 'cast/:id',
     loadComponent: () =>
-      import('./pages/movie/all-actors/all-actors.component').then(
+      import('./pages/all-actors/all-actors.component').then(
         m => m.AllActorsComponent
       ),
   },

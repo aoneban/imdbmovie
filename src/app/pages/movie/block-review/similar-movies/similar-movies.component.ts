@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Movie } from '../../../interfaces/interface';
+import { Movie } from '../../../../interfaces/interface';
 
 @Component({
   selector: 'app-similar-movies',

@@ -1,7 +1,7 @@
 import { Component, input, Input, output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { RatingComponent } from '../rating/rating.component';
+import { RatingComponent } from './rating/rating.component';
 import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
 
 @Component({

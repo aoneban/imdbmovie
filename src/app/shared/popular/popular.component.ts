@@ -12,7 +12,7 @@ import { Movie, PopularConfig } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
-import { RatingComponent } from '../../pages/movie/rating/rating.component';
+import { RatingComponent } from '../../pages/movie/block-hero/rating/rating.component';
 
 @Component({
   selector: 'app-popular',

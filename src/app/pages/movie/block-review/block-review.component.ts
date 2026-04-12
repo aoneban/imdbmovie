@@ -1,7 +1,7 @@
 import { Component, input, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { SimilarMoviesComponent } from '../similar-movies/similar-movies.component';
+import { SimilarMoviesComponent } from './similar-movies/similar-movies.component';
 import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
 
 @Component({

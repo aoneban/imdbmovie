@@ -1,7 +1,7 @@
 import { Component, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { RatingComponent } from '../../movie/rating/rating.component';
+import { RatingComponent } from '../../movie/block-hero/rating/rating.component';
 import { MediaTypeService } from '../../../services/media-type.service';
 import { Movie } from '../../../interfaces/interface';
 import { getReleaseDate } from '../../../helpers/getReleaseDate';
