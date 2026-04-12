@@ -1,14 +1,14 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   Movie,
   ReviewItem,
   ReviewsResponse,
   SingleMovie,
-} from '../../../../interfaces/interface';
+} from '../../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
-import { CommonService } from '../../../../services/common.service';
-import { MediaTypeService } from '../../../../services/media-type.service';
-import { MovieService } from '../../../../services/movie.service';
+import { CommonService } from '../../../../../services/common.service';
+import { MediaTypeService } from '../../../../../services/media-type.service';
+import { MovieService } from '../../../../../services/movie.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 

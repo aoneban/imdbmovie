@@ -123,16 +123,16 @@ export const routes: Routes = [
   {
     path: 'single-review/:movieId/:reviewId',
     loadComponent: () =>
-      import('./pages/movie/review/single-review/single-review.component').then(
-        m => m.SingleReviewComponent
-      ),
+      import(
+        './pages/movie/block-review/review/single-review/single-review.component'
+      ).then(m => m.SingleReviewComponent),
   },
   {
     path: 'all-reviews/:id',
     loadComponent: () =>
-      import('./pages/movie/review/all-reviews/all-reviews.component').then(
-        m => m.AllReviewsComponent
-      ),
+      import(
+        './pages/movie/block-review/review/all-reviews/all-reviews.component'
+      ).then(m => m.AllReviewsComponent),
   },
   { path: '', redirectTo: '/main', pathMatch: 'full' },
 ];

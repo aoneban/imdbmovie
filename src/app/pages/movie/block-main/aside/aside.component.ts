@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { SingleMovie } from '../../../interfaces/interface';
+import { SingleMovie } from '../../../../interfaces/interface';
 
 @Component({
   selector: 'app-aside',

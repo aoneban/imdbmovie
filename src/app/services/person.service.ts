@@ -2,37 +2,21 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { SinglePerson, CastCombined } from '../interfaces/interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PersonService {
-  private apiUrl1 = 'https://api.themoviedb.org/3/person/';
-  private apiUrl2 = '?language=en-US';
 
   constructor(private http: HttpClient) {}
 
-  getDataPerson(id: number): Observable<SinglePerson> {
+  getDataPerson<T>(apiUrl1: string, id: number, apiUrl2: string): Observable<T> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<SinglePerson>(`${this.apiUrl1}${id}${this.apiUrl2}`, {
+    return this.http.get<T>(`${apiUrl1}${id}${apiUrl2}`, {
       headers,
     });
-  }
-
-  getCombinedCredits(id: number): Observable<CastCombined> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${environment.apiKey}`,
-      Accept: 'application/json',
-    });
-    return this.http.get<CastCombined>(
-      `${this.apiUrl1}${id}/combined_credits`,
-      {
-        headers,
-      }
-    );
   }
 }

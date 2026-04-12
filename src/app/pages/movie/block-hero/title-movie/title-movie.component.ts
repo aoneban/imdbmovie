@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SingleMovie } from '../../../interfaces/interface';
+import { SingleMovie } from '../../../../interfaces/interface';
 import { RouterModule } from '@angular/router';
-import { MediaTypeService } from '../../../services/media-type.service';
+import { MediaTypeService } from '../../../../services/media-type.service';
 
 @Component({
   selector: 'app-title-movie',
@@ -42,9 +42,7 @@ export class TitleMovieComponent {
   color = 'grey';
   mediaType!: string | null;
 
-  constructor(
-    private mediaTypeService: MediaTypeService
-  ) {}
+  constructor(private mediaTypeService: MediaTypeService) {}
 
   ngOnInit(): void {
     this.getType();

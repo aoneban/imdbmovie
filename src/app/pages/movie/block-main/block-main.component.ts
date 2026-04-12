@@ -1,10 +1,16 @@
 import { Component, Input, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActorsComponent } from '../actors/actors.component';
-import { ReviewComponent } from '../review/review.component';
-import { AsideComponent } from '../aside/aside.component';
+import { ActorsComponent } from './actors/actors.component';
+import { ReviewComponent } from '../block-review/review/review.component';
+import { AsideComponent } from './aside/aside.component';
 import { RouterModule } from '@angular/router';
-import { CastMember, MovieCast, ReviewItem, ReviewsResponse, SingleMovie } from '../../../interfaces/interface';
+import {
+  CastMember,
+  MovieCast,
+  ReviewItem,
+  ReviewsResponse,
+  SingleMovie,
+} from '../../../interfaces/interface';
 
 @Component({
   selector: 'app-main-block',
@@ -75,12 +81,10 @@ import { CastMember, MovieCast, ReviewItem, ReviewsResponse, SingleMovie } from 
 })
 export class MainBlockComponent {
   movieData = input<SingleMovie | undefined>();
-  movieId = input<number | undefined>()
-  dataReview = input<ReviewItem | undefined>()
-  movieCast = input<CastMember[] | undefined>()
-  movieAllTeam = input<MovieCast | undefined>()
-  loadedImages = input<Set<number>>(new Set())
-  dataReviewResponse = input<ReviewsResponse | undefined>()
+  movieId = input<number | undefined>();
+  dataReview = input<ReviewItem | undefined>();
+  movieCast = input<CastMember[] | undefined>();
+  movieAllTeam = input<MovieCast | undefined>();
+  loadedImages = input<Set<number>>(new Set());
+  dataReviewResponse = input<ReviewsResponse | undefined>();
 }
-
-

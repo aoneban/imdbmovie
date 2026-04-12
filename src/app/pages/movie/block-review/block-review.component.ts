@@ -30,8 +30,8 @@ import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
   styles: ``,
 })
 export class ReviewBlockComponent {
-   @Input() startUrl: string | undefined;
-   dataReview = input<ReviewItem | undefined>()
-   movieData = input<SingleMovie | undefined>();
-   similarMovies = input<Movie[]>([])
+  @Input() startUrl: string | undefined;
+  dataReview = input<ReviewItem | undefined>();
+  movieData = input<SingleMovie | undefined>();
+  similarMovies = input<Movie[]>([]);
 }

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReviewItem, ReviewsResponse } from '../../../interfaces/interface';
+import { ReviewItem, ReviewsResponse } from '../../../../interfaces/interface';
 import { RouterModule } from '@angular/router';
-import { ReviewDataService } from '../../../services/review-data.service';
+import { ReviewDataService } from '../../../../services/review-data.service';
 
 @Component({
   selector: 'app-review',

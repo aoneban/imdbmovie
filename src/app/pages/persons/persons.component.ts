@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, effect } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   SinglePerson,
@@ -15,6 +15,9 @@ import { KnownForComponent } from './knownfor/knownfor.component';
 import { PersonalComponent } from './personal/personal.component';
 import { NameActorComponent } from './nameactor/nameactor.component';
 import { MainImageComponent } from './main-image/main-image.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'persons',
@@ -32,10 +35,10 @@ import { MainImageComponent } from './main-image/main-image.component';
   template: `
     <app-navbar></app-navbar>
     <section>
-      <div *ngIf="isLoading" class="preloader">
+      <div *ngIf="!isLoading()" class="preloader">
         <div class="loader"></div>
       </div>
-      <div *ngIf="!isLoading" class="w-[80%] flex m-[auto]">
+      <section *ngIf="isLoading()" class="w-[80%] flex m-[auto]">
         <!-- Left content: 20% width -->
         <div class="w-2/6 pr-6 pb-12 pt-12">
           <section>
@@ -49,16 +52,14 @@ import { MainImageComponent } from './main-image/main-image.component';
         </div>
         <!-- Right content: 80% width -->
         <div class="w-[70%]">
-          <div>
-            <section>
-              <app-nameactor [actorName]="personData()"></app-nameactor>
-            </section>
-            <section>
-              <app-biography
-                [data]="personData()"
-                [show]="showFull"></app-biography>
-            </section>
-          </div>
+          <section>
+            <app-nameactor [actorName]="personData()"></app-nameactor>
+          </section>
+          <section>
+            <app-biography
+              [data]="personData()"
+              [show]="showFull"></app-biography>
+          </section>
           <section>
             <app-knownfor [cast]="topCast()" [url]="startUrl"></app-knownfor>
           </section>
@@ -66,68 +67,61 @@ import { MainImageComponent } from './main-image/main-image.component';
             <app-previous [release]="release"></app-previous>
           </section>
         </div>
-      </div>
+      </section>
     </section>
   `,
   styles: ``,
 })
-export class PersonsComponent implements OnInit {
-  isLoading = false;
+export class PersonsComponent {
+  route = inject(ActivatedRoute);
   showFull = false;
-  startUrl = 'https://image.tmdb.org/t/p/w500';
-  personId: number | undefined;
+  startUrl = TMDB.imageBaseUrl;
   personData = signal<SinglePerson | undefined>(undefined);
   personCombined = signal<CastCombined | undefined>(undefined);
   release: CastCredits[] | undefined = [];
+  personId = toSignal(
+    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
+  );
+
+  isLoading = computed(() => this.personData());
 
   topCast = computed(() => {
     const combined = this.personCombined();
     return combined?.cast.slice(2, 17) ?? [];
   });
 
-  constructor(
-    private route: ActivatedRoute,
-    private personService: PersonService
-  ) {}
-
-  ngOnInit(): void {
-    this.isLoading = true;
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.personId = id ? Number(id) : undefined;
-      if (this.personId !== undefined) {
-        this.fetchPerson(this.personId);
-        this.fetchCastCombined(this.personId);
-      }
+  constructor(private personService: PersonService) {
+    effect(() => {
+      this.personService
+        .getDataPerson<SinglePerson>(
+          TMDB.apiUrlPerson,
+          this.personId()!,
+          TMDB.apiLanguage
+        )
+        .subscribe(
+          data => {
+            this.personData.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+      this.personService
+        .getDataPerson<CastCombined>(
+          TMDB.apiUrlPerson,
+          this.personId()!,
+          TMDB.apiCombinedCredits
+        )
+        .subscribe(
+          data => {
+            this.personCombined.set(data);
+            this.sorted();
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
     });
-  }
-
-  fetchPerson(id: number): void {
-    this.personService.getDataPerson(id).subscribe(
-      data => {
-        this.personData.set(data);
-        this.isLoading = false;
-        console.log('Person data: ', this.personData());
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
-  }
-
-  fetchCastCombined(id: number): void {
-    this.personService.getCombinedCredits(id).subscribe(
-      data => {
-        this.isLoading = false;
-        this.personCombined.set(data);
-        console.log('Person combined: ', this.personCombined());
-        this.sorted();
-        console.log('released', this.release)
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
   }
 
   sorted(): void {

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CastMember } from '../../../interfaces/interface';
+import { CastMember } from '../../../../interfaces/interface';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -84,7 +84,7 @@ export class ActorsComponent {
   @Input() cast: CastMember[] | undefined;
   @Input() movieId: number | undefined;
 
-  ngOnInit(){
-    console.log('cast', this.cast)
+  ngOnInit() {
+    console.log('cast', this.cast);
   }
 }

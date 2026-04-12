@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
 import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { MediaTypeService } from '../../../services/media-type.service';
-import { TitleMovieComponent } from '../title-movie/title-movie.component';
+import { TitleMovieComponent } from '../block-hero/title-movie/title-movie.component';
 
 @Component({
   selector: 'app-all-actors',
@@ -25,8 +25,6 @@ import { TitleMovieComponent } from '../title-movie/title-movie.component';
       </div>
 
       <app-title-movie [property]="movieData()"></app-title-movie>
-
-
     </section>
     <section>
       <div class="w-[80%] flex mx-auto py-6">
@@ -97,7 +95,7 @@ import { TitleMovieComponent } from '../title-movie/title-movie.component';
 })
 export class AllActorsComponent implements OnInit {
   apiMovie = 'https://api.themoviedb.org/3/movie/';
-  apiTv = 'https://api.themoviedb.org/3/tv/'
+  apiTv = 'https://api.themoviedb.org/3/tv/';
   apiUrlEnd = '?language=en-US';
   apiCastEnd = '/credits?language=en-US';
   startUrl = 'https://image.tmdb.org/t/p/w200';
@@ -124,8 +122,16 @@ export class AllActorsComponent implements OnInit {
       const id = params.get('id');
       this.movieId = id ? Number(id) : undefined;
       if (this.movieId !== undefined) {
-        this.fetchCast(type === 'movie' ? this.apiMovie : this.apiTv, this.apiCastEnd, this.movieId);
-        this.fetchData(type === 'movie' ? this.apiMovie : this.apiTv, this.apiUrlEnd, this.movieId);
+        this.fetchCast(
+          type === 'movie' ? this.apiMovie : this.apiTv,
+          this.apiCastEnd,
+          this.movieId
+        );
+        this.fetchData(
+          type === 'movie' ? this.apiMovie : this.apiTv,
+          this.apiUrlEnd,
+          this.movieId
+        );
       }
     });
   }

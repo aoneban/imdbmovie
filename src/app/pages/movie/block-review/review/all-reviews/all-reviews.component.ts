@@ -1,13 +1,16 @@
 import { Component, signal } from '@angular/core';
-import { NavbarComponent } from '../../../../shared/navbar/navbar.component';
+import { NavbarComponent } from '../../../../../shared/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
-import { CommonService } from '../../../../services/common.service';
-import { ReviewsResponse, SingleMovie } from '../../../../interfaces/interface';
-import { MediaTypeService } from '../../../../services/media-type.service';
+import { CommonService } from '../../../../../services/common.service';
+import {
+  ReviewsResponse,
+  SingleMovie,
+} from '../../../../../interfaces/interface';
+import { MediaTypeService } from '../../../../../services/media-type.service';
 import { ReviewComponent } from '../review.component';
 import { CommonModule } from '@angular/common';
-import { MovieService } from '../../../../services/movie.service';
-import { TitleMovieComponent } from '../../title-movie/title-movie.component';
+import { MovieService } from '../../../../../services/movie.service';
+import { TitleMovieComponent } from '../../../block-hero/title-movie/title-movie.component';
 
 @Component({
   selector: 'app-all-reviews',
@@ -49,7 +52,7 @@ export class AllReviewsComponent {
   allReviews: ReviewsResponse | undefined;
   movieData = signal<SingleMovie | undefined>(undefined);
   type: string | null;
-  isLoading = false
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,

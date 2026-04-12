@@ -101,7 +101,7 @@ export class HeroBlockComponent {
     this.loadMoreClick.emit();
   }
 
-   getGenres(item: Genre[] | undefined): string[] | string {
+  getGenres(item: Genre[] | undefined): string[] | string {
     if (item) {
       const genres = item.map(el => ' ' + el.name);
       return genres;
