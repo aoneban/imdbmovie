@@ -10,13 +10,13 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
   template: `
     <div class="inner__content new__index">
       <div
-        [ngStyle]="{ 'background-image': image() }"
+        [ngStyle]="{ 'background-image': backgroundImage() }"
         class="background-movie">
         <div class="background-shadow"></div>
         <div class="content-movie">
           <img
             decoding="auto"
-            *ngIf="!images().has(movie()!.id)"
+            *ngIf="!loadedImages().has(movieData()!.id)"
             class="!w-[20%] !h-[200%] m-5 bg-gray-800"
             src="/placeholder.svg"
             alt="placeholder" />
@@ -24,30 +24,30 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
             decoding="auto"
             class="main-poster transition-opacity duration-700 h-[29vw]"
             (load)="onLoad()"
-            [class.hidden]="!images().has(movie()!.id)"
-            [src]="url + (movie()?.poster_path || '')"
-            [alt]="movie()?.title || ''" />
+            [class.hidden]="!loadedImages().has(movieData()!.id)"
+            [src]="url + (movieData()?.poster_path || '')"
+            [alt]="movieData()?.title || ''" />
           <div class="text-content">
             <h1 class="text-4xl font-bold text-white-900 mb-1">
-              {{ movie()?.title || movie()?.name }} ({{
-                movie()?.release_date?.slice(0, 4)
-                  ? movie()?.release_date?.slice(0, 4)
-                  : movie()?.first_air_date?.slice(0, 4)
+              {{ movieData()?.title || movieData()?.name }} ({{
+                movieData()?.release_date?.slice(0, 4)
+                  ? movieData()?.release_date?.slice(0, 4)
+                  : movieData()?.first_air_date?.slice(0, 4)
               }})
             </h1>
             <p class="text-gray-300 mb-3">
               {{
-                movie()?.release_date
-                  ? formatDate(movie()?.release_date)
-                  : formatDate(movie()?.first_air_date)
+                movieData()?.release_date
+                  ? formatDate(movieData()?.release_date)
+                  : formatDate(movieData()?.first_air_date)
               }}
-              ● {{ getGenres(movie()?.genres) }} ●
-              {{ minutesToTime(movie()?.runtime) }}
+              ● {{ getGenres(movieData()?.genres) }} ●
+              {{ minutesToTime(movieData()?.runtime) }}
             </p>
 
             <div class="rating-block flex items-center mb-3">
               <!--Rating component start-->
-              <app-rating [rat]="movie()"></app-rating>
+              <app-rating [rat]="movieData()"></app-rating>
               <!--Rating component end-->
               <div class="rating-name ml-2 mr-4 relative bottom-[5px]">
                 <p>IMDB</p>
@@ -55,7 +55,7 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
             </div>
 
             <h3 class="italic text-gray-300">
-              {{ movie()?.tagline }}
+              {{ movieData()?.tagline }}
             </h3>
 
             <div>
@@ -65,13 +65,13 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
             <p class="w-[80%]">
               {{
-                movie()?.overview
-                  ? movie()?.overview
+                movieData()?.overview
+                  ? movieData()?.overview
                   : 'Description will be added soon...'
               }}
             </p>
             <div class="flex mt-6 gap-20">
-              @for (worker of crew; track $index) {
+              @for (worker of movieCrew(); track $index) {
                 <div class="direction">
                   <a
                     [routerLink]="['/persons', worker.id]"
@@ -90,12 +90,12 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
   styles: ``,
 })
 export class HeroBlockComponent {
-  movie = input<SingleMovie | undefined>();
-  image = input();
-  @Input() crew: CrewMember[] | undefined;
-  @Input() url: string | undefined;
+  movieData = input<SingleMovie | undefined>();
+  backgroundImage = input();
+  movieCrew = input<CrewMember[] | undefined>(undefined);
   loadMoreClick = output<void>();
-  images = input<Set<number>>(new Set());
+  loadedImages = input<Set<number>>(new Set());
+  @Input() url: string | undefined;
 
   onLoad(): void {
     this.loadMoreClick.emit();

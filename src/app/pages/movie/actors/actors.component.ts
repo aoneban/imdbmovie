@@ -48,7 +48,7 @@ import { CommonModule } from '@angular/common';
             <div class="flex justify-center h-full items-center">
               @if (cast !== undefined && cast.length > 0) {
                 <button
-                  [routerLink]="['/cast', id]"
+                  [routerLink]="['/cast', movieId]"
                   class="w-fit whitespace-nowrap text-md font-bold duration-200 ease hover:underline hover:underline-offset-2 hover:text-gray-500">
                   View more &#10230;
                 </button>
@@ -82,7 +82,7 @@ import { CommonModule } from '@angular/common';
 export class ActorsComponent {
   startUrl = 'https://image.tmdb.org/t/p/w500';
   @Input() cast: CastMember[] | undefined;
-  @Input() id: number | undefined;
+  @Input() movieId: number | undefined;
 
   ngOnInit(){
     console.log('cast', this.cast)

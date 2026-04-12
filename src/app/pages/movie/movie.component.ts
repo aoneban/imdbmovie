@@ -13,7 +13,6 @@ import {
   MovieCast,
   SingleMovie,
   ImagesResponse,
-  Genre,
   ReviewsResponse,
   ApiResponse,
   Movie,
@@ -21,28 +20,23 @@ import {
 } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { ActorsComponent } from './actors/actors.component';
-import { AsideComponent } from './aside/aside.component';
-import { RatingComponent } from './rating/rating.component';
 import { MediaTypeService } from '../../services/media-type.service';
-import { ReviewComponent } from './review/review.component';
-import { SimilarMoviesComponent } from './similar-movies/similar-movies.component';
 import { TMDB } from '../../config/tmdb.config';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
-import { HeroBlockComponent } from './hero-block/hero-block.component';
+import { HeroBlockComponent } from './block-hero/block-hero.component';
+import { MainBlockComponent } from './block-main/block-main.component';
+import { ReviewBlockComponent } from './block-review/block-review.component';
 
 @Component({
   selector: 'movie',
   imports: [
     CommonModule,
     NavbarComponent,
-    ActorsComponent,
-    AsideComponent,
     RouterModule,
-    ReviewComponent,
-    SimilarMoviesComponent,
     HeroBlockComponent,
+    MainBlockComponent,
+    ReviewBlockComponent,
   ],
 
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,90 +49,42 @@ import { HeroBlockComponent } from './hero-block/hero-block.component';
           <div class="loader"></div>
         </div>
       } @else {
-        <div>
-          <!--Hero component start-->
-          <app-hero-block
-            [movie]="movieData()"
-            [crew]="movieCrew()"
-            [url]="startUrl"
-            [image]="backgroundImage()"
-            (loadMoreClick)="onImageLoad(movieData()!.id)"
-            [images]="loadedImages()"></app-hero-block>
-          <!--Hero component end-->
-
-          <div class="w-[80%] mx-auto flex gap-[5rem]">
-            <div class="w-4/5 mx-auto flex flex-col">
-              <!--Actors component start-->
-              <app-actors
-                *ngIf="movieData() && loadedImages().has(movieData()!.id)"
-                [cast]="movieCast()"
-                [id]="movieId()"
-                class="md:flex-row">
-              </app-actors>
-              <!--Actors component end-->
-              <div
-                class="w-[100%] flex gap-5 mx-auto mb-6 pb-8 border-b border-gray-300">
-                <button
-                  *ngIf="movieData() && loadedImages().has(movieData()!.id)"
-                  [routerLink]="['/cast', movieAllTeam()?.id]"
-                  class="w-fit whitespace-nowrap text-lg duration-300 easy font-bold underline underline-offset-2 hover:text-gray-300">
-                  Full Cast & Crew
-                </button>
-              </div>
-              <div *ngIf="movieData() && loadedImages().has(movieData()!.id)">
-                <div class="flex mb-4 justify-start items-center gap-[4%]">
-                  <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
-                  <a
-                    *ngIf="dataReviewResponse()?.results?.length"
-                    [routerLink]="['/all-reviews', movieData()?.id]"
-                    class="duration-200 easy text-xl w-[auto] font-semibold underline underline-offset-2 hover:text-gray-500">
-                    Reviews ({{ dataReviewResponse()?.results?.length }})
-                  </a>
-
-                  <span
-                    *ngIf="!dataReviewResponse()?.results?.length"
-                    class="text-xl w-[auto] font-semibold text-gray-400 cursor-not-allowed">
-                    Reviews (0)
-                  </span>
-                </div>
-                <!--Reviews component start-->
-                @if (dataReview()) {
-                  <app-review
-                    [review]="dataReview()"
-                    [allReviews]="dataReviewResponse()"></app-review>
-                } @else {
-                  <p>There are no reviews at the moment...</p>
-                }
-                <!--Reviews component end-->
-              </div>
-            </div>
-            <!--Aside component start-->
-            <app-aside
-              *ngIf="movieData() && loadedImages().has(movieData()!.id)"
-              [props]="movieData()"
-              class="w-1/5 md:flex-row flex items-start mt-[3rem] relative">
-            </app-aside>
-            <!--Aside component end-->
-          </div>
-          <div *ngIf="dataReview()" class="w-[80%] mx-auto">
-            <a
-              [routerLink]="['/all-reviews', this.movieData()?.id]"
-              class="duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500"
-              >Read all reviews</a
-            >
-          </div>
+        <main>
+          <!--Hero block start-->
           <section>
-            <div class="w-[80%] mx-auto">
-              <h3 class="text-2xl font-semibold text-gray-900 mt-6">Similar</h3>
-
-              <!--Similar movies component start-->
-              <app-similar-movies
-                [similar]="similarMovies()"
-                [url]="startUrl"></app-similar-movies>
-              <!--Similar movies component end-->
-            </div>
+            <app-hero-block
+              [movieData]="movieData()"
+              [movieCrew]="movieCrew()"
+              [url]="startUrl"
+              [backgroundImage]="backgroundImage()"
+              (loadMoreClick)="onImageLoad(movieData()!.id)"
+              [loadedImages]="loadedImages()"></app-hero-block>
           </section>
-        </div>
+          <!--Hero block end-->
+
+          <!--Main block start-->
+          <section>
+            <app-main-block
+              [movieData]="movieData()"
+              [movieId]="movieId()"
+              [dataReview]="dataReview()"
+              [movieCast]="movieCast()"
+              [movieAllTeam]="movieAllTeam()"
+              [loadedImages]="loadedImages()"
+              [dataReviewResponse]="dataReviewResponse()"></app-main-block>
+          </section>
+          <!--Main block end-->
+
+          <!--Review block start-->
+          <section>
+            <app-review-block
+              [startUrl]="startUrl"
+              [dataReview]="dataReview()"
+              [movieData]="movieData()"
+              [similarMovies]="similarMovies()"></app-review-block>
+          </section>
+          <!--Review block start-->
+        </main>
       }
     </section>
   `,
