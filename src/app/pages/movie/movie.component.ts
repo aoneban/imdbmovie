@@ -100,7 +100,6 @@ export class MovieComponent {
   movieAllTeam = signal<MovieCast | undefined>(undefined);
   dataReviewResponse = signal<ReviewsResponse | undefined>(undefined);
   loadedImages = signal<Set<number>>(new Set());
-  text: string | undefined;
   movieId = toSignal(
     this.route.paramMap.pipe(map(params => Number(params.get('id'))))
   );

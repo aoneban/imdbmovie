@@ -1,14 +1,16 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
-import { CastService } from '../../services/cast.service';
 import { CastMember, MovieCast, SingleMovie } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { Location } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { MediaTypeService } from '../../services/media-type.service';
 import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { TMDB } from '../../config/tmdb.config';
+// import { CastService } from '../../services/cast.service';
 
 @Component({
   selector: 'app-all-actors',
@@ -16,14 +18,13 @@ import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie
   template: `
     <app-navbar></app-navbar>
     <section>
-      <div *ngIf="isLoading" class="preloader">
+      <div *ngIf="!isLoading()" class="preloader">
         <div class="loader"></div>
       </div>
-
       <app-title-movie [property]="movieData()"></app-title-movie>
     </section>
     <section>
-      <div class="w-[80%] flex mx-auto py-6">
+      <div *ngIf="isLoading()" class="w-[80%] flex mx-auto py-6">
         <div class="w-1/2">
           <h3
             class="mb-4 text-xl font-normal text-gray-800 md:text-2xl lg:text-3xl">
@@ -89,71 +90,44 @@ import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie
   `,
   styles: ``,
 })
-export class AllActorsComponent implements OnInit {
-  apiMovie = 'https://api.themoviedb.org/3/movie/';
-  apiTv = 'https://api.themoviedb.org/3/tv/';
-  apiUrlEnd = '?language=en-US';
-  apiCastEnd = '/credits?language=en-US';
-  startUrl = 'https://image.tmdb.org/t/p/w200';
-  startUrl2 = 'https://image.tmdb.org/t/p/w1920';
-  movieId: number | undefined;
+export class AllActorsComponent {
+  route = inject(ActivatedRoute);
+  startUrl = TMDB.imageSmallUrl;
   movieData = signal<SingleMovie | undefined>(undefined);
-  movieCast = signal<CastMember[] | undefined>(undefined);
   movieAllTeam = signal<MovieCast | undefined>(undefined);
-  isLoading = false;
-  color = 'grey';
+  movieId = toSignal(
+    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
+  );
+  isLoading = computed(() => this.movieData());
 
   constructor(
-    private route: ActivatedRoute,
     private movieService: MovieService,
-    private castService: CastService,
-    private location: Location,
     private mediaTypeService: MediaTypeService
-  ) {}
+  ) {
+    effect(() => {
+      const type = this.mediaTypeService.getMediaType();
+      const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
+      this.movieService
+        .getDataMovie<SingleMovie>(apiOne, TMDB.apiLanguage, this.movieId()!)
+        .subscribe(
+          data => {
+            this.movieData.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
 
-  ngOnInit(): void {
-    this.isLoading = true;
-    const type = this.mediaTypeService.getMediaType();
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id');
-      this.movieId = id ? Number(id) : undefined;
-      if (this.movieId !== undefined) {
-        this.fetchCast(
-          type === 'movie' ? this.apiMovie : this.apiTv,
-          this.apiCastEnd,
-          this.movieId
+      this.movieService
+        .getDataMovie<MovieCast>(apiOne, TMDB.apiCredits, this.movieId()!)
+        .subscribe(
+          data => {
+            this.movieAllTeam.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
         );
-        this.fetchData(
-          type === 'movie' ? this.apiMovie : this.apiTv,
-          this.apiUrlEnd,
-          this.movieId
-        );
-      }
     });
-  }
-
-  fetchData(apiOne: string, apiTwo: string, id: number): void {
-    this.movieService.getDataMovie<SingleMovie>(apiOne, apiTwo, id).subscribe(
-      data => {
-        this.movieData.set(data);
-        this.isLoading = false;
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
-  }
-
-  fetchCast(linkOne: string, linkTwo: string, id: number): void {
-    this.castService.getDataCast(linkOne, linkTwo, id).subscribe(
-      data => {
-        this.movieCast.set(data.cast.filter((_, i) => i < 15));
-        this.movieAllTeam.set(data);
-        this.isLoading = false;
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
   }
 }
