@@ -27,7 +27,7 @@ import {
         <!--Actors component start-->
         <app-actors
           *ngIf="movieData() && loadedImages().has(movieData()!.id)"
-          [cast]="movieCast()"
+          [movieCast]="movieCast()"
           [movieId]="movieId()"
           class="md:flex-row">
         </app-actors>

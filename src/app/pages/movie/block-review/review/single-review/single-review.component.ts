@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  Movie,
   ReviewItem,
   ReviewsResponse,
   SingleMovie,
 } from '../../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
-import { CommonService } from '../../../../../services/common.service';
 import { MediaTypeService } from '../../../../../services/media-type.service';
 import { MovieService } from '../../../../../services/movie.service';
 import { CommonModule } from '@angular/common';
@@ -78,7 +76,6 @@ export class SingleReviewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private commonService: CommonService,
     private mediaTypeService: MediaTypeService,
     private movieService: MovieService
   ) {
@@ -98,8 +95,8 @@ export class SingleReviewComponent implements OnInit {
   }
 
   fetchReviews() {
-    this.commonService
-      .getCommonData<ReviewsResponse>(
+    this.movieService
+      .getDataMovie<ReviewsResponse>(
         this.type === 'movie' ? this.apiMovie : this.apiTv,
         this.apiReviewEnd,
         Number(this.movieId)

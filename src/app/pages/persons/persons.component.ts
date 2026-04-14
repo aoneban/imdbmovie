@@ -5,7 +5,6 @@ import {
   CastCombined,
   CastCredits,
 } from '../../interfaces/interface';
-import { PersonService } from '../../services/person.service';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { BiographyComponent } from './biography/biography.component';
@@ -18,6 +17,7 @@ import { MainImageComponent } from './main-image/main-image.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { TMDB } from '../../config/tmdb.config';
+import { MovieService } from '../../services/movie.service';
 
 @Component({
   selector: 'persons',
@@ -43,28 +43,29 @@ import { TMDB } from '../../config/tmdb.config';
         <div class="w-2/6 pr-6 pb-12 pt-12">
           <section>
             <app-main-image
-              [data]="personData()"
+              [personData]="personData()"
               [url]="startUrl"></app-main-image>
           </section>
           <section class="sticky top-10">
-            <app-personal [data]="personData()"></app-personal>
+            <app-personal [personData]="personData()"></app-personal>
           </section>
         </div>
         <!-- Right content: 80% width -->
         <div class="w-[70%]">
           <section>
-            <app-nameactor [actorName]="personData()"></app-nameactor>
+            <app-nameactor [personData]="personData()"></app-nameactor>
           </section>
           <section>
             <app-biography
-              [data]="personData()"
+              [personData]="personData()"
               [show]="showFull"></app-biography>
           </section>
           <section>
             <app-knownfor [cast]="topCast()" [url]="startUrl"></app-knownfor>
           </section>
           <section>
-            <app-previous [previousReleases]="previousReleases()"></app-previous>
+            <app-previous
+              [previousReleases]="previousReleases()"></app-previous>
           </section>
         </div>
       </section>
@@ -76,19 +77,19 @@ export class PersonsComponent {
   route = inject(ActivatedRoute);
   showFull = false;
   startUrl = TMDB.imageBaseUrl;
-  personData = signal<SinglePerson | undefined>(undefined);
+  personData = signal<SinglePerson | null>(null);
   personCombined = signal<CastCombined | undefined>(undefined);
   personId = toSignal(
     this.route.paramMap.pipe(map(params => Number(params.get('id'))))
   );
 
-  constructor(private personService: PersonService) {
+  constructor(private movieService: MovieService) {
     effect(() => {
-      this.personService
-        .getDataPerson<SinglePerson>(
+      this.movieService
+        .getDataMovie<SinglePerson>(
           TMDB.apiUrlPerson,
-          this.personId()!,
-          TMDB.apiLanguage
+          TMDB.apiLanguage,
+          this.personId()!
         )
         .subscribe(
           data => {
@@ -98,11 +99,11 @@ export class PersonsComponent {
             console.error('Error fetching data: ', error);
           }
         );
-      this.personService
-        .getDataPerson<CastCombined>(
+      this.movieService
+        .getDataMovie<CastCombined>(
           TMDB.apiUrlPerson,
-          this.personId()!,
-          TMDB.apiCombinedCredits
+          TMDB.apiCombinedCredits,
+          this.personId()!
         )
         .subscribe(
           data => {

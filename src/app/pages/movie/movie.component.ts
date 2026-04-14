@@ -27,6 +27,7 @@ import { map } from 'rxjs';
 import { HeroBlockComponent } from './block-hero/block-hero.component';
 import { MainBlockComponent } from './block-main/block-main.component';
 import { ReviewBlockComponent } from './block-review/block-review.component';
+import { MovieStoreService } from '../../services/movie-store.service';
 
 @Component({
   selector: 'movie',
@@ -106,7 +107,8 @@ export class MovieComponent {
 
   constructor(
     private movieService: MovieService,
-    private mediaTypeService: MediaTypeService
+    private mediaTypeService: MediaTypeService,
+    private movieStoreService: MovieStoreService
   ) {
     effect(() => {
       const type = this.mediaTypeService.getMediaType();
@@ -116,6 +118,7 @@ export class MovieComponent {
         .subscribe(
           data => {
             this.movieData.set(data);
+            this.movieStoreService.movieData.set(this.movieData());
           },
           error => {
             console.error('Error fetching data: ', error);
@@ -136,6 +139,7 @@ export class MovieComponent {
         .subscribe(
           data => {
             this.movieAllTeam.set(data);
+            this.movieStoreService.movieAllTeam.set(this.movieAllTeam());
           },
           error => {
             console.error('Error fetching data: ', error);
@@ -171,14 +175,14 @@ export class MovieComponent {
   });
 
   movieCast = computed(() => {
-    const amountOfActors = 15;
+    const amountOfActors = 20;
     return this.movieAllTeam()?.cast.filter((_, i) => i < amountOfActors);
   });
 
   movieCrew = computed<CrewMember[] | undefined>(
     (): CrewMember[] | undefined => {
-      const amountOfPersonal = 3;
-      return this.movieAllTeam()?.crew.filter((_, i) => i < amountOfPersonal);
+      const amountOfDirection = 3;
+      return this.movieAllTeam()?.crew.filter((_, i) => i < amountOfDirection);
     }
   );
 

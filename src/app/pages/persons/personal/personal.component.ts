@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { SinglePerson } from '../../../interfaces/interface';
 
 @Component({
@@ -9,30 +9,30 @@ import { SinglePerson } from '../../../interfaces/interface';
       <h3 class="font-medium text-xl mb-3 mt-[7rem]">Personal Info</h3>
       <div>
         <h4 class="font-bold mt-3">Known for</h4>
-        <p>{{ data?.known_for_department }}</p>
+        <p>{{ personData()?.known_for_department }}</p>
       </div>
       <div>
         <h4 class="font-bold mt-3">Gender</h4>
-        <p>{{ data?.gender === 1 ? 'female' : 'male' }}</p>
+        <p>{{ personData()?.gender === 1 ? 'female' : 'male' }}</p>
       </div>
       <div>
         <h4 class="font-bold mt-3">Birthday</h4>
         <p>
-          {{ formatDate(data?.birthday) }}
-          @if (!data?.deathday) {
-            <span>({{ actorAge(data?.birthday) }} years old)</span>
+          {{ formatDate(personData()?.birthday) }}
+          @if (!personData()?.deathday) {
+            <span>({{ actorAge(personData()?.birthday) }} years old)</span>
           }
         </p>
       </div>
-      @if (data?.deathday) {
+      @if (personData()?.deathday) {
         <div>
           <h4 class="font-bold mt-3">Day of Death</h4>
           <p>
-            {{ formatDate(data?.deathday)
+            {{ formatDate(personData()?.deathday)
             }}<span>
               (died at
               {{
-                actorDeath(data?.birthday, data?.deathday)
+                actorDeath(personData()?.birthday, personData()?.deathday)
               }})</span
             >
           </p>
@@ -40,14 +40,14 @@ import { SinglePerson } from '../../../interfaces/interface';
       }
       <div>
         <h4 class="font-bold mt-3">Place of Birth</h4>
-        <p>{{ data?.place_of_birth }}</p>
+        <p>{{ personData()?.place_of_birth }}</p>
       </div>
     </div>
   `,
   styles: ``,
 })
 export class PersonalComponent {
-  @Input() data: SinglePerson | undefined
+  personData = input<SinglePerson | null>(null)
 
   formatDate(dateStr: string | undefined | null): string {
     if (dateStr) {

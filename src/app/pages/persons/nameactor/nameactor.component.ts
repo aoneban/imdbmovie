@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { SinglePerson } from '../../../interfaces/interface';
 
 @Component({
@@ -6,11 +6,11 @@ import { SinglePerson } from '../../../interfaces/interface';
   imports: [],
   template: `
     <h1 class="text-3xl font-bold text-gray-800 pt-10">
-      {{ actorName?.name }}
+      {{ personData()?.name }}
     </h1>
   `,
   styles: ``,
 })
 export class NameActorComponent {
-  @Input() actorName: SinglePerson | undefined
+  personData = input< SinglePerson | null>(null)
 }

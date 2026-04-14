@@ -1,16 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { NavbarComponent } from '../../../../../shared/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
-import { CommonService } from '../../../../../services/common.service';
 import {
   ReviewsResponse,
-  SingleMovie,
 } from '../../../../../interfaces/interface';
 import { MediaTypeService } from '../../../../../services/media-type.service';
 import { ReviewComponent } from '../review.component';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../../../../services/movie.service';
 import { TitleMovieComponent } from '../../../block-hero/title-movie/title-movie.component';
+import { MovieStoreService } from '../../../../../services/movie-store.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
+import { TMDB } from '../../../../../config/tmdb.config';
 
 @Component({
   selector: 'app-all-reviews',
@@ -23,18 +25,18 @@ import { TitleMovieComponent } from '../../../block-hero/title-movie/title-movie
   template: `
     <section>
       <div>
-        <div *ngIf="isLoading" class="preloader">
+        <div *ngIf="!isLoading()" class="preloader">
           <div class="loader"></div>
         </div>
-        <div *ngIf="!isLoading">
+        <div *ngIf="isLoading()">
           <app-navbar></app-navbar>
           <app-title-movie [property]="movieData()"></app-title-movie>
           <section class="mt-[2rem]">
             <div class="w-[80%] mx-auto">
               <app-review
-                *ngFor="let item of allReviews?.results"
+                *ngFor="let item of allReviews()?.results"
                 [review]="item"
-                [allReviews]="allReviews"></app-review>
+                [allReviews]="allReviews()"></app-review>
             </div>
           </section>
         </div>
@@ -44,67 +46,37 @@ import { TitleMovieComponent } from '../../../block-hero/title-movie/title-movie
   styles: ``,
 })
 export class AllReviewsComponent {
-  movieId: number | undefined;
-  apiMovie = 'https://api.themoviedb.org/3/movie/';
-  apiReviewEnd = '/reviews?language=en-US&page=1';
-  apiUrlEnd = '?language=en-US';
-  apiTv = 'https://api.themoviedb.org/3/tv/';
-  allReviews: ReviewsResponse | undefined;
-  movieData = signal<SingleMovie | undefined>(undefined);
-  type: string | null;
-  isLoading = false;
+  route = inject(ActivatedRoute);
+  movieStoreService = inject(MovieStoreService);
+  allReviews = signal<ReviewsResponse | undefined>(undefined);
+  movieId = toSignal(
+    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
+  );
 
   constructor(
-    private route: ActivatedRoute,
-    private commonService: CommonService,
     private mediaTypeService: MediaTypeService,
     private movieService: MovieService
   ) {
-    this.type = this.mediaTypeService.getMediaType();
+    effect(() => {
+      const type = this.mediaTypeService.getMediaType();
+      const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
+      this.movieService
+        .getDataMovie<ReviewsResponse>(
+          apiOne,
+          TMDB.apiReviews,
+          this.movieId() as number
+        )
+        .subscribe(
+          data => {
+            this.allReviews.set(data);
+          },
+          error => {
+            console.error('Error fetching data: ', error);
+          }
+        );
+    });
   }
 
-  ngOnInit() {
-    this.isLoading = true;
-    this.movieId = Number(this.route.snapshot.params['id']);
-    this.fetchReviews();
-    this.fetchData();
-    console.log('Id:', this.movieId);
-  }
-
-  fetchReviews() {
-    this.commonService
-      .getCommonData<ReviewsResponse>(
-        this.type === 'movie' ? this.apiMovie : this.apiTv,
-        this.apiReviewEnd,
-        Number(this.movieId)
-      )
-      .subscribe(
-        data => {
-          this.allReviews = data;
-          this.isLoading = false;
-        },
-        error => {
-          console.error('Error fetching data: ', error);
-        }
-      );
-  }
-
-  fetchData() {
-    this.movieService
-      .getDataMovie<SingleMovie>(
-        this.type === 'movie' ? this.apiMovie : this.apiTv,
-        this.apiUrlEnd,
-        Number(this.movieId)
-      )
-      .subscribe(
-        data => {
-          this.movieData.set(data);
-          this.isLoading = false;
-          console.log(this.movieData());
-        },
-        error => {
-          console.error('Error fetching data: ', error);
-        }
-      );
-  }
+  isLoading = computed(() => this.movieData());
+  movieData = this.movieStoreService.movieData;
 }

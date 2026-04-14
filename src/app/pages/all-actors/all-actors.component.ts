@@ -1,16 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MovieService } from '../../services/movie.service';
-import { CastMember, MovieCast, SingleMovie } from '../../interfaces/interface';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MediaTypeService } from '../../services/media-type.service';
 import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie.component';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
 import { TMDB } from '../../config/tmdb.config';
-// import { CastService } from '../../services/cast.service';
+import { MovieStoreService } from '../../services/movie-store.service';
 
 @Component({
   selector: 'app-all-actors',
@@ -92,42 +87,9 @@ import { TMDB } from '../../config/tmdb.config';
 })
 export class AllActorsComponent {
   route = inject(ActivatedRoute);
+  movieStoreService = inject(MovieStoreService);
   startUrl = TMDB.imageSmallUrl;
-  movieData = signal<SingleMovie | undefined>(undefined);
-  movieAllTeam = signal<MovieCast | undefined>(undefined);
-  movieId = toSignal(
-    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
-  );
   isLoading = computed(() => this.movieData());
-
-  constructor(
-    private movieService: MovieService,
-    private mediaTypeService: MediaTypeService
-  ) {
-    effect(() => {
-      const type = this.mediaTypeService.getMediaType();
-      const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
-      this.movieService
-        .getDataMovie<SingleMovie>(apiOne, TMDB.apiLanguage, this.movieId()!)
-        .subscribe(
-          data => {
-            this.movieData.set(data);
-          },
-          error => {
-            console.error('Error fetching data: ', error);
-          }
-        );
-
-      this.movieService
-        .getDataMovie<MovieCast>(apiOne, TMDB.apiCredits, this.movieId()!)
-        .subscribe(
-          data => {
-            this.movieAllTeam.set(data);
-          },
-          error => {
-            console.error('Error fetching data: ', error);
-          }
-        );
-    });
-  }
+  movieData = this.movieStoreService.movieData
+  movieAllTeam = this.movieStoreService.movieAllTeam
 }

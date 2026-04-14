@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { CommonModule, SlicePipe } from '@angular/common';
 import { SinglePerson } from '../../../interfaces/interface';
 
@@ -8,7 +8,7 @@ import { SinglePerson } from '../../../interfaces/interface';
   template: `
     <div class="relative">
       <h4 class="text-xl font-semibold text-gray-900 mt-6">Biography</h4>
-      @if(data?.biography) {
+      @if(personData()?.biography) {
         <div
           class="transition-all duration-500 ease-in-out overflow-hidden relative"
           [class.max-h-28]="!show"
@@ -17,8 +17,8 @@ import { SinglePerson } from '../../../interfaces/interface';
             class="text-base text-gray-800 leading-relaxed mt-2 whitespace-pre-line">
             {{
               show
-                ? data?.biography
-                : (data?.biography | slice: 0 : 400) + '...'
+                ? personData()?.biography
+                : (personData()?.biography | slice: 0 : 400) + '...'
             }}
           </p>
           <div
@@ -26,7 +26,7 @@ import { SinglePerson } from '../../../interfaces/interface';
             class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
         </div>
         <button
-          *ngIf="data && data.biography && data.biography.length > 400"
+          *ngIf="personData() && personData()?.biography && personData()?.biography!.length > 400"
           (click)="toggleShow()"
           class="float-right duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500">
           {{ show ? 'Read less' : 'Read more...' }}
@@ -39,7 +39,7 @@ import { SinglePerson } from '../../../interfaces/interface';
   styles: ``,
 })
 export class BiographyComponent {
-  @Input() data: SinglePerson | undefined;
+  personData = input<SinglePerson | null>(null);
   @Input() show: boolean | undefined;
 
   toggleShow() {
