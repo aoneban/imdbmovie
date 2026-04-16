@@ -1,7 +1,7 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
-import { WelcomeComponent } from '../../shared/welcome/welcome.component';
-import { PopularComponent } from '../../shared/popular/popular.component';
-import { TrailersComponent } from '../../shared/trailers/trailers.component';
+import { WelcomeComponent } from './shared/welcome/welcome.component';
+import { PopularComponent } from './shared/popular/popular.component';
+import { TrailersComponent } from './shared/trailers/trailers.component';
 import { IntersectionObserverDirective } from '../../directives/intersection-observer.directive';
 
 @Component({
@@ -16,14 +16,14 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
   template: `
     <app-welcome></app-welcome>
 
-    <app-popular 
-    [config]="{
-      link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
-      link2: 'https://api.themoviedb.org/3/trending/all/week?language=en-US',
-      type: ['Top Today', 'Top Week',],
-      title: 'Trending',
-      bgData: true,
-    }"></app-popular>
+    <app-popular
+      [config]="{
+        link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
+        link2: 'https://api.themoviedb.org/3/trending/all/week?language=en-US',
+        type: ['Top Today', 'Top Week'],
+        title: 'Trending',
+        bgData: true,
+      }"></app-popular>
 
     <app-trailers></app-trailers>
 
@@ -32,7 +32,7 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
       (visible)="loadPopular()"
       [rootMargin]="'50px'"
       style="height: 1px;"></div>
-    <ng-template #popularContainer ></ng-template>
+    <ng-template #popularContainer></ng-template>
 
     <div
       appIntersectionObserver
@@ -68,11 +68,11 @@ export class MainPageComponent {
   private personsLoaded = false;
 
   async loadPopular() {
-    if (this.popularLoaded) return; 
+    if (this.popularLoaded) return;
     this.popularLoaded = true;
 
     const { PopularComponent } = await import(
-      '../../shared/popular/popular.component'
+      './shared/popular/popular.component'
     );
     const componentRef = this.popularVcr.createComponent(PopularComponent);
     componentRef.setInput('config', {
@@ -86,12 +86,12 @@ export class MainPageComponent {
     });
   }
 
-    async loadPopular2() {
-    if (this.popularLoaded2) return; 
+  async loadPopular2() {
+    if (this.popularLoaded2) return;
     this.popularLoaded2 = true;
 
     const { PopularComponent } = await import(
-      '../../shared/popular/popular.component'
+      './shared/popular/popular.component'
     );
     const componentRef = this.popularVcr2.createComponent(PopularComponent);
     componentRef.setInput('config', {
@@ -105,11 +105,11 @@ export class MainPageComponent {
   }
 
   async loadPersons() {
-    if (this.personsLoaded) return; 
+    if (this.personsLoaded) return;
     this.personsLoaded = true;
 
     const { PopularPersonsComponent } = await import(
-      '../../shared/popularpersons/popularpersons.component'
+      './shared/popularpersons/popularpersons.component'
     );
     this.personsVcr.createComponent(PopularPersonsComponent);
   }

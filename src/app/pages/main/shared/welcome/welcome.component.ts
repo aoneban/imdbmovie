@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrendingService } from '../../services/trending.service';
+import { TrendingService } from '../../../../services/trending.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TMDB } from '../../config/tmdb.config';
+import { TMDB } from '../../../../config/tmdb.config';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-welcome',
@@ -52,7 +53,7 @@ export class WelcomeComponent implements OnInit {
         const random = this.getRandomNumber();
         this.imgUrl = this.startUrl + data.results[random].backdrop_path;
       },
-      error => {
+      (error: HttpErrorResponse) => {
         console.error('Error fetching data:', error);
       }
     );

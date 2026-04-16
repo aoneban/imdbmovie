@@ -1,16 +1,15 @@
 import {
   Component,
-  OnInit,
   ChangeDetectionStrategy,
   signal,
   effect,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { PopPersonService } from '../../services/popperson.service';
-import { Person } from '../../interfaces/interface';
+import { PopPersonService } from '../../../../services/popperson.service';
+import { Person } from '../../../../interfaces/interface';
 import { RouterModule } from '@angular/router';
-import { TMDB } from '../../config/tmdb.config';
+import { TMDB } from '../../../../config/tmdb.config';
 
 @Component({
   selector: 'app-popularpersons',
@@ -34,14 +33,17 @@ import { TMDB } from '../../config/tmdb.config';
                 [routerLink]="['/persons', person.id]"
                 class="image"
                 [src]="
-                    person.profile_path
-                      ? startUrl + person.profile_path
-                      : '/icon-bg.svg'
-                  "
+                  person.profile_path
+                    ? startUrl + person.profile_path
+                    : '/icon-bg.svg'
+                "
                 alt="{{ person.name }}" />
             </div>
             <a [routerLink]="['/persons', person.id]">
-              <p class="font-bold text-[17px] pl-[6px] pt-[14px] pb-[2px] break-words">{{ person.name }}</p>
+              <p
+                class="font-bold text-[17px] pl-[6px] pt-[14px] pb-[2px] break-words">
+                {{ person.name }}
+              </p>
             </a>
             <a>
               <p class="text-[15px] pl-[6px] text-gray-500">
@@ -56,7 +58,6 @@ import { TMDB } from '../../config/tmdb.config';
         </div>
       </div>
     </section>`,
-  styleUrls: ['../../../styles.scss'],
   animations: [
     trigger('fadeAnimation', [
       transition(':enter', [
@@ -80,9 +81,11 @@ export class PopularPersonsComponent {
 
   constructor(private popPersonService: PopPersonService) {
     effect(() => {
-      this.popPersonService.getDataPopularPerson(TMDB.urlPersonPage).subscribe(data => {
-      this.newData.set(data.results);
+      this.popPersonService
+        .getDataPopularPerson(TMDB.urlPersonPage)
+        .subscribe(data => {
+          this.newData.set(data.results);
+        });
     });
-    })
   }
 }

@@ -5,7 +5,7 @@ import {
   CastCombined,
   CastCredits,
 } from '../../interfaces/interface';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { NavbarComponent } from '../main/shared/navbar/navbar.component';
 import { CommonModule } from '@angular/common';
 import { BiographyComponent } from './biography/biography.component';
 import { RouterModule } from '@angular/router';

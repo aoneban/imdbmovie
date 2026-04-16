@@ -18,7 +18,7 @@ import {
   Movie,
   CrewMember,
 } from '../../interfaces/interface';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { NavbarComponent } from '../main/shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { MediaTypeService } from '../../services/media-type.service';
 import { TMDB } from '../../config/tmdb.config';

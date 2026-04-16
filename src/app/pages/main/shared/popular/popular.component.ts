@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { TrendingService } from '../../services/trending.service';
-import { Movie, PopularConfig } from '../../interfaces/interface';
+import { TrendingService } from '../../../../services/trending.service';
+import { Movie, PopularConfig } from '../../../../interfaces/interface';
 import { RouterModule } from '@angular/router';
-import { getReleaseDate } from '../../helpers/getReleaseDate';
-import { MediaTypeService } from '../../services/media-type.service';
-import { RatingComponent } from '../../pages/movie/block-hero/rating/rating.component';
-import { TMDB } from '../../config/tmdb.config';
+import { getReleaseDate } from '../../../../helpers/getReleaseDate';
+import { MediaTypeService } from '../../../../services/media-type.service';
+import { RatingComponent } from '../../../movie/block-hero/rating/rating.component';
+import { TMDB } from '../../../../config/tmdb.config';
 
 @Component({
   selector: 'app-popular',
@@ -125,7 +125,7 @@ import { TMDB } from '../../config/tmdb.config';
 })
 export class PopularComponent implements OnInit {
   @Input() config!: PopularConfig;
-  newData = signal< Movie[]>([]);
+  newData = signal<Movie[]>([]);
   startUrl = TMDB.imageBaseUrl;
   imgUrl = '';
   type!: string | undefined;

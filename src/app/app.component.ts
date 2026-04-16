@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { HeaderComponent } from './shared/header/header.component';
-import { FooterComponent } from './shared/footer/footer.component';
+import { HeaderComponent } from './pages/main/shared/header/header.component';
+import { FooterComponent } from './pages/main/shared/footer/footer.component';
 
 @Component({
   selector: 'app-root',
   imports: [RouterModule, HeaderComponent, FooterComponent],
   host: {
-    class: 'min-h-screen flex flex-col'
+    class: 'min-h-screen flex flex-col',
   },
   template: `
     <app-header></app-header>

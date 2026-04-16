@@ -1,9 +1,13 @@
 import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrendingService } from '../../services/trending.service';
+import { TrendingService } from '../../../../services/trending.service';
 import { trigger, style, transition, animate } from '@angular/animations';
-import { Movie, VideoResult, VideoResponse } from '../../interfaces/interface';
-import { TrailerMovieService } from '../../services/trailermovie.service';
+import {
+  Movie,
+  VideoResult,
+  VideoResponse,
+} from '../../../../interfaces/interface';
+import { TrailerMovieService } from '../../../../services/trailermovie.service';
 import { YouTubePlayerModule } from '@angular/youtube-player';
 
 @Component({
@@ -48,7 +52,9 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
       </div>
       <section class="movies__trailers">
         <div class="movies__trailers-cart">
-          <div class="movies__trailers-block" [@listAnimation]="newData().length">
+          <div
+            class="movies__trailers-block"
+            [@listAnimation]="newData().length">
             <div
               class="movies__wrapper-cart cart"
               *ngFor="let movie of newData()"
@@ -104,21 +110,21 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
     </section>
   `,
   animations: [
-      trigger('fadeAnimation', [
-        transition(':enter', [
-          style({ opacity: 0 }),
-          animate('1000ms', style({ opacity: 1 })),
-        ]),
-        transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+    trigger('fadeAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1000ms', style({ opacity: 1 })),
       ]),
-      trigger('listAnimation', [
-        transition(':enter', [
-          style({ opacity: 0 }),
-          animate('1000ms', style({ opacity: 1 })),
-        ]),
-        transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+      transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+    ]),
+    trigger('listAnimation', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('1000ms', style({ opacity: 1 })),
       ]),
-    ],
+      transition(':leave', [animate('300ms', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class TrailersComponent implements OnInit {
   apiUrlMovie = 'https://api.themoviedb.org/3/movie/';
@@ -131,7 +137,8 @@ export class TrailersComponent implements OnInit {
   apiUrl1 = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
   apiUrl2 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   apiUrl3 = 'https://api.themoviedb.org/3/trending/tv/day?language=en-US';
-  apiUrl4 = 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1';
+  apiUrl4 =
+    'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1';
   activeButton = 'today';
 
   constructor(
@@ -142,7 +149,7 @@ export class TrailersComponent implements OnInit {
   imgUrl = computed(() => {
     const url = this.newData()[0].backdrop_path;
     return url;
-  })
+  });
 
   ngOnInit(): void {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(

@@ -1,6 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
+import { NavbarComponent } from '../main/shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie.component';
@@ -90,6 +90,6 @@ export class AllActorsComponent {
   movieStoreService = inject(MovieStoreService);
   startUrl = TMDB.imageSmallUrl;
   isLoading = computed(() => this.movieData());
-  movieData = this.movieStoreService.movieData
-  movieAllTeam = this.movieStoreService.movieAllTeam
+  movieData = this.movieStoreService.movieData;
+  movieAllTeam = this.movieStoreService.movieAllTeam;
 }

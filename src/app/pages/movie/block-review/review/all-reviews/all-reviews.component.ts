@@ -1,9 +1,7 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { NavbarComponent } from '../../../../../shared/navbar/navbar.component';
+import { NavbarComponent } from '../../../../main/shared/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
-import {
-  ReviewsResponse,
-} from '../../../../../interfaces/interface';
+import { ReviewsResponse } from '../../../../../interfaces/interface';
 import { MediaTypeService } from '../../../../../services/media-type.service';
 import { ReviewComponent } from '../review.component';
 import { CommonModule } from '@angular/common';

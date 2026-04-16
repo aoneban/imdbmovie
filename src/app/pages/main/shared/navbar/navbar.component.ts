@@ -58,6 +58,5 @@ import { RouterModule } from '@angular/router';
       </div>
     </header>
   `,
-  styleUrls: ['../../../styles.scss'],
 })
 export class NavbarComponent {}
