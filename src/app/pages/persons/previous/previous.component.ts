@@ -11,7 +11,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
     <div>
       <h3 class="font-medium text-xl mb-3">Acting</h3>
       <div class="border-2 p-3 border-solid rounded-lg">
-        @for (item of previousReleases(); track $index) {
+        @for (item of previousReleases(); track item.id) {
           <li
             class="list-none pt-3 cursor-pointer"
             (click)="setType(item.media_type)"

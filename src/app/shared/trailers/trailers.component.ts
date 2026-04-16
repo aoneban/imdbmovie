@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
 import { trigger, style, transition, animate } from '@angular/animations';
@@ -11,7 +11,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
   imports: [CommonModule, YouTubePlayerModule],
   template: `
     <section
-      [ngStyle]="{ 'background-image': 'url(' + startUrl + imgUrl + ')' }"
+      [ngStyle]="{ 'background-image': 'url(' + startUrl + imgUrl() + ')' }"
       class="background-trailers">
       <div class="trailers switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
         <h3 class="trending">Latest Trailers</h3>
@@ -48,10 +48,10 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
       </div>
       <section class="movies__trailers">
         <div class="movies__trailers-cart">
-          <div class="movies__trailers-block" [@listAnimation]="newData.length">
+          <div class="movies__trailers-block" [@listAnimation]="newData().length">
             <div
               class="movies__wrapper-cart cart"
-              *ngFor="let movie of newData"
+              *ngFor="let movie of newData()"
               [@fadeAnimation]>
               <div
                 class="img-wrapper relative w-full h-full"
@@ -124,11 +124,10 @@ export class TrailersComponent implements OnInit {
   apiUrlMovie = 'https://api.themoviedb.org/3/movie/';
   apiUrlSeries = 'https://api.themoviedb.org/3/tv/';
   apiUrlEnd = '/videos?language=en-US';
-  newData: Movie[] = [];
+  newData = signal<Movie[]>([]);
   trailersData: VideoResult[] = [];
   selectedVideoId: string | null = null;
   startUrl = 'https://image.tmdb.org/t/p/w1280/';
-  imgUrl = '';
   apiUrl1 = 'https://api.themoviedb.org/3/trending/all/day?language=en-US';
   apiUrl2 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
   apiUrl3 = 'https://api.themoviedb.org/3/trending/tv/day?language=en-US';
@@ -140,11 +139,15 @@ export class TrailersComponent implements OnInit {
     private trailerMovie: TrailerMovieService
   ) {}
 
+  imgUrl = computed(() => {
+    const url = this.newData()[0].backdrop_path;
+    return url;
+  })
+
   ngOnInit(): void {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
       data => {
-        this.newData = data.results;
-        this.imgUrl = this.newData[0].backdrop_path;
+        this.newData.set(data.results);
       },
       error => {
         console.error('Error fetching data:', error);
@@ -169,8 +172,7 @@ export class TrailersComponent implements OnInit {
   fetchData(apiUrl: string): void {
     this.trendingService.getTrendingDataMovies(apiUrl).subscribe(
       data => {
-        this.newData = data.results;
-        this.imgUrl = this.newData[0].backdrop_path;
+        this.newData.set(data.results);
       },
       error => {
         console.error('Error fetching data: ', error);

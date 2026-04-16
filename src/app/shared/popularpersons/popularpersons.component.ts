@@ -3,12 +3,14 @@ import {
   OnInit,
   ChangeDetectionStrategy,
   signal,
+  effect,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { PopPersonService } from '../../services/popperson.service';
 import { Person } from '../../interfaces/interface';
 import { RouterModule } from '@angular/router';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'app-popularpersons',
@@ -72,16 +74,15 @@ import { RouterModule } from '@angular/router';
     ]),
   ],
 })
-export class PopularPersonsComponent implements OnInit {
+export class PopularPersonsComponent {
   newData = signal<Person[]>([]);
-  startUrl = 'https://image.tmdb.org/t/p/w500/';
-  apiUrl = 'https://api.themoviedb.org/3/person/popular?language=en-US&page=1';
+  startUrl = TMDB.imageBaseUrl;
 
-  constructor(private popPersonService: PopPersonService) {}
-
-  ngOnInit(): void {
-    this.popPersonService.getDataPopularPerson(this.apiUrl).subscribe(data => {
+  constructor(private popPersonService: PopPersonService) {
+    effect(() => {
+      this.popPersonService.getDataPopularPerson(TMDB.urlPersonPage).subscribe(data => {
       this.newData.set(data.results);
     });
+    })
   }
 }

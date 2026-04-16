@@ -17,7 +17,7 @@ import { TMDB } from '../../../../config/tmdb.config';
               No cast information available yet...
             </div>
           } @else {
-            @for (person of movieCast(); track $index) {
+            @for (person of movieCast(); track person.id) {
               @if(person.profile_path) {
                 <div
                   class="movies__wrapper-cart rounded-lg overflow-hidden border border-gray-200 shadow-sm shadow-gray-300">

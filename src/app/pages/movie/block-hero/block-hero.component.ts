@@ -71,7 +71,7 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
               }}
             </p>
             <div class="flex mt-6 gap-20">
-              @for (worker of movieCrew(); track $index) {
+              @for (worker of movieCrew(); track worker.id) {
                 <div class="direction">
                   <a
                     [routerLink]="['/persons', worker.id]"

@@ -1,23 +1,24 @@
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { PopPersonService } from '../../services/popperson.service';
 import { Person } from '../../interfaces/interface';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'app-page-persons',
   imports: [CommonModule, RouterModule],
   template: `
     <section>
-      <div *ngIf="isLoading" class="preloader">
+      <div *ngIf="!isLoading()" class="preloader">
         <div class="loader"></div>
       </div>
-      <div *ngIf="!isLoading">
+      <div *ngIf="isLoading()">
         <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
           Popular Persons
         </h1>
         <div class="flex w-[80%] mx-auto flex-wrap justify-center">
-          @for (person of personData(); track $index) {
+          @for (person of personData(); track person.id) {
             <div class="relative w-[20%] mt-5">
               <div
                 class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
@@ -59,37 +60,30 @@ import { Person } from '../../interfaces/interface';
   styles: ``,
 })
 export class PagePersonsComponent {
-  url = 'https://api.themoviedb.org/3/person/popular?language=en-US&page=';
-  startUrl = 'https://image.tmdb.org/t/p/w500';
+  url = TMDB.urlPerson;
+  startUrl = TMDB.imageBaseUrl;
   page = 1;
-  totalPages: number = 0;
-  isLoading = false;
+  totalPages = 0;
   personData = signal<Person[] | undefined>(undefined);
   loadedImages = new Set<number>();
 
-  constructor(private popPersonService: PopPersonService) {}
-
-  ngOnInit(): void {
-    this.isLoading = true;
-    if (this.personData !== undefined) {
-      this.fetchData(this.page);
-    }
-  }
-
-  fetchData(page: number): void {
-    this.popPersonService.getDataPopularPerson(this.url, page).subscribe(
-      data => {
-        this.personData.set(data.results);
-        if (data.total_pages) {
-          this.totalPages = data.total_pages;
+  constructor(private popPersonService: PopPersonService) {
+    effect(() => {
+      this.popPersonService.getDataPopularPerson(this.url, this.page).subscribe(
+        data => {
+          this.personData.set(data.results);
+          if (data.total_pages) {
+            this.totalPages = data.total_pages;
+          }
+        },
+        error => {
+          console.error('Error fetching data: ', error);
         }
-        this.isLoading = false;
-      },
-      error => {
-        console.error('Error fetching data: ', error);
-      }
-    );
+      );
+    });
   }
+
+  isLoading = computed(() => this.personData());
 
   onImageLoad(id: number) {
     this.loadedImages.add(id);

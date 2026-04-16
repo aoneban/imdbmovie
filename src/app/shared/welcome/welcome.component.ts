@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { TrendingService } from '../../services/trending.service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'app-welcome',
@@ -36,11 +37,10 @@ import { RouterModule } from '@angular/router';
       </div>
     </section>
   `,
-  styleUrls: ['../../../styles.scss'],
 })
 export class WelcomeComponent implements OnInit {
-  apiUrl1 = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
-  startUrl = 'https://image.tmdb.org/t/p/w1280/';
+  apiUrl1 = TMDB.apiTrends;
+  startUrl = TMDB.imageMiddleUrl;
   imgUrl = '';
   userInput: string | undefined;
 

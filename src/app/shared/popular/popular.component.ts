@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Input,
+  signal,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
@@ -13,6 +14,7 @@ import { RouterModule } from '@angular/router';
 import { getReleaseDate } from '../../helpers/getReleaseDate';
 import { MediaTypeService } from '../../services/media-type.service';
 import { RatingComponent } from '../../pages/movie/block-hero/rating/rating.component';
+import { TMDB } from '../../config/tmdb.config';
 
 @Component({
   selector: 'app-popular',
@@ -54,10 +56,10 @@ import { RatingComponent } from '../../pages/movie/block-hero/rating/rating.comp
     </div>
     <section class="movies__main" [class.bg-none]="!config.bgData">
       <div class="movies__wrapper">
-        <div class="movies__wrapper-block" [@listAnimation]="newData.length">
+        <div class="movies__wrapper-block" [@listAnimation]="newData().length">
           <div
             class="movies__wrapper-cart relative overflow-hidden"
-            *ngFor="let movie of newData; trackBy: trackByMovie"
+            *ngFor="let movie of newData(); trackBy: trackByMovie"
             [@fadeAnimation]>
             <div
               *ngIf="!loadedImages.has(movie.id)"
@@ -123,8 +125,8 @@ import { RatingComponent } from '../../pages/movie/block-hero/rating/rating.comp
 })
 export class PopularComponent implements OnInit {
   @Input() config!: PopularConfig;
-  newData: Movie[] = [];
-  startUrl = 'https://image.tmdb.org/t/p/w500/';
+  newData = signal< Movie[]>([]);
+  startUrl = TMDB.imageBaseUrl;
   imgUrl = '';
   type!: string | undefined;
 
@@ -183,7 +185,7 @@ export class PopularComponent implements OnInit {
     }
 
     this.trendingService.getTrendingDataMovies(apiUrl).subscribe(data => {
-      this.newData = data.results;
+      this.newData.set(data.results);
       this.cdr.markForCheck();
     });
   }
@@ -191,7 +193,7 @@ export class PopularComponent implements OnInit {
   fetchData(apiUrl: string): void {
     this.trendingService.getTrendingDataMovies(apiUrl).subscribe(
       data => {
-        this.newData = data.results;
+        this.newData.set(data.results);
       },
       error => {
         console.error('Error fetching data: ', error);

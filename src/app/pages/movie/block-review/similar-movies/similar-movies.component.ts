@@ -9,7 +9,7 @@ import { Movie } from '../../../../interfaces/interface';
     <div class="blur-right max-w-[80%]">
       <div
         class="scroll-container overflow-x-auto new-block mt-5 mb-2 flex max-w-[100%] gap-4 justify-start">
-        @for (item of similar; track $index) {
+        @for (item of similar; track item.id) {
           <li class="list-none">
             <img
               decoding="async"

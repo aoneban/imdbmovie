@@ -12,7 +12,7 @@ import { TMDB } from '../../../config/tmdb.config';
   imports: [CommonModule, RouterModule, RatingComponent],
   template: `
     <div class="flex w-[80%] mx-auto flex-wrap justify-center">
-      @for (movie of movieData(); track $index) {
+      @for (movie of movieData(); track movie.id) {
         <div class="relative w-[20%] mt-5">
           <div
             class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
