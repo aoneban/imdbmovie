@@ -10,12 +10,12 @@ import { MovieSearchResponse } from '../interfaces/interface';
 export class SearchService {
   constructor(private http: HttpClient) { }
 
-  getDataMovie(linkOne: string, linkTwo: string, text: string, page: number): Observable<MovieSearchResponse> {
+  getDataSearch<T>(linkOne: string, linkTwo: string, text: string, page: number): Observable<T> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${environment.apiKey}`,
       Accept: 'application/json',
     });
-    return this.http.get<MovieSearchResponse>(
+    return this.http.get<T>(
       `${linkOne}${text}${linkTwo}${page}`,
       { headers }
     );

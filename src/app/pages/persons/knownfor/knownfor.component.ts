@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { CastCredits } from '../../../interfaces/interface';
@@ -11,7 +11,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
     <h4 class="text-xl font-semibold text-gray-800 mt-6 mb-6">Known for</h4>
     <div class="movies__wrapper">
       <div class="movies__wrapper-block">
-        <div class="movies__wrapper-cart" *ngFor="let movie of cast">
+        <div class="movies__wrapper-cart" *ngFor="let movie of cast()">
           <div class="h-[220px]">
             <img
               [routerLink]="[
@@ -43,7 +43,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
   styles: ``,
 })
 export class KnownForComponent {
-  @Input() cast: CastCredits[] | undefined = [];
+  cast = input< CastCredits[] | undefined>([]);
   @Input() url: string | undefined;
 
   constructor(private mediaTypeService: MediaTypeService) {}

@@ -40,7 +40,6 @@ import { HttpErrorResponse } from '@angular/common/http';
   `,
 })
 export class WelcomeComponent implements OnInit {
-  apiUrl1 = TMDB.apiTrends;
   startUrl = TMDB.imageMiddleUrl;
   imgUrl = '';
   userInput: string | undefined;
@@ -48,7 +47,7 @@ export class WelcomeComponent implements OnInit {
   constructor(private trendingService: TrendingService) {}
 
   ngOnInit() {
-    this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
+    this.trendingService.getTrendingDataMovies(TMDB.apiTrends).subscribe(
       data => {
         const random = this.getRandomNumber();
         this.imgUrl = this.startUrl + data.results[random].backdrop_path;

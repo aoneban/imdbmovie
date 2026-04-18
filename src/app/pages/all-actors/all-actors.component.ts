@@ -86,10 +86,13 @@ import { MovieStoreService } from '../../services/movie-store.service';
   styles: ``,
 })
 export class AllActorsComponent {
+  startUrl = TMDB.imageSmallUrl;
+
   route = inject(ActivatedRoute);
   movieStoreService = inject(MovieStoreService);
-  startUrl = TMDB.imageSmallUrl;
+
   isLoading = computed(() => this.movieData());
+  
   movieData = this.movieStoreService.movieData;
   movieAllTeam = this.movieStoreService.movieAllTeam;
 }

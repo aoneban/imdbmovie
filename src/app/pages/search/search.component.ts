@@ -16,42 +16,39 @@ import { MediaTypeService } from '../../services/media-type.service';
         {{ fromInput }}
       </h1>
       <ul>
-        <li
-          *ngFor="
-            let movie of movieResponse()?.results;
-            index as i;
-            first as isFirst
-          ">
-          <div
-            class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
-            <div class="basis-[8%]">
-              <div
-                *ngIf="!loadedImages.has(movie.id)"
-                class="absolute w-[8%] top-[20px] pb-12 animate-pulse z-10">
-                <img src="/placeholder.svg" alt="placeholder" />
+        @for(movie of movieResponse()?.results; track movie.id) {
+          <li>
+            <div
+              class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
+              <div class="basis-[8%]">
+                <div
+                  *ngIf="!loadedImages.has(movie.id)"
+                  class="absolute w-[8%] top-[20px] pb-12 animate-pulse z-10">
+                  <img src="/placeholder.svg" alt="placeholder" />
+                </div>
+                <img
+                  decoding="async"
+                  class="w-[100%] h-[100%]"
+                  (load)="onImageLoad(movie.id)"
+                  [class.opacity-0]="!loadedImages.has(movie.id)"
+                  [src]="startUrl + (movie.poster_path || '')"
+                  [alt]="movie?.title || ''" />
               </div>
-              <img
-                decoding="async"
-                class="w-[100%] h-[100%]"
-                (load)="onImageLoad(movie.id)"
-                [class.opacity-0]="!loadedImages.has(movie.id)"
-                [src]="startUrl + (movie.poster_path || '')"
-                [alt]="movie?.title || ''" />
+  
+              <div class="basis-[92%] pt-2 pb-2">
+                <a [routerLink]="['/movie', movie.id]" (click)="setType()">
+                  <h3 class="text-xl font-bold tracking-tight text-gray-800">
+                    {{ movie.title }}
+                  </h3>
+                </a>
+                <p class="italic text-[13px] text-gray-400">
+                  {{ movie.release_date }}
+                </p>
+                <p>{{ movie.overview | truncateWords: 70 }}</p>
+              </div>
             </div>
-
-            <div class="basis-[92%] pt-2 pb-2">
-              <a [routerLink]="['/movie', movie.id]" (click)="setType()">
-                <h3 class="text-xl font-bold tracking-tight text-gray-800">
-                  {{ movie.title }}
-                </h3>
-              </a>
-              <p class="italic text-[13px] text-gray-400">
-                {{ movie.release_date }}
-              </p>
-              <p>{{ movie.overview | truncateWords: 70 }}</p>
-            </div>
-          </div>
-        </li>
+          </li>
+        }
       </ul>
       <div>
         <button
@@ -91,14 +88,13 @@ export class SearchComponent {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      const query = params['query'];
-      this.fromInput = query;
-      this.fetchData(this.apiUrl1, this.apiUrl2, query);
+      this.fromInput = params['query'];
+      this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput as string);
     });
   }
 
   fetchData(one: string, two: string, text: string): void {
-    this.searchService.getDataMovie(one, two, text, this.numberPage).subscribe(
+    this.searchService.getDataSearch<MovieSearchResponse>(one, two, text, this.numberPage).subscribe(
       data => {
         this.movieResponse.set(data);
         this.totalPages = data.total_pages;

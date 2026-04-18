@@ -93,8 +93,10 @@ import { MovieStoreService } from '../../services/movie-store.service';
 })
 export class MovieComponent {
   route = inject(ActivatedRoute);
+
   startUrl = TMDB.imageBaseUrl;
   secondUrl = TMDB.imageBigUrl;
+  
   movieData = signal<SingleMovie | undefined>(undefined);
   similarMovies = signal<Movie[]>([]);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
