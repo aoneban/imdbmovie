@@ -79,7 +79,7 @@ export class SingleReviewComponent implements OnInit {
     private mediaTypeService: MediaTypeService,
     private movieService: MovieService
   ) {
-    this.type = this.mediaTypeService.getMediaType();
+    this.type = this.mediaTypeService.mediaType();
   }
 
   ngOnInit() {

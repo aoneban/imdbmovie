@@ -44,7 +44,7 @@ export class TitleMovieComponent {
 
   constructor(private mediaTypeService: MediaTypeService) {
     effect(() => {
-      this.mediaType = this.mediaTypeService.getMediaType();
+      this.mediaType = this.mediaTypeService.mediaType();
     })
   }
 }

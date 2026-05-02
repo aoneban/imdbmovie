@@ -56,7 +56,7 @@ export class AllReviewsComponent {
     private movieService: MovieService
   ) {
     effect(() => {
-      const type = this.mediaTypeService.getMediaType();
+      const type = this.mediaTypeService.mediaType();
       const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
       this.movieService
         .getDataMovie<ReviewsResponse>(

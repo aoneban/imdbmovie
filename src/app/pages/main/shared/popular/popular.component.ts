@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Input,
   signal,
+  computed,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
@@ -128,7 +129,8 @@ export class PopularComponent implements OnInit {
   newData = signal<Movie[]>([]);
   startUrl = TMDB.imageBaseUrl;
   imgUrl = '';
-  type!: string | undefined;
+  type!: string;
+  media = ''
 
   activeButton = 'popular';
   loadedImages = new Set<number>();
@@ -141,7 +143,7 @@ export class PopularComponent implements OnInit {
 
   ngOnInit(): void {
     this.switchTo(this.activeButton);
-    this.type = this.config.mediaType;
+    this.type = this.config.mediaType as string;
   }
 
   trackByMovie(index: number, movie: Movie): number {
@@ -155,7 +157,7 @@ export class PopularComponent implements OnInit {
     }, 2000);
   }
 
-  setType(type: string = 'movie') {
+  setType(type: string) {
     this.mediaTypeService.setMediaType(type);
   }
 
@@ -164,23 +166,23 @@ export class PopularComponent implements OnInit {
     let apiUrl = '';
     switch (button) {
       case 'popular':
-        apiUrl = this.config.link1;
+        apiUrl = this.config.link[0];
         break;
 
       case 'tv':
-        apiUrl = this.config.link2;
+        apiUrl = this.config.link[1];
         break;
 
       case 'top':
-        if (this.config.link3) apiUrl = this.config.link3;
+        if (this.config.link[2]) apiUrl = this.config.link[2];
         break;
 
       case 'upcoming':
-        if (this.config.link4) apiUrl = this.config.link4;
+        if (this.config.link[3]) apiUrl = this.config.link[3];
         break;
 
       default:
-        apiUrl = this.config.link1;
+        apiUrl = this.config.link[0];
         break;
     }
 

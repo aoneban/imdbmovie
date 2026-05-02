@@ -17,8 +17,9 @@ import { TMDB } from '../../../config/tmdb.config';
           <div
             class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
             <img
+              decoding="async"
               *ngIf="!loadedImages().has(movie.id)"
-              class="absolute inset-0 w-[80%] h-[80%] p-5 m-5 object-cover bg-gray-300"
+              class="absolute inset-0 w-[85%] h-[80%] p-5 m-5 object-cover bg-gray-200 animate-pulse"
               src="/placeholder.svg"
               alt="placeholder" />
 

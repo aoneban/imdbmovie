@@ -96,7 +96,7 @@ export class MovieComponent {
 
   startUrl = TMDB.imageBaseUrl;
   secondUrl = TMDB.imageBigUrl;
-  
+
   movieData = signal<SingleMovie | undefined>(undefined);
   similarMovies = signal<Movie[]>([]);
   movieDataImg = signal<ImagesResponse | undefined>(undefined);
@@ -107,13 +107,13 @@ export class MovieComponent {
     this.route.paramMap.pipe(map(params => Number(params.get('id'))))
   );
 
-  constructor(
+    constructor(
     private movieService: MovieService,
     private mediaTypeService: MediaTypeService,
     private movieStoreService: MovieStoreService
   ) {
     effect(() => {
-      const type = this.mediaTypeService.getMediaType();
+      const type = this.mediaTypeService.mediaType();
       const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
       this.movieService
         .getDataMovie<SingleMovie>(apiOne, TMDB.apiLanguage, this.movieId()!)

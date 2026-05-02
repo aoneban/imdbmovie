@@ -128,6 +128,7 @@ export interface ApiResponsePerson {
   page: number;
   results: Person[];
   total_pages: number;
+  total_results: number;
 }
 
 export interface Person {
@@ -258,6 +259,7 @@ export interface MovieSearchResponse {
   page: number;
   results: MovieResult[];
   total_pages: number;
+  total_results: number
 }
 
 export interface MovieResult {
@@ -271,20 +273,19 @@ export interface MovieResult {
   popularity: number;
   poster_path: string | null;
   release_date: string;
+  first_air_date: string;
   title: string;
+  name: string;
   video: boolean;
   vote_average: number;
   vote_count: number;
 }
 
 export interface PopularConfig {
-  link1: string;
-  link2: string;
-  link3?: string;
-  link4?: string;
+  link: string[];
   type: string[];
   title: string;
-  mediaType?: 'movie' | 'tv';
+  mediaType?: string;
   bgData?: boolean;
 }
 

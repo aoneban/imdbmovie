@@ -1,18 +1,10 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class MediaTypeService {
-  private mediaTypeSubject = new BehaviorSubject<string | null>(null);
+  mediaType = signal<string | null>(null);
 
-  mediaType$ = this.mediaTypeSubject.asObservable();
-
-  setMediaType(type: string) {
-    localStorage.setItem('media_type', type); 
-    this.mediaTypeSubject.next(type); 
-  }
-
-  getMediaType(): string | null {
-    return localStorage.getItem('media_type');
+  setMediaType(type: string | null) {
+    this.mediaType.set(type);
   }
 }

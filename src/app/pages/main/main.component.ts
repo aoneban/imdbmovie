@@ -18,8 +18,10 @@ import { IntersectionObserverDirective } from '../../directives/intersection-obs
 
     <app-popular
       [config]="{
-        link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
-        link2: 'https://api.themoviedb.org/3/trending/all/week?language=en-US',
+        link: [
+          'https://api.themoviedb.org/3/trending/all/day?language=en-US',
+          'https://api.themoviedb.org/3/trending/all/week?language=en-US',
+        ],
         type: ['Top Today', 'Top Week'],
         title: 'Trending',
         bgData: true,
@@ -76,12 +78,15 @@ export class MainPageComponent {
     );
     const componentRef = this.popularVcr.createComponent(PopularComponent);
     componentRef.setInput('config', {
-      link1: 'https://api.themoviedb.org/3/trending/all/day?language=en-US',
-      link2: 'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
-      link3: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US',
-      link4: 'https://api.themoviedb.org/3/trending/movie/day?language=en-US',
+      link: [
+        'https://api.themoviedb.org/3/trending/all/day?language=en-US',
+        'https://api.themoviedb.org/3/trending/tv/day?language=en-US',
+        'https://api.themoviedb.org/3/movie/top_rated?language=en-US',
+        'https://api.themoviedb.org/3/movie/upcoming?language=en-US',
+      ],
       type: ['Popular', 'Now', 'Top Rated', 'Upcoming'],
       title: "What's Popular",
+      mediaType: 'movie',
       bgData: false,
     });
   }
@@ -95,8 +100,10 @@ export class MainPageComponent {
     );
     const componentRef = this.popularVcr2.createComponent(PopularComponent);
     componentRef.setInput('config', {
-      link1: 'https://api.themoviedb.org/3/tv/airing_today',
-      link2: 'https://api.themoviedb.org/3/tv/on_the_air',
+      link: [
+        'https://api.themoviedb.org/3/tv/airing_today',
+        'https://api.themoviedb.org/3/tv/on_the_air',
+      ],
       type: ['Airing', 'Tv'],
       title: 'Free to watch',
       mediaType: 'tv',
