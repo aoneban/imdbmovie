@@ -144,7 +144,6 @@ export class SearchComponent {
             this.movieResponse.set(data);
             this.selectedItem.set('Movies');
             this.totalDataArray.push(['Movies', data.total_results, 0]);
-            console.log('response movie', this.movieResponse());
           },
           error => {
             console.error('Error fetching data: ', error);
@@ -161,7 +160,6 @@ export class SearchComponent {
           data => {
             this.tvResponse.set(data);
             this.totalDataArray.push(['TV Shows', data.total_results, 1]);
-            console.log('response tv', this.tvResponse());
           },
           error => {
             console.error('Error fetching data: ', error);
@@ -178,7 +176,6 @@ export class SearchComponent {
           data => {
             this.personResponse.set(data);
             this.totalDataArray.push(['Persons', data.total_results, 2]);
-            console.log('response persons', this.personResponse());
           },
           error => {
             console.error('Error fetching data: ', error);

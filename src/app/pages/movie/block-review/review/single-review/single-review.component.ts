@@ -122,7 +122,6 @@ export class SingleReviewComponent implements OnInit {
       )
       .subscribe(
         data => {
-          console.log('this is data', data);
           this.movieData = data;
           this.isLoading = false;
         },
@@ -143,7 +142,6 @@ export class SingleReviewComponent implements OnInit {
             ? el.author_details.rating
             : '';
         }
-        console.log('rating', this.rating)
       });
     }
   }
