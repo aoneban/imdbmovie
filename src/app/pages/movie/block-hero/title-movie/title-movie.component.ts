@@ -1,8 +1,7 @@
-import { Component, effect, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SingleMovie } from '../../../../interfaces/interface';
-import { RouterModule } from '@angular/router';
-import { MediaTypeService } from '../../../../services/media-type.service';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { TMDB } from '../../../../config/tmdb.config';
 
 @Component({
@@ -40,11 +39,10 @@ import { TMDB } from '../../../../config/tmdb.config';
 export class TitleMovieComponent {
   property = input<SingleMovie | undefined>();
   url = TMDB.imageBaseUrl;
-  mediaType?: string | null;
-
-  constructor(private mediaTypeService: MediaTypeService) {
-    effect(() => {
-      this.mediaType = this.mediaTypeService.mediaType();
-    })
+  constructor(private route: ActivatedRoute) {}
+  get mediaType(): string {
+    return this.route.snapshot.queryParamMap.get('type') === 'tv'
+      ? 'tv'
+      : 'movie';
   }
 }

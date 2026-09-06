@@ -5,7 +5,6 @@ import {
   SingleMovie,
 } from '../../../../../interfaces/interface';
 import { ActivatedRoute } from '@angular/router';
-import { MediaTypeService } from '../../../../../services/media-type.service';
 import { MovieService } from '../../../../../services/movie.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -18,9 +17,12 @@ import { RouterModule } from '@angular/router';
       <div class="loader"></div>
     </div>
     <section *ngIf="!isLoading">
-      <div class="duration-200 easy flex h-[50px] font-bold text-gray-700 items-center bg-gray-100 hover:text-gray-500">
+      <div
+        class="duration-200 easy flex h-[50px] font-bold text-gray-700 items-center bg-gray-100 hover:text-gray-500">
         <div class="w-[80%] mx-auto">
-          <a [routerLink]="['/all-reviews', this.movieData?.id]"
+          <a
+            [routerLink]="['/all-reviews', this.movieData?.id]"
+            [queryParams]="{ type: type }"
             >&#8592; Back to main</a
           >
         </div>
@@ -36,7 +38,8 @@ import { RouterModule } from '@angular/router';
         <div>
           <a
             class="duration-200 easy text-2xl font-bold underline underline-offset-2 hover:text-gray-500"
-            [routerLink]="['/all-reviews', this.movieData?.id]">
+            [routerLink]="['/all-reviews', this.movieData?.id]"
+            [queryParams]="{ type: type }">
             {{ movieData?.name || movieData?.title }}
             <span class="text-gray-500">
               ({{
@@ -76,10 +79,10 @@ export class SingleReviewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private mediaTypeService: MediaTypeService,
     private movieService: MovieService
   ) {
-    this.type = this.mediaTypeService.mediaType();
+    this.type =
+      this.route.snapshot.queryParamMap.get('type') === 'tv' ? 'tv' : 'movie';
   }
 
   ngOnInit() {

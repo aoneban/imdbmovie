@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Movie } from '../../../../interfaces/interface';
 
 @Component({
@@ -14,7 +14,9 @@ import { Movie } from '../../../../interfaces/interface';
             <img
               decoding="async"
               [routerLink]="[
-                item.media_type === 'movie' ? '/movie' : '/tv',
+                (item.media_type || route.snapshot.url[0].path) === 'movie'
+                  ? '/movie'
+                  : '/tv',
                 item.id,
               ]"
               class="cursor-pointer transition-opacity duration-700 rounded-lg relative min-w-[230px] h-[130px]"
@@ -27,7 +29,9 @@ import { Movie } from '../../../../interfaces/interface';
             <p
               class="text-sm pt-3 pb-3 pl-3 cursor-pointer font-medium hover:text-gray-400 easy duration-300 hover:underline hover:underline-offset-1"
               [routerLink]="[
-                item.media_type === 'movie' ? '/movie' : '/tv',
+                (item.media_type || route.snapshot.url[0].path) === 'movie'
+                  ? '/movie'
+                  : '/tv',
                 item.id,
               ]">
               {{ item.title || item.name }}
@@ -85,6 +89,7 @@ import { Movie } from '../../../../interfaces/interface';
   `,
 })
 export class SimilarMoviesComponent {
+  constructor(public route: ActivatedRoute) {}
   @Input() similar: Movie[] | undefined;
   @Input() url: string | undefined;
 }

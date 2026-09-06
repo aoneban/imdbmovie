@@ -1,5 +1,5 @@
 import { Component, input, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CastMember } from '../../../../interfaces/interface';
 import { CommonModule } from '@angular/common';
 import { TMDB } from '../../../../config/tmdb.config';
@@ -18,7 +18,7 @@ import { TMDB } from '../../../../config/tmdb.config';
             </div>
           } @else {
             @for (person of movieCast(); track person.id) {
-              @if(person.profile_path) {
+              @if (person.profile_path) {
                 <div
                   class="movies__wrapper-cart rounded-lg overflow-hidden border border-gray-200 shadow-sm shadow-gray-300">
                   <div class="rounded-none w-auto min-h-[230px]">
@@ -55,6 +55,7 @@ import { TMDB } from '../../../../config/tmdb.config';
             @if (movieCast() !== undefined && movieCast()!.length > 0) {
               <button
                 [routerLink]="['/cast', movieId()]"
+                [queryParams]="{ type: route.snapshot.url[0].path }"
                 class="w-fit whitespace-nowrap text-md font-bold duration-200 ease hover:underline hover:underline-offset-2 hover:text-gray-500">
                 View more &#10230;
               </button>
@@ -67,6 +68,7 @@ import { TMDB } from '../../../../config/tmdb.config';
   styles: ``,
 })
 export class ActorsComponent {
+  constructor(public route: ActivatedRoute) {}
   startUrl = TMDB.imageBaseUrl;
   movieCast = input<CastMember[] | undefined>();
   movieId = input<number | undefined>();

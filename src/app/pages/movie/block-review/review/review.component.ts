@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReviewItem, ReviewsResponse } from '../../../../interfaces/interface';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ReviewDataService } from '../../../../services/review-data.service';
 
 @Component({
@@ -22,6 +22,7 @@ import { ReviewDataService } from '../../../../services/review-data.service';
           <div class="ml-4 mb-4 mt-[-5px]">
             <a
               [routerLink]="['/single-review', allReviews?.id, review.id]"
+              [queryParams]="{ type: mediaType }"
               (click)="sendReview(review)"
               class="duration-200 easy font-bold text-gray-800 text-xl underline underline-offset-2 hover:text-gray-500"
               >A review by {{ review.author }}</a
@@ -42,6 +43,7 @@ import { ReviewDataService } from '../../../../services/review-data.service';
           <ng-container *ngIf="isTruncated">
             <a
               [routerLink]="['/single-review', allReviews?.id, review.id]"
+              [queryParams]="{ type: mediaType }"
               (click)="sendReview(review)"
               class="duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500">
               Read more
@@ -60,7 +62,17 @@ export class ReviewComponent {
   maxLength: number = 300;
   item: number = 0;
 
-  constructor(private reviewDataService: ReviewDataService) {}
+  constructor(
+    private reviewDataService: ReviewDataService,
+    private route: ActivatedRoute
+  ) {}
+
+  get mediaType(): string {
+    return this.route.snapshot.url[0].path === 'tv' ||
+      this.route.snapshot.queryParamMap.get('type') === 'tv'
+      ? 'tv'
+      : 'movie';
+  }
 
   ngOnInit(): void {}
 

@@ -20,7 +20,6 @@ import {
 } from '../../interfaces/interface';
 import { NavbarComponent } from '../main/shared/navbar/navbar.component';
 import { RouterModule } from '@angular/router';
-import { MediaTypeService } from '../../services/media-type.service';
 import { TMDB } from '../../config/tmdb.config';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
@@ -107,13 +106,12 @@ export class MovieComponent {
     this.route.paramMap.pipe(map(params => Number(params.get('id'))))
   );
 
-    constructor(
+  constructor(
     private movieService: MovieService,
-    private mediaTypeService: MediaTypeService,
     private movieStoreService: MovieStoreService
   ) {
     effect(() => {
-      const type = this.mediaTypeService.mediaType();
+      const type = this.route.snapshot.url[0].path;
       const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
       this.movieService
         .getDataMovie<SingleMovie>(apiOne, TMDB.apiLanguage, this.movieId()!)

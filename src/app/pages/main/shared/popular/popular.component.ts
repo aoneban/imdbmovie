@@ -79,7 +79,7 @@ import { TMDB } from '../../../../config/tmdb.config';
             <img
               decoding="async"
               [routerLink]="[
-                movie.media_type === 'movie' ? '/movie' : '/tv',
+                (movie.media_type || type) === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]"
               (load)="onImageLoad(movie.id)"
@@ -90,7 +90,7 @@ import { TMDB } from '../../../../config/tmdb.config';
               alt="{{ movie.title }}" />
             <a
               [routerLink]="[
-                movie.media_type === 'movie' ? '/movie' : '/tv',
+                (movie.media_type || type) === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]"
               (click)="setType(movie.media_type ? movie.media_type : type)">
@@ -130,7 +130,7 @@ export class PopularComponent implements OnInit {
   startUrl = TMDB.imageBaseUrl;
   imgUrl = '';
   type!: string;
-  media = ''
+  media = '';
 
   activeButton = 'popular';
   loadedImages = new Set<number>();

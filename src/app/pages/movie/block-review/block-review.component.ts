@@ -1,6 +1,6 @@
 import { Component, input, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SimilarMoviesComponent } from './similar-movies/similar-movies.component';
 import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
 
@@ -12,6 +12,7 @@ import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
       <div *ngIf="dataReview()" class="w-[80%] mx-auto">
         <a
           [routerLink]="['/all-reviews', this.movieData()?.id]"
+          [queryParams]="{ type: route.snapshot.url[0].path }"
           class="duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500"
           >Read all reviews</a
         >
@@ -30,6 +31,7 @@ import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
   styles: ``,
 })
 export class ReviewBlockComponent {
+  constructor(public route: ActivatedRoute) {}
   @Input() startUrl: string | undefined;
   dataReview = input<ReviewItem | undefined>();
   movieData = input<SingleMovie | undefined>();

@@ -1,15 +1,23 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { NavbarComponent } from '../../../../main/shared/navbar/navbar.component';
 import { ActivatedRoute } from '@angular/router';
-import { ReviewsResponse } from '../../../../../interfaces/interface';
-import { MediaTypeService } from '../../../../../services/media-type.service';
+import {
+  ReviewsResponse,
+  SingleMovie,
+} from '../../../../../interfaces/interface';
 import { ReviewComponent } from '../review.component';
 import { CommonModule } from '@angular/common';
 import { MovieService } from '../../../../../services/movie.service';
 import { TitleMovieComponent } from '../../../block-hero/title-movie/title-movie.component';
-import { MovieStoreService } from '../../../../../services/movie-store.service';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  forkJoin,
+  of,
+  startWith,
+  switchMap,
+} from 'rxjs';
 import { TMDB } from '../../../../../config/tmdb.config';
 
 @Component({
@@ -45,36 +53,35 @@ import { TMDB } from '../../../../../config/tmdb.config';
 })
 export class AllReviewsComponent {
   route = inject(ActivatedRoute);
-  movieStoreService = inject(MovieStoreService);
-  allReviews = signal<ReviewsResponse | undefined>(undefined);
-  movieId = toSignal(
-    this.route.paramMap.pipe(map(params => Number(params.get('id'))))
-  );
-
-  constructor(
-    private mediaTypeService: MediaTypeService,
-    private movieService: MovieService
-  ) {
-    effect(() => {
-      const type = this.mediaTypeService.mediaType();
-      const apiOne = type === 'movie' ? TMDB.apiBaseMovie : TMDB.apiBaseTV;
-      this.movieService
-        .getDataMovie<ReviewsResponse>(
-          apiOne,
-          TMDB.apiReviews,
-          this.movieId() as number
-        )
-        .subscribe(
-          data => {
-            this.allReviews.set(data);
-          },
-          error => {
+  private movieService = inject(MovieService);
+  private data = toSignal(
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(
+      switchMap(([params, query]) => {
+        const api =
+          query.get('type') === 'tv' ? TMDB.apiBaseTV : TMDB.apiBaseMovie;
+        const id = Number(params.get('id'));
+        return forkJoin({
+          movie: this.movieService.getDataMovie<SingleMovie>(
+            api,
+            TMDB.apiLanguage,
+            id
+          ),
+          reviews: this.movieService.getDataMovie<ReviewsResponse>(
+            api,
+            TMDB.apiReviews,
+            id
+          ),
+        }).pipe(
+          catchError(error => {
             console.error('Error fetching data: ', error);
-          }
+            return of(undefined);
+          }),
+          startWith(undefined)
         );
-    });
-  }
-
+      })
+    )
+  );
+  allReviews = computed(() => this.data()?.reviews);
+  movieData = computed(() => this.data()?.movie);
   isLoading = computed(() => this.movieData());
-  movieData = this.movieStoreService.movieData;
 }

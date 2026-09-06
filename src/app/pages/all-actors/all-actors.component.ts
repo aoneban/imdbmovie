@@ -5,7 +5,17 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TitleMovieComponent } from '../movie/block-hero/title-movie/title-movie.component';
 import { TMDB } from '../../config/tmdb.config';
-import { MovieStoreService } from '../../services/movie-store.service';
+import { MovieService } from '../../services/movie.service';
+import { MovieCast, SingleMovie } from '../../interfaces/interface';
+import { toSignal } from '@angular/core/rxjs-interop';
+import {
+  catchError,
+  combineLatest,
+  forkJoin,
+  of,
+  startWith,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'app-all-actors',
@@ -89,10 +99,35 @@ export class AllActorsComponent {
   startUrl = TMDB.imageSmallUrl;
 
   route = inject(ActivatedRoute);
-  movieStoreService = inject(MovieStoreService);
-
+  private movieService = inject(MovieService);
+  private data = toSignal(
+    combineLatest([this.route.paramMap, this.route.queryParamMap]).pipe(
+      switchMap(([params, query]) => {
+        const api =
+          query.get('type') === 'tv' ? TMDB.apiBaseTV : TMDB.apiBaseMovie;
+        const id = Number(params.get('id'));
+        return forkJoin({
+          movie: this.movieService.getDataMovie<SingleMovie>(
+            api,
+            TMDB.apiLanguage,
+            id
+          ),
+          credits: this.movieService.getDataMovie<MovieCast>(
+            api,
+            TMDB.apiCredits,
+            id
+          ),
+        }).pipe(
+          catchError(error => {
+            console.error('Error fetching data: ', error);
+            return of(undefined);
+          }),
+          startWith(undefined)
+        );
+      })
+    )
+  );
+  movieData = computed(() => this.data()?.movie);
+  movieAllTeam = computed(() => this.data()?.credits);
   isLoading = computed(() => this.movieData());
-  
-  movieData = this.movieStoreService.movieData;
-  movieAllTeam = this.movieStoreService.movieAllTeam;
 }
