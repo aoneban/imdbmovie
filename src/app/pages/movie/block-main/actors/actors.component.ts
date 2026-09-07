@@ -13,7 +13,7 @@ import { TMDB } from '../../../../config/tmdb.config';
       <div class="movies__wrapper">
         <div class="movies__wrapper-block gap-[15px]">
           @if (!movieCast() || movieCast()?.length === 0) {
-            <div class="text-black text-xl italic m-12 p-10">
+            <div class="min-w-0 text-black text-xl italic py-4">
               No cast information available yet...
             </div>
           } @else {
@@ -21,11 +21,11 @@ import { TMDB } from '../../../../config/tmdb.config';
               @if (person.profile_path) {
                 <div
                   class="movies__wrapper-cart rounded-lg overflow-hidden border border-gray-200 shadow-sm shadow-gray-300">
-                  <div class="rounded-none w-auto min-h-[230px]">
+                  <div class="aspect-[2/3] mb-4">
                     <img
                       decoding="auto"
                       [routerLink]="['/persons', person.id]"
-                      class="image h-[auto] rounded-none pb-4"
+                      class="w-full h-full object-cover cursor-pointer rounded-none"
                       [ngClass]="{
                         'absolute mt-[50px]': !person?.profile_path,
                       }"

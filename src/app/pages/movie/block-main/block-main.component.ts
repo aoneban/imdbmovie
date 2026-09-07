@@ -22,14 +22,15 @@ import {
     RouterModule,
   ],
   template: `
-    <div class="w-[80%] mx-auto flex gap-[5rem]">
-      <div class="w-4/5 mx-auto flex flex-col">
+    <div
+      class="mx-auto grid max-w-screen-xl grid-cols-1 gap-6 px-4 pt-6 sm:px-6 lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-8 lg:px-8">
+      <div class="min-w-0 flex flex-col">
         <!--Actors component start-->
         <app-actors
           *ngIf="movieData() && loadedImages().has(movieData()!.id)"
           [movieCast]="movieCast()"
           [movieId]="movieId()"
-          class="md:flex-row">
+          class="block min-w-0">
         </app-actors>
         <!--Actors component end-->
         <div
@@ -43,7 +44,8 @@ import {
           </button>
         </div>
         <div *ngIf="movieData() && loadedImages().has(movieData()!.id)">
-          <div class="flex mb-4 justify-start items-center gap-[4%]">
+          <div
+            class="flex flex-wrap mb-4 justify-start items-center gap-x-4 gap-y-2">
             <h3 class="text-2xl font-semibold text-gray-900">Social</h3>
             <a
               *ngIf="dataReviewResponse()?.results?.length"
@@ -74,7 +76,7 @@ import {
       <app-aside
         *ngIf="movieData() && loadedImages().has(movieData()!.id)"
         [props]="movieData()"
-        class="w-1/5 md:flex-row flex items-start mt-[3rem] relative">
+        class="block min-w-0 relative [overflow-wrap:anywhere]">
       </app-aside>
       <!--Aside component end-->
     </div>

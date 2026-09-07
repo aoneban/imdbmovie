@@ -11,15 +11,15 @@ import { ReviewDataService } from '../../../../services/review-data.service';
     <section>
       <div
         *ngIf="review"
-        class="mt-4 mb-4 p-6 border border-gray-300 rounded-[10px]">
+        class="mt-4 mb-4 p-4 sm:p-6 border border-gray-300 rounded-[10px] [overflow-wrap:anywhere]">
         <div class="flex">
           <img
             decoding="auto"
             [src]="getAvatar(item)"
-            class="w-11 h-11 rounded-full"
+            class="w-11 h-11 shrink-0 object-cover rounded-full"
             alt="{{ review.author }}" />
 
-          <div class="ml-4 mb-4 mt-[-5px]">
+          <div class="min-w-0 ml-4 mb-4 mt-[-5px]">
             <a
               [routerLink]="['/single-review', allReviews?.id, review.id]"
               [queryParams]="{ type: mediaType }"

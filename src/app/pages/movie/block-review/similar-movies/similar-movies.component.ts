@@ -6,11 +6,12 @@ import { Movie } from '../../../../interfaces/interface';
   selector: 'app-similar-movies',
   imports: [RouterModule],
   template: `
-    <div class="blur-right max-w-[80%]">
+    <div class="blur-right w-full min-w-0">
       <div
         class="scroll-container overflow-x-auto new-block mt-5 mb-2 flex max-w-[100%] gap-4 justify-start">
         @for (item of similar; track item.id) {
-          <li class="list-none">
+          <li
+            class="list-none w-[230px] max-w-full shrink-0 [overflow-wrap:anywhere]">
             <img
               decoding="async"
               [routerLink]="[
@@ -19,7 +20,7 @@ import { Movie } from '../../../../interfaces/interface';
                   : '/tv',
                 item.id,
               ]"
-              class="cursor-pointer transition-opacity duration-700 rounded-lg relative min-w-[230px] h-[130px]"
+              class="cursor-pointer transition-opacity duration-700 rounded-lg relative w-full aspect-video object-cover"
               [src]="
                 item.backdrop_path
                   ? url + item.backdrop_path

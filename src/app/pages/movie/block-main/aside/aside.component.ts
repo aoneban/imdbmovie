@@ -5,7 +5,8 @@ import { SingleMovie } from '../../../../interfaces/interface';
   selector: 'app-aside',
   imports: [],
   template: `
-    <aside class="sticky top-[30px]">
+    <aside
+      class="grid grid-cols-1 gap-x-6 sm:grid-cols-2 lg:block lg:sticky lg:top-[30px]">
       <div class="mt-4">
         <h3 class="font-bold">Status</h3>
         <p>{{ props?.status }}</p>

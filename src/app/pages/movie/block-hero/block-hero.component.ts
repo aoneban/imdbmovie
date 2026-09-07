@@ -13,22 +13,24 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
         [ngStyle]="{ 'background-image': backgroundImage() }"
         class="background-movie">
         <div class="background-shadow"></div>
-        <div class="content-movie">
+        <div
+          class="relative mx-auto flex max-w-screen-xl flex-col items-start gap-6 px-4 py-6 sm:px-6 md:flex-row lg:gap-8 lg:px-8">
           <img
             decoding="auto"
             *ngIf="!loadedImages().has(movieData()!.id)"
-            class="!w-[20%] !h-[200%] m-5 bg-gray-800"
+            class="w-40 shrink-0 aspect-[2/3] rounded-lg object-cover bg-gray-800 sm:w-48 lg:w-64"
             src="/placeholder.svg"
             alt="placeholder" />
           <img
             decoding="auto"
-            class="main-poster transition-opacity duration-700 h-[29vw]"
+            class="w-40 shrink-0 aspect-[2/3] rounded-lg object-cover transition-opacity duration-700 sm:w-48 lg:w-64"
             (load)="onLoad()"
             [class.hidden]="!loadedImages().has(movieData()!.id)"
             [src]="url + (movieData()?.poster_path || '')"
             [alt]="movieData()?.title || ''" />
-          <div class="text-content">
-            <h1 class="text-4xl font-bold text-white-900 mb-1">
+          <div class="min-w-0 flex-1 [overflow-wrap:anywhere]">
+            <h1
+              class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white-900 mb-1">
               {{ movieData()?.title || movieData()?.name }} ({{
                 movieData()?.release_date?.slice(0, 4)
                   ? movieData()?.release_date?.slice(0, 4)
@@ -63,16 +65,16 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
             </div>
 
             <h4 class="text-xl text-white-900 mb-2 mt-2">Overview</h4>
-            <p class="w-[80%]">
+            <p>
               {{
                 movieData()?.overview
                   ? movieData()?.overview
                   : 'Description will be added soon...'
               }}
             </p>
-            <div class="flex mt-6 gap-20">
+            <div class="flex flex-wrap mt-6 gap-x-8 gap-y-4">
               @for (worker of movieCrew(); track worker.id) {
-                <div class="direction">
+                <div class="min-w-0 max-w-full">
                   <a
                     [routerLink]="['/persons', worker.id]"
                     class="font-bold text-md underline duration-300 easy hover:text-gray-300"

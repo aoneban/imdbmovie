@@ -6,36 +6,23 @@
 .background-movie {
   position: relative;
   min-height: 300px;
-  height: 32vw;
-  max-height: 600px;
   background-color: #595f64;
   background-size: cover;
   background-repeat: no-repeat;
   color: #fff;
-  background-position: left calc(50vw - 170px - 340px) center;
+  background-position: center;
 }
 
 .background-shadow {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   background-image: linear-gradient(
     to right,
     rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px),
     rgba(31.5, 31.5, 31.5, 0.84) 50%,
     rgba(31.5, 31.5, 31.5, 0.84) 100%
   );
-}
-
-.content-movie {
-  position: absolute;
-  display: flex;
-  gap: 25px;
-  top: 25px;
-  left: 9vw;
-  .main-poster {
-    width: 19vw;
-    border-radius: 10px;
-  }
 }
 
 section.new__index {

@@ -11,7 +11,8 @@ import { RouterModule } from '@angular/router';
         <div
           class="content__wrapper flex justify-center max-w-screen-xl mx-auto">
           <div class="content__wrapper-navbar_left">
-            <ul class="flex gap-x-5">
+            <ul
+              class="flex flex-wrap justify-center gap-x-3 gap-y-2 px-4 sm:gap-x-5">
               <li>
                 <div class="dropdown-navbar">
                   <button class="dropbtn">Overview &#9662;</button>
@@ -57,6 +58,21 @@ import { RouterModule } from '@angular/router';
         </div>
       </div>
     </header>
+  `,
+  styles: `
+    .dropbtn {
+      width: auto;
+      white-space: nowrap;
+    }
+
+    .dropdown-navbar {
+      position: relative;
+      overflow: visible;
+    }
+
+    li:nth-last-child(-n + 2) .dropdown-navbar_content {
+      right: 0;
+    }
   `,
 })
 export class NavbarComponent {}

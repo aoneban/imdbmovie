@@ -9,7 +9,9 @@ import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
   imports: [CommonModule, RouterLink, SimilarMoviesComponent],
   template: `
     <div>
-      <div *ngIf="dataReview()" class="w-[80%] mx-auto">
+      <div
+        *ngIf="dataReview()"
+        class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <a
           [routerLink]="['/all-reviews', this.movieData()?.id]"
           [queryParams]="{ type: route.snapshot.url[0].path }"
@@ -17,7 +19,7 @@ import { Movie, ReviewItem, SingleMovie } from '../../../interfaces/interface';
           >Read all reviews</a
         >
       </div>
-      <div class="w-[80%] mx-auto">
+      <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <h3 class="text-2xl font-semibold text-gray-900 mt-6">Similar</h3>
 
         <!--Similar movies component start-->
