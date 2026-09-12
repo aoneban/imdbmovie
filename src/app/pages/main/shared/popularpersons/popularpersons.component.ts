@@ -15,49 +15,36 @@ import { TMDB } from '../../../../config/tmdb.config';
   selector: 'app-popularpersons',
   imports: [CommonModule, RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ` <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
-      <h3 class="trending">Most popular celebrities</h3>
-    </div>
-    <section class="movies__main bg-none">
-      <div class="movies__wrapper overflow-x-auto focus:outline-none">
-        <div
-          class="movies__wrapper-block add"
-          [@listAnimation]="newData().length">
-          <div
-            class="movies__wrapper-cart"
+  template: `
+    <section class="persons-section">
+      <h3 class="persons-heading">Most popular celebrities</h3>
+      <div class="persons-content movies__wrapper">
+        <div class="persons-carousel" [@listAnimation]="newData().length">
+          <article
+            class="persons-card"
             *ngFor="let person of newData()"
             [@fadeAnimation]>
-            <div class="wrapper_img border border-gray-300">
+            <a class="persons-portrait" [routerLink]="['/persons', person.id]">
               <img
                 decoding="async"
-                [routerLink]="['/persons', person.id]"
-                class="image"
                 [src]="
                   person.profile_path
                     ? startUrl + person.profile_path
                     : '/icon-bg.svg'
                 "
-                alt="{{ person.name }}" />
-            </div>
-            <a [routerLink]="['/persons', person.id]">
-              <p
-                class="font-bold text-[17px] pl-[6px] pt-[14px] pb-[2px] break-words">
-                {{ person.name }}
-              </p>
+                [alt]="person.name" />
             </a>
-            <a>
-              <p class="text-[15px] pl-[6px] text-gray-500">
-                {{
-                  person.known_for[0].name !== undefined
-                    ? person.known_for[0].name
-                    : person.known_for[0].title
-                }}
-              </p>
+            <a class="persons-name" [routerLink]="['/persons', person.id]">
+              {{ person.name }}
             </a>
-          </div>
+            <p class="persons-credit" *ngIf="person.known_for.length">
+              {{ person.known_for[0].name || person.known_for[0].title }}
+            </p>
+          </article>
         </div>
       </div>
-    </section>`,
+    </section>
+  `,
   animations: [
     trigger('fadeAnimation', [
       transition(':enter', [
