@@ -10,7 +10,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-welcome',
   imports: [CommonModule, FormsModule, RouterModule],
   template: `
-    <section class="inner__content new__index">
+    <section class="welcome-section">
       <div
         [ngStyle]="{ 'background-image': 'url(' + imgUrl + ')' }"
         class="background">
@@ -19,15 +19,21 @@ import { HttpErrorResponse } from '@angular/common/http';
           <p class="motto">
             Millions of movies, TV shows and people to discover. Explore now.
           </p>
-          <div class="search-container">
+          <div
+            class="search-container"
+            role="search"
+            aria-label="Cinema search">
             <input
-              type="text"
-              placeholder="Search for a movie, TV show, person..."
+              type="search"
+              aria-label="Search movies, TV shows and people"
+              enterkeyhint="search"
+              placeholder="Search movies, TV shows, people"
               class="search-input"
               [(ngModel)]="userInput"
               (keyup.enter)="searchButton.click()" />
             <button
               #searchButton
+              type="button"
               class="search-button"
               [routerLink]="['/search']"
               [queryParams]="{ query: userInput }">

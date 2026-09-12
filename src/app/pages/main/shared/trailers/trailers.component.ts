@@ -15,36 +15,38 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
   imports: [CommonModule, YouTubePlayerModule],
   template: `
     <section
-      [ngStyle]="{ 'background-image': 'url(' + startUrl + imgUrl() + ')' }"
+      [style.background-image]="
+        imgUrl() ? 'url(' + startUrl + imgUrl() + ')' : null
+      "
       class="background-trailers">
-      <div class="trailers switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
+      <div class="trailers">
         <h3 class="trending">Latest Trailers</h3>
         <div class="switch-trailers">
           <button
+            type="button"
             (click)="switchTo('today')"
+            [attr.aria-pressed]="activeButton === 'today'"
             [class.active]="activeButton === 'today'">
             Popular
           </button>
-          <div
-            class="back-trailers"
-            [ngClass]="{
-              today: activeButton === 'today',
-              'this-week': activeButton === 'this-week',
-              'on-tv': activeButton === 'on-tv',
-              'in-theatres': activeButton === 'in-theatres',
-            }"></div>
           <button
+            type="button"
             (click)="switchTo('this-week')"
+            [attr.aria-pressed]="activeButton === 'this-week'"
             [class.active]="activeButton === 'this-week'">
             Streaming
           </button>
           <button
+            type="button"
             (click)="switchTo('on-tv')"
+            [attr.aria-pressed]="activeButton === 'on-tv'"
             [class.active]="activeButton === 'on-tv'">
             On TV
           </button>
           <button
+            type="button"
             (click)="switchTo('in-theatres')"
+            [attr.aria-pressed]="activeButton === 'in-theatres'"
             [class.active]="activeButton === 'in-theatres'">
             In Theatres
           </button>
@@ -56,11 +58,11 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
             class="movies__trailers-block"
             [@listAnimation]="newData().length">
             <div
-              class="movies__wrapper-cart cart"
+              class="movies__wrapper-cart"
               *ngFor="let movie of newData()"
               [@fadeAnimation]>
               <div
-                class="img-wrapper relative w-full h-full"
+                class="img-wrapper"
                 role="button"
                 tabindex="0"
                 (click)="
@@ -78,6 +80,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
                   )
                 "
                 (keydown.space)="
+                  $event.preventDefault();
                   onImageClick(
                     movie.media_type === 'movie' ? apiUrlMovie : apiUrlSeries,
                     apiUrlEnd,
@@ -86,11 +89,11 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
                 ">
                 <div class="play-triangle"></div>
                 <img
-                  class="image relative z-10"
+                  class="image"
                   [src]="startUrl + movie.backdrop_path"
-                  alt="{{ movie.title }}" />
+                  [alt]="getMovieTitle(movie)" />
               </div>
-              <p class="font-bold text-[16px] pl-[6px] pb-[2px]">
+              <p class="trailer-title">
                 {{ getMovieTitle(movie) }}
               </p>
             </div>
@@ -103,6 +106,13 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
           (keyup.enter)="closeModal()"
           (keyup.space)="closeModal()">
           <div class="modal-content" (click)="$event.stopPropagation()">
+            <button
+              type="button"
+              class="trailer-modal-close"
+              aria-label="Close trailer"
+              (click)="closeModal()">
+              &times;
+            </button>
             <youtube-player [videoId]="selectedVideoId"></youtube-player>
           </div>
         </div>
@@ -146,10 +156,7 @@ export class TrailersComponent implements OnInit {
     private trailerMovie: TrailerMovieService
   ) {}
 
-  imgUrl = computed(() => {
-    const url = this.newData()[0].backdrop_path;
-    return url;
-  });
+  imgUrl = computed(() => this.newData()[0]?.backdrop_path ?? '');
 
   ngOnInit(): void {
     this.trendingService.getTrendingDataMovies(this.apiUrl1).subscribe(
