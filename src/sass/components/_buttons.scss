@@ -1,0 +1,16 @@
+button {
+  position: relative;
+  width: 100px;
+  border: none;
+  padding: 4px 15px;
+  border-radius: 25px;
+  background: none;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+  z-index: 2;
+
+  &.active {
+    color: #000;
+  }
+}

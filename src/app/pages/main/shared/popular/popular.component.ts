@@ -5,7 +5,6 @@ import {
   ChangeDetectorRef,
   Input,
   signal,
-  computed,
 } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
@@ -22,87 +21,91 @@ import { TMDB } from '../../../../config/tmdb.config';
   imports: [CommonModule, RouterModule, RatingComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="switcher-wrapper flex max-w-screen-xl mx-auto mt-4">
-      <h3 class="trending">{{ config.title }}</h3>
-      <div class="switch">
-        <button
-          (click)="switchTo('popular')"
-          [class.active]="activeButton === 'popular'">
-          {{ config.type[0] }}
-        </button>
+    <section class="popular-section">
+      <div class="popular-header">
+        <h3 class="popular-heading">{{ config.title }}</h3>
         <div
-          class="back"
-          [ngClass]="{
-            popular: activeButton === 'popular',
-            tv: activeButton === 'tv',
-            top: activeButton === 'top',
-            upcoming: activeButton === 'upcoming',
-          }"></div>
-        <button (click)="switchTo('tv')" [class.active]="activeButton === 'tv'">
-          {{ config.type[1] }}
-        </button>
-        <button
-          *ngIf="config.type[2]"
-          (click)="switchTo('top')"
-          [class.active]="activeButton === 'top'">
-          {{ config.type[2] }}
-        </button>
-        <button
-          *ngIf="config.type[3]"
-          (click)="switchTo('upcoming')"
-          [class.active]="activeButton === 'upcoming'">
-          {{ config.type[3] }}
-        </button>
+          class="popular-tabs switch"
+          role="group"
+          [attr.aria-label]="config.title + ' categories'"
+          [style.--tab-count]="config.type.length">
+          <button
+            type="button"
+            (click)="switchTo('popular')"
+            [attr.aria-pressed]="activeButton === 'popular'"
+            [class.active]="activeButton === 'popular'">
+            {{ config.type[0] }}
+          </button>
+          <button
+            type="button"
+            (click)="switchTo('tv')"
+            [attr.aria-pressed]="activeButton === 'tv'"
+            [class.active]="activeButton === 'tv'">
+            {{ config.type[1] }}
+          </button>
+          <button
+            *ngIf="config.type[2]"
+            type="button"
+            (click)="switchTo('top')"
+            [attr.aria-pressed]="activeButton === 'top'"
+            [class.active]="activeButton === 'top'">
+            {{ config.type[2] }}
+          </button>
+          <button
+            *ngIf="config.type[3]"
+            type="button"
+            (click)="switchTo('upcoming')"
+            [attr.aria-pressed]="activeButton === 'upcoming'"
+            [class.active]="activeButton === 'upcoming'">
+            {{ config.type[3] }}
+          </button>
+        </div>
       </div>
-    </div>
-    <section class="movies__main" [class.bg-none]="!config.bgData">
-      <div class="movies__wrapper">
-        <div class="movies__wrapper-block" [@listAnimation]="newData().length">
-          <div
-            class="movies__wrapper-cart relative overflow-hidden"
+      <div
+        class="popular-content movies__wrapper"
+        [class.popular-content--trending]="config.bgData">
+        <div class="popular-carousel" [@listAnimation]="newData().length">
+          <article
+            class="popular-card"
             *ngFor="let movie of newData(); trackBy: trackByMovie"
             [@fadeAnimation]>
-            <div
-              *ngIf="!loadedImages.has(movie.id)"
-              class="absolute inset-0 bg-gray-300 animate-pulse mb-12 rounded-lg z-10">
-              <img
-                *ngIf="!loadedImages.has(movie.id)"
-                class="absolute inset-0 w-full h-full p-5 object-cover bg-gray-300"
-                src="/placeholder.svg"
-                alt="placeholder" />
+            <div class="popular-poster">
+              <a
+                class="popular-poster-link"
+                [routerLink]="[
+                  (movie.media_type || type) === 'movie' ? '/movie' : '/tv',
+                  movie.id,
+                ]"
+                (click)="setType(movie.media_type ? movie.media_type : type)">
+                <div
+                  *ngIf="!loadedImages.has(movie.id)"
+                  class="popular-placeholder"
+                  aria-hidden="true">
+                  <img src="/placeholder.svg" alt="" />
+                </div>
+                <img
+                  decoding="async"
+                  (load)="onImageLoad(movie.id)"
+                  class="popular-image"
+                  [class.popular-image--loading]="!loadedImages.has(movie.id)"
+                  [src]="startUrl + movie.poster_path"
+                  [alt]="getMovieTitle(movie)" />
+              </a>
+              <app-rating [rat]="movie" class="popular-rating"></app-rating>
             </div>
-            <!--Rating component start-->
-            <app-rating
-              [rat]="movie"
-              class="absolute bottom-[1.4rem] left-2 !z-[11]"></app-rating>
-            <!--Rating component end-->
-            <img
-              decoding="async"
-              [routerLink]="[
-                (movie.media_type || type) === 'movie' ? '/movie' : '/tv',
-                movie.id,
-              ]"
-              (load)="onImageLoad(movie.id)"
-              (click)="setType(movie.media_type ? movie.media_type : type)"
-              class="image transition-opacity duration-700 relative z-0 min-h-[220px]"
-              [class.opacity-0]="!loadedImages.has(movie.id)"
-              [src]="startUrl + movie.poster_path"
-              alt="{{ movie.title }}" />
             <a
+              class="popular-title"
               [routerLink]="[
                 (movie.media_type || type) === 'movie' ? '/movie' : '/tv',
                 movie.id,
               ]"
               (click)="setType(movie.media_type ? movie.media_type : type)">
-              <p
-                class="font-bold text-[15px] pl-[6px] pt-[14px] pb-[2px] break-words">
-                {{ getMovieTitle(movie) }}
-              </p>
+              {{ getMovieTitle(movie) }}
             </a>
-            <p class="italic text-[14px] pl-[6px] text-gray-400">
+            <p class="popular-date">
               {{ getDate(movie) }}
             </p>
-          </div>
+          </article>
         </div>
       </div>
     </section>

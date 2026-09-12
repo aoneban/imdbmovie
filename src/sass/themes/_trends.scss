@@ -91,53 +91,6 @@
   font-size: 1.5rem;
 }
 
-.switch {
-  position: relative;
-  display: flex;
-  background: none!important;
-  border: 1px solid blueviolet;
-  color: #fff;
-  border-radius: 30px;
-  width: fit-content;
-  margin: 5px 0;
-
-  button {
-    position: relative;
-    width: 100px;
-    padding: 0px 15px;
-    border-radius: 25px;
-    background: none!important;
-    color: #111;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    z-index: 2;
-
-    &.active {
-      color: #000;
-    }
-  }
-
-  .back {
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    background: linear-gradient(to right, #d478d8, #752576);;
-    width: 100px;
-    border-radius: 25px;
-    transition: transform 0.3s ease-in-out;
-    z-index: 1;
-
-    &.today {
-      transform: translateX(0);
-    }
-
-    &.this-week {
-      transform: translateX(100px);
-    }
-  }
-}
-
 @media (max-width: 992px) {
   .movies__wrapper-cart {
     width: 150px;
