@@ -1,0 +1,67 @@
+app-footer {
+  .footer-navigation {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.25rem;
+  }
+
+  .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    max-width: 100%;
+  }
+
+  .logo {
+    position: static;
+    max-width: 100%;
+    height: auto;
+  }
+
+  nav {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  button {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    color: white;
+    font-size: 17px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+    transition: color 0.2s ease;
+  }
+
+  button:hover {
+    color: lightblue;
+  }
+
+  button:focus-visible,
+  .footer-brand:focus-visible {
+    outline: 2px solid lightblue;
+    outline-offset: 4px;
+  }
+
+  @media (min-width: 640px) {
+    nav {
+      width: auto;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+    }
+  }
+}
