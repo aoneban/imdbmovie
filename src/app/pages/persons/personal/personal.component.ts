@@ -1,53 +1,56 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { SinglePerson } from '../../../interfaces/interface';
 
 @Component({
   selector: 'app-personal',
   imports: [],
+  host: { class: 'block min-w-0' },
   template: `
-    <div>
-      <h3 class="font-medium text-xl mb-3 mt-[7rem]">Personal Info</h3>
-      <div>
-        <h4 class="font-bold mt-3">Known for</h4>
-        <p>{{ personData()?.known_for_department }}</p>
-      </div>
-      <div>
-        <h4 class="font-bold mt-3">Gender</h4>
-        <p>{{ personData()?.gender === 1 ? 'female' : 'male' }}</p>
-      </div>
-      <div>
-        <h4 class="font-bold mt-3">Birthday</h4>
-        <p>
-          {{ formatDate(personData()?.birthday) }}
-          @if (!personData()?.deathday) {
-            <span>({{ actorAge(personData()?.birthday) }} years old)</span>
-          }
-        </p>
-      </div>
-      @if (personData()?.deathday) {
+    <div class="break-words text-sm leading-relaxed sm:text-base">
+      <h3 class="mb-4 text-xl font-medium">Personal Info</h3>
+      <div class="space-y-4">
         <div>
-          <h4 class="font-bold mt-3">Day of Death</h4>
-          <p>
-            {{ formatDate(personData()?.deathday)
-            }}<span>
-              (died at
-              {{
-                actorDeath(personData()?.birthday, personData()?.deathday)
-              }})</span
-            >
+          <h4 class="font-bold">Known for</h4>
+          <p>{{ personData()?.known_for_department }}</p>
+        </div>
+        <div>
+          <h4 class="font-bold">Gender</h4>
+          <p>{{ personData()?.gender === 1 ? 'female' : 'male' }}</p>
+        </div>
+        <div>
+          <h4 class="font-bold">Birthday</h4>
+          <p class="flex flex-wrap gap-x-1">
+            <span>{{ formatDate(personData()?.birthday) }}</span>
+            @if (!personData()?.deathday) {
+              <span>({{ actorAge(personData()?.birthday) }} years old)</span>
+            }
           </p>
         </div>
-      }
-      <div>
-        <h4 class="font-bold mt-3">Place of Birth</h4>
-        <p>{{ personData()?.place_of_birth }}</p>
+        @if (personData()?.deathday) {
+          <div>
+            <h4 class="font-bold">Day of Death</h4>
+            <p class="flex flex-wrap gap-x-1">
+              <span>{{ formatDate(personData()?.deathday) }}</span>
+              <span>
+                (died at
+                {{
+                  actorDeath(personData()?.birthday, personData()?.deathday)
+                }})
+              </span>
+            </p>
+          </div>
+        }
+        <div>
+          <h4 class="font-bold">Place of Birth</h4>
+          <p>{{ personData()?.place_of_birth }}</p>
+        </div>
       </div>
     </div>
   `,
   styles: ``,
 })
 export class PersonalComponent {
-  personData = input<SinglePerson | null>(null)
+  personData = input<SinglePerson | null>(null);
 
   formatDate(dateStr: string | undefined | null): string {
     if (dateStr) {

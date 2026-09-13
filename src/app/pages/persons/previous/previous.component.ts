@@ -1,4 +1,4 @@
-import { Component, input, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CastCredits } from '../../../interfaces/interface';
 import { MediaTypeService } from '../../../services/media-type.service';
@@ -7,47 +7,58 @@ import { MediaTypeService } from '../../../services/media-type.service';
   selector: 'app-previous',
   imports: [RouterModule],
   template: `
-    <!-- Start acting component -->
-    <div>
-      <h3 class="font-medium text-xl mb-3">Acting</h3>
-      <div class="border-2 p-3 border-solid rounded-lg">
+    <section>
+      <h3 class="mb-4 text-xl font-medium">Acting</h3>
+      <ul class="rounded-lg border-2 border-solid border-gray-200 p-3 sm:p-4">
         @for (item of previousReleases(); track item) {
-          <li
-            class="list-none pt-3 cursor-pointer"
-            (click)="setType(item.media_type)"
-            [routerLink]="[
-              item.media_type === 'movie' ? '/movie' : '/tv',
-              item.id,
-            ]">
-            <span class="ml-[2%]">{{ item.release_date || 'Unknown' }}</span>
-            <span
-              class="ml-[3%] font-bold hover:text-gray-400 duration-300 ease-in-out">
-              {{ item.title || item.name || item.original_title }}
-            </span>
+          <li class="min-w-0">
+            <a
+              class="grid min-w-0 grid-cols-1 gap-1 rounded py-3 transition-colors hover:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 sm:grid-cols-[5rem_minmax(0,1fr)] sm:gap-x-4"
+              (click)="setType(item.media_type)"
+              [routerLink]="[
+                item.media_type === 'movie' ? '/movie' : '/tv',
+                item.id,
+              ]">
+              <span class="break-words text-sm text-gray-600 sm:text-base">
+                {{ item.release_date || 'Unknown' }}
+              </span>
+              <div class="min-w-0">
+                <span class="block break-words font-bold">
+                  {{ item.title || item.name || item.original_title }}
+                </span>
 
-            @if (item.character) {
-              <span class="block ml-[9%] text-gray-600"
-                >as {{ item.character }}</span
-              >
-            } @else {
-              <span class="block ml-[9%] h-[1.5rem]"></span>
+                @if (item.character) {
+                  <span
+                    class="mt-1 block break-words text-sm text-gray-600 sm:text-base">
+                    as {{ item.character }}
+                  </span>
+                } @else {
+                  <span class="block min-h-6" aria-hidden="true"></span>
+                }
+              </div>
+            </a>
+
+            @if (
+              $index < previousReleases()!.length - 1 &&
+              item.release_date !== previousReleases()![$index + 1].release_date
+            ) {
+              <div
+                class="my-3 border-b border-gray-300"
+                aria-hidden="true"></div>
             }
           </li>
-
-          @if (
-            $index < previousReleases()!.length - 1 &&
-            item.release_date !== previousReleases()![$index + 1].release_date
-          ) {
-            <div class="w-full border-b border-gray-300 my-4"></div>
-          }
         } @empty {
-          <li>There are no items.</li>
+          <li class="py-3 text-gray-600">There are no items.</li>
         }
-      </div>
-    </div>
-    <!-- End acting component -->
+      </ul>
+    </section>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      display: block;
+      min-width: 0;
+    }
+  `,
 })
 export class PreviousComponent {
   previousReleases = input<CastCredits[] | undefined>([]);

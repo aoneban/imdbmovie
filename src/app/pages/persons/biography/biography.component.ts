@@ -6,37 +6,39 @@ import { SinglePerson } from '../../../interfaces/interface';
   selector: 'app-biography',
   imports: [CommonModule, SlicePipe],
   template: `
-    <div class="relative">
-      <h4 class="text-xl font-semibold text-gray-900 mt-6">Biography</h4>
-      @if(personData()?.biography) {
-        <div
-          class="transition-all duration-500 ease-in-out overflow-hidden relative"
-          [class.max-h-28]="!show"
-          [class.max-h-[1000px]]="show">
-          <p
-            class="text-base text-gray-800 leading-relaxed mt-2 whitespace-pre-line">
-            {{
-              show
-                ? personData()?.biography
-                : (personData()?.biography | slice: 0 : 400) + '...'
-            }}
-          </p>
-          <div
-            *ngIf="!show"
-            class="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
-        </div>
-        <button
-          *ngIf="personData() && personData()?.biography && personData()?.biography!.length > 400"
-          (click)="toggleShow()"
-          class="float-right duration-200 easy underline underline-offset-4 text-blue-400 font-bold hover:text-blue-500">
-          {{ show ? 'Read less' : 'Read more...' }}
-        </button>
+    <div class="min-w-0">
+      <h4 class="mb-4 text-xl font-semibold text-gray-900">Biography</h4>
+      @if (personData()?.biography; as biography) {
+        <p
+          class="whitespace-pre-line break-words text-base leading-relaxed text-gray-800">
+          {{
+            show || biography.length <= 400
+              ? biography
+              : (biography | slice: 0 : 400) + '...'
+          }}
+        </p>
+        @if (biography.length > 400) {
+          <div class="mt-2 flex justify-end">
+            <button
+              type="button"
+              [attr.aria-expanded]="!!show"
+              (click)="toggleShow()"
+              class="min-h-11 w-auto px-2 py-2 text-base font-bold text-blue-500 underline underline-offset-4 transition-colors hover:text-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+              {{ show ? 'Read less' : 'Read more...' }}
+            </button>
+          </div>
+        }
       } @else {
-       <p class="mt-4 mb-4 italic"> Information is being filled in...</p>
+        <p class="italic">Information is being filled in...</p>
       }
     </div>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      display: block;
+      min-width: 0;
+    }
+  `,
 })
 export class BiographyComponent {
   personData = input<SinglePerson | null>(null);

@@ -38,23 +38,24 @@ import { MovieService } from '../../services/movie.service';
       <div *ngIf="!isLoading()" class="preloader">
         <div class="loader"></div>
       </div>
-      <section *ngIf="isLoading()" class="w-[80%] flex m-[auto]">
-        <!-- Left content: 20% width -->
-        <div class="w-2/6 pr-6 pb-12 pt-12">
+      <section
+        *ngIf="isLoading()"
+        class="mx-auto grid w-full min-w-0 max-w-screen-2xl grid-cols-1 gap-8 px-4 py-6 sm:w-[90%] sm:px-6 lg:w-[80%] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:grid-rows-[auto_1fr] lg:gap-y-6 lg:px-8 lg:py-10 xl:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] xl:gap-x-10">
+        <div class="min-w-0 lg:col-start-2 lg:row-start-1">
+          <app-nameactor [personData]="personData()"></app-nameactor>
+        </div>
+        <aside
+          class="grid min-w-0 content-start gap-6 sm:grid-cols-2 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:block lg:space-y-8">
           <section>
             <app-main-image
               [personData]="personData()"
               [url]="startUrl"></app-main-image>
           </section>
-          <section class="sticky top-10">
+          <section class="min-w-0 lg:sticky lg:top-6">
             <app-personal [personData]="personData()"></app-personal>
           </section>
-        </div>
-        <!-- Right content: 80% width -->
-        <div class="w-[70%]">
-          <section>
-            <app-nameactor [personData]="personData()"></app-nameactor>
-          </section>
+        </aside>
+        <div class="min-w-0 space-y-8 lg:col-start-2 lg:row-start-2">
           <section>
             <app-biography
               [personData]="personData()"
@@ -71,7 +72,12 @@ import { MovieService } from '../../services/movie.service';
       </section>
     </section>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      display: block;
+      min-width: 0;
+    }
+  `,
 })
 export class PersonsComponent {
   route = inject(ActivatedRoute);
