@@ -15,8 +15,10 @@ import { MovieCardComponent } from './movie-card/movie-card.component';
           <div class="loader"></div>
         </div>
       } @else {
-        <div>
-          <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
+        <div
+          class="mx-auto w-full max-w-screen-2xl px-4 py-6 sm:w-[90%] sm:px-6 lg:w-[80%] lg:px-8">
+          <h1
+            class="mb-6 break-words text-2xl font-bold sm:text-3xl lg:text-4xl">
             {{ namePage() }}
           </h1>
           <app-movie-card
