@@ -13,23 +13,28 @@ import { TMDB } from '../../config/tmdb.config';
       <div *ngIf="!isLoading()" class="preloader">
         <div class="loader"></div>
       </div>
-      <div *ngIf="isLoading()">
-        <h1 class="w-[78%] mx-auto mt-6 text-4xl font-bold text-white-900">
+      <div
+        *ngIf="isLoading()"
+        class="mx-auto w-full max-w-screen-2xl px-4 py-6 sm:w-[90%] sm:px-6 lg:w-[80%] lg:px-8">
+        <h1 class="mb-6 break-words text-2xl font-bold sm:text-3xl lg:text-4xl">
           Popular Persons
         </h1>
-        <div class="flex w-[80%] mx-auto flex-wrap justify-center">
+        <div
+          class="grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           @for (person of personData(); track person.id) {
-            <div class="relative w-[20%] mt-5">
-              <div
-                class="m-5 h-[100%] rounded-xl border border-gray-200 overflow-hidden">
+            <div
+              class="flex min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200">
+              <div class="relative aspect-[2/3] w-full bg-gray-300">
                 <img
+                  decoding="async"
                   *ngIf="!loadedImages.has(person.id)"
-                  class="absolute inset-0 w-[80%] h-[80%] p-5 m-5 object-cover bg-gray-300"
+                  class="absolute inset-0 h-full w-full animate-pulse object-cover"
                   src="/placeholder.svg"
-                  alt="placeholder" />
+                  alt=""
+                  aria-hidden="true" />
                 <img
                   decoding="auto"
-                  class="w-[auto] transition-opacity duration-700 rounded-none"
+                  class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
                   [src]="
                     person.profile_path
                       ? startUrl + person.profile_path
@@ -38,26 +43,32 @@ import { TMDB } from '../../config/tmdb.config';
                   (load)="onImageLoad(person.id)"
                   [class.opacity-0]="!loadedImages.has(person.id)"
                   alt="{{ person.name }}" />
-                <h3
-                  class="cursor-pointer font-bold relative top-4 left-3"
-                  [routerLink]="['/persons', person.id]">
-                  {{ person.name }}
-                </h3>
               </div>
+              <h3 class="break-words p-3 font-bold leading-snug sm:p-4">
+                <a [routerLink]="['/persons', person.id]">
+                  {{ person.name }}
+                </a>
+              </h3>
             </div>
           }
-          <div class="mt-20 mb-10">
-            <button
-              (click)="loadMore()"
-              class="px-1 py-1 rounded bg-blue-600 text-white font-medium hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed">
-              Load more...
-            </button>
-          </div>
+        </div>
+        <div class="mb-10 mt-8 flex justify-center">
+          <button
+            type="button"
+            (click)="loadMore()"
+            class="min-h-11 w-full rounded bg-blue-600 px-6 py-3 font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400 sm:w-auto sm:min-w-48">
+            Load more...
+          </button>
         </div>
       </div>
     </section>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      display: block;
+      min-width: 0;
+    }
+  `,
 })
 export class PagePersonsComponent {
   url = TMDB.urlPerson;
