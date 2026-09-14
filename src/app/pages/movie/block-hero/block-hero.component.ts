@@ -73,7 +73,7 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
               }}
             </p>
             <div class="flex flex-wrap mt-6 gap-x-8 gap-y-4">
-              @for (worker of movieCrew(); track worker.id) {
+              @for (worker of movieCrew(); track worker.credit_id) {
                 <div class="min-w-0 max-w-full">
                   <a
                     [routerLink]="['/persons', worker.id]"
