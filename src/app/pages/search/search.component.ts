@@ -1,4 +1,4 @@
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, effect, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   ApiResponsePerson,
@@ -21,40 +21,54 @@ import { PersonsComponent } from './persons/persons.component';
     TvComponent,
     PersonsComponent,
   ],
+  host: {
+    class: 'block min-w-0',
+  },
   template: `
-    <section class="w-[80%] min-h-screen mx-auto">
-      <div class="flex">
-        <div class="basis-[20%] mt-[7.5%]">
-          <div class="h-[auto]">
-            <h3
-              class="bg-sky-500/100 text-white font-bold text-xl p-6 flex items-center justify-center rounded-t-lg">
-              Search results
-            </h3>
-            <ul>
-              @for (item of sortedArray(); track item) {
-                <li
-                  class="flex justify-between"
-                  [ngClass]="{
-                    'bg-gray-300': selectedItem() === item[0],
-                  }">
-                  <button
-                    (click)="handleClick($event, item[0])"
+    <section
+      class="mx-auto min-h-screen w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <h1
+        class="mb-6 text-2xl font-bold text-gray-900 [overflow-wrap:anywhere] sm:text-3xl lg:text-4xl">
+        {{ fromInput }}
+      </h1>
+      <div
+        class="grid min-w-0 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-8">
+        <aside
+          aria-labelledby="search-categories-heading"
+          class="min-w-0 self-start">
+          <h2
+            id="search-categories-heading"
+            class="flex items-center justify-center rounded-t-lg bg-sky-500 p-6 text-xl font-bold text-white">
+            Search results
+          </h2>
+          <ul>
+            @for (item of sortedArray(); track item) {
+              <li
+                class="min-w-0"
+                [ngClass]="{
+                  'bg-gray-300': selectedItem() === item[0],
+                }">
+                <button
+                  type="button"
+                  (click)="handleClick(item[0])"
+                  [attr.aria-pressed]="selectedItem() === item[0]"
+                  class="flex w-full min-w-0 items-center justify-between gap-4 p-4 text-left text-base focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-sky-600">
+                  <span
+                    class="min-w-0 break-words"
                     [ngClass]="{
                       'font-bold': selectedItem() === item[0],
-                    }"
-                    class="text-left p-4 w-[100%]">
+                    }">
                     {{ item[0] }}
-                  </button>
-                  <p class="p-4">{{ item[1] }}</p>
-                </li>
-              }
-            </ul>
-          </div>
-        </div>
-        <div class="basis-[80%]">
-          <h1 class="text-4xl pt-4 pb-4 font-bold text-white-900 mb-4">
-            {{ fromInput }}
-          </h1>
+                  </span>
+                  <span class="shrink-0 text-right font-normal tabular-nums">
+                    {{ item[1] }}
+                  </span>
+                </button>
+              </li>
+            }
+          </ul>
+        </aside>
+        <div class="min-w-0">
           @switch (currentContent) {
             @case ('Movies') {
               <app-movies
@@ -113,8 +127,8 @@ export class SearchComponent {
   apiUrl2 = '&include_adult=false&language=en-US&page=';
   startUrl = 'https://image.tmdb.org/t/p/w200';
   fromInput: string | undefined;
-  numberPage: number = 1;
-  totalPages: number = 0;
+  numberPage = 1;
+  totalPages = 0;
   currentContent = '';
   totalDataArray: [string, number, number][] = [];
   movieResponse = signal<MovieSearchResponse | undefined>(undefined);
@@ -219,9 +233,8 @@ export class SearchComponent {
   //     this.fetchData(this.apiUrl1, this.apiUrl2, this.fromInput);
   //   this.goTop();
   // }
-  handleClick(event: MouseEvent, item: string): void {
-    const target = event.currentTarget as HTMLElement;
-    this.currentContent = target.innerText;
+  handleClick(item: string): void {
+    this.currentContent = item;
     this.selectedItem.set(item);
   }
 }

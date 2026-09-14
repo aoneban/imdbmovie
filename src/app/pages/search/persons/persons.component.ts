@@ -7,32 +7,42 @@ import { ApiResponsePerson } from '../../../interfaces/interface';
   selector: 'app-persons',
   imports: [RouterModule, CommonModule],
   template: `
-    <ul>
+    <ul class="space-y-4">
       @for (person of personResponse()?.results; track person.id) {
         <li>
           <div
-            class="full relative min-h-[150px] flex gap-[15px] m-[20px] border border-gray-300 rounded-[10px] overflow-hidden">
-            <div class="basis-[11%] bg-red-200">
+            class="flex items-start gap-3 overflow-hidden rounded-[10px] border border-gray-300 sm:gap-4">
+            <div
+              class="relative aspect-[2/3] w-20 shrink-0 overflow-hidden bg-gray-100 sm:w-28">
               <div
-                *ngIf="!loadedImages().has(person.id)"
-                class="absolute w-[8%] top-[35px] left-[10px] pb-12 z-10">
-                <img src="/placeholder.svg" alt="placeholder" />
+                *ngIf="!person.profile_path || !loadedImages().has(person.id)"
+                class="absolute inset-0 flex items-center justify-center p-3">
+                <img
+                  class="h-auto w-full max-w-12"
+                  src="/placeholder.svg"
+                  alt=""
+                  aria-hidden="true" />
               </div>
-              <img
-                decoding="async"
-                class="w-[100%] h-[100%]"
-                (load)="onLoad(person.id)"
-                [class.opacity-0]="!loadedImages().has(person.id)"
-                [src]="startUrl + (person.profile_path || '')"
-                [alt]="person.name || ''" />
+              @if (person.profile_path) {
+                <img
+                  decoding="async"
+                  class="absolute inset-0 h-full w-full object-cover"
+                  (load)="onLoad(person.id)"
+                  [class.opacity-0]="!loadedImages().has(person.id)"
+                  [src]="startUrl + person.profile_path"
+                  [alt]="person.name || ''" />
+              }
             </div>
 
-            <div class="basis-[92%] pt-2 pb-2">
+            <div
+              class="min-w-0 flex-1 break-words py-3 pr-3 text-sm leading-relaxed sm:py-4 sm:pr-4 sm:text-base">
               <div>
-                <a [routerLink]="['/persons', person.id]" class="text-xl font-bold tracking-tight text-gray-800">
+                <a
+                  [routerLink]="['/persons', person.id]"
+                  class="text-base font-bold leading-snug tracking-tight text-gray-800 sm:text-xl">
                   {{ person.name }}
                 </a>
-                <p>{{ person.known_for_department }}</p>
+                <p class="my-1">{{ person.known_for_department }}</p>
                 @for (item of person.known_for; track item.id) {
                   <a
                     [routerLink]="[
@@ -40,8 +50,8 @@ import { ApiResponsePerson } from '../../../interfaces/interface';
                       item.id,
                     ]"
                     (click)="setType(item.media_type)"
-                    >{{ item.name || item.title }} + </a
-                  >
+                    >{{ item.name || item.title }} +
+                  </a>
                 }
               </div>
             </div>
