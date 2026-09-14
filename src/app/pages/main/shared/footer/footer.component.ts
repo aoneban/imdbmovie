@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <footer class="w-full bg-blue-950 mt-5 px-4 pt-8 pb-[30px] sm:pt-[60px]">
+    <footer class="w-full bg-blue-950 px-4 pt-8 pb-[30px] sm:pt-[60px]">
       <div class="max-w-screen-xl mx-auto">
         <div class="footer-navigation">
           <a
