@@ -21,7 +21,7 @@ import { YouTubePlayerModule } from '@angular/youtube-player';
       class="background-trailers">
       <div class="trailers">
         <h3 class="trending">Latest Trailers</h3>
-        <div class="switch-trailers">
+        <div class="switch-trailers" [attr.data-active-tab]="activeButton">
           <button
             type="button"
             (click)="switchTo('today')"

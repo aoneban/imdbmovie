@@ -28,6 +28,8 @@ import { TMDB } from '../../../../config/tmdb.config';
           class="popular-tabs switch"
           role="group"
           [attr.aria-label]="config.title + ' categories'"
+          [attr.data-active-tab]="activeButton"
+          [style.--mobile-tab-rows]="config.type.length > 2 ? 2 : 1"
           [style.--tab-count]="config.type.length">
           <button
             type="button"

@@ -24,10 +24,16 @@ app-popular {
   }
 
   .popular-tabs {
+    --tab-columns: var(--tab-count);
+    --tab-rows: 1;
+    --active-column: 0;
+    --active-row: 0;
+
     position: relative;
     z-index: 1;
     display: grid;
-    grid-template-columns: repeat(var(--tab-count), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--tab-columns), minmax(0, 1fr));
+    grid-auto-rows: 1fr;
     width: min(100%, calc(var(--tab-count) * 100px + 10px));
     min-width: 0;
     padding: 4px;
@@ -35,7 +41,37 @@ app-popular {
     border-radius: 30px;
     background: transparent;
 
+    &::before {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc((100% - 8px) / var(--tab-columns));
+      height: calc((100% - 8px) / var(--tab-rows));
+      border-radius: 25px;
+      background: linear-gradient(to right, #d478d8, #752576);
+      transform: translate(
+        calc(var(--active-column) * 100%),
+        calc(var(--active-row) * 100%)
+      );
+      pointer-events: none;
+    }
+
+    &[data-active-tab='tv'] {
+      --active-column: 1;
+    }
+
+    &[data-active-tab='top'] {
+      --active-column: 2;
+    }
+
+    &[data-active-tab='upcoming'] {
+      --active-column: 3;
+    }
+
     button {
+      position: relative;
+      z-index: 1;
       min-width: 0;
       width: auto;
       min-height: 27px;
@@ -51,7 +87,6 @@ app-popular {
       cursor: pointer;
 
       &.active {
-        background: linear-gradient(to right, #d478d8, #752576);
         color: #000;
       }
     }
@@ -199,6 +234,10 @@ app-popular {
   }
 
   @media (prefers-reduced-motion: no-preference) {
+    .popular-tabs::before {
+      transition: transform 300ms ease-in-out;
+    }
+
     .popular-image {
       transition: opacity 0.7s ease;
     }
@@ -217,8 +256,20 @@ app-popular {
 
   @media (max-width: 480px) {
     .popular-tabs {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      --tab-columns: 2;
+      --tab-rows: var(--mobile-tab-rows);
+
       border-radius: 24px;
+
+      &[data-active-tab='top'] {
+        --active-column: 0;
+        --active-row: 1;
+      }
+
+      &[data-active-tab='upcoming'] {
+        --active-column: 1;
+        --active-row: 1;
+      }
     }
   }
 }
