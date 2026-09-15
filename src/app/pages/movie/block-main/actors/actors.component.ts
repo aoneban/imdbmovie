@@ -37,14 +37,14 @@ import { TMDB } from '../../../../config/tmdb.config';
                       alt="{{ person.name }}" />
                   </div>
                   <a [routerLink]="['/persons', person.id]">
-                    <p>
+                    <p class="truncate">
                       <b
                         class="pl-2 duration-300 ease hover:text-gray-500 hover:underline hover:underline-offset-2"
                         >{{ person.name }}</b
                       >
                     </p>
                   </a>
-                  <p class="pl-2 pb-2 text-sm text-gray-700">
+                  <p class="pl-2 pb-2 text-sm text-gray-700 truncate">
                     {{ person.character ? person.character : 'unknown' }}
                   </p>
                 </div>
