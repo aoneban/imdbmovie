@@ -69,7 +69,7 @@ export class PopularPersonsComponent {
   constructor(private popPersonService: PopPersonService) {
     effect(() => {
       this.popPersonService
-        .getDataPopularPerson(TMDB.urlPersonPage)
+        .getDataPopularPerson(TMDB.urlPerson)
         .subscribe(data => {
           this.newData.set(data.results);
         });

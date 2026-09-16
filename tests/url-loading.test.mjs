@@ -29,6 +29,9 @@ try {
         "export { MovieService } from './src/app/services/movie.service';",
         "export { MovieStoreService } from './src/app/services/movie-store.service';",
         "export { MediaTypeService } from './src/app/services/media-type.service';",
+        "export { PopularPersonsComponent } from './src/app/pages/main/shared/popularpersons/popularpersons.component';",
+        "export { PagePersonsComponent } from './src/app/pages/page-persons/page-persons.component';",
+        "export { PopPersonService } from './src/app/services/popperson.service';",
       ].join('\n'),
       resolveDir: process.cwd(),
       loader: 'ts',
@@ -156,6 +159,50 @@ try {
       });
     }
   }
+
+  function createPersonsComponent(name) {
+    TestBed.resetTestingModule();
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: DOCUMENT, useValue: { body: {}, defaultView: null } },
+        {
+          provide: TestComponentRenderer,
+          useValue: { removeAllRootElements() {} },
+        },
+      ],
+    });
+    const urls = [];
+    const http = {
+      get(url) {
+        urls.push(url);
+        const page = Number(new URL(url).searchParams.get('page'));
+        return of({ page, results: [{ id: page }], total_pages: 20 });
+      },
+    };
+    const service = new app.PopPersonService(http);
+    const component = TestBed.runInInjectionContext(() => new app[name](service));
+    TestBed.flushEffects();
+    return { component, urls };
+  }
+
+  await test('homepage popular celebrities request page 1', () => {
+    const { component, urls } = createPersonsComponent('PopularPersonsComponent');
+    assert.deepEqual(urls, [
+      'https://api.themoviedb.org/3/person/popular?language=en-US&page=1',
+    ]);
+    assert.deepEqual(component.newData(), [{ id: 1 }]);
+  });
+
+  await test('popular persons load more requests the next page', () => {
+    const { component, urls } = createPersonsComponent('PagePersonsComponent');
+    component.loadMore();
+    assert.deepEqual(urls, [
+      'https://api.themoviedb.org/3/person/popular?language=en-US&page=1',
+      'https://api.themoviedb.org/3/person/popular?language=en-US&page=2',
+    ]);
+    assert.deepEqual(component.personData(), [{ id: 1 }, { id: 2 }]);
+  });
+
   TestBed.resetTestingModule();
 } finally {
   await rm(folder, { recursive: true, force: true });
