@@ -24,7 +24,7 @@ import { MediaTypeService } from '../../../services/media-type.service';
           (click)="setType(movie.media_type)">
           <div class="aspect-[2/3] overflow-hidden rounded-xl bg-gray-200">
             <img
-              class="block h-full w-full object-cover"
+              class="block h-full w-full"
               [src]="
                 movie.poster_path ? url + movie.poster_path : '/placeholder.svg'
               "

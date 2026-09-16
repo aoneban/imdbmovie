@@ -20,7 +20,7 @@ import { Movie } from '../../../../interfaces/interface';
                   : '/tv',
                 item.id,
               ]"
-              class="cursor-pointer transition-opacity duration-700 rounded-lg relative w-full aspect-video object-cover"
+              class="cursor-pointer transition-opacity duration-700 rounded-lg relative w-full aspect-video"
               [src]="
                 item.backdrop_path
                   ? url + item.backdrop_path

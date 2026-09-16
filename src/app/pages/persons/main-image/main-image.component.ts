@@ -17,7 +17,7 @@ import { SinglePerson } from '../../../interfaces/interface';
         alt="" />
       <img
         decoding="auto"
-        class="absolute inset-0 h-full w-full object-cover transition-opacity duration-700"
+        class="absolute inset-0 h-full w-full transition-opacity duration-700"
         (load)="onImageLoad(p.id)"
         [class.opacity-0]="!loadedImages.has(p.id)"
         [src]="p.profile_path ? url + p.profile_path : '/placeholder.svg'"

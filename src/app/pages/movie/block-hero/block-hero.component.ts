@@ -18,7 +18,7 @@ import { CrewMember, Genre, SingleMovie } from '../../../interfaces/interface';
           <img
             decoding="auto"
             *ngIf="!loadedImages().has(movieData()!.id)"
-            class="w-40 shrink-0 aspect-[2/3] rounded-lg object-cover bg-gray-800 sm:w-48 lg:w-64"
+            class="w-40 shrink-0 aspect-[2/3] rounded-lg bg-gray-800 sm:w-48 lg:w-64"
             src="/placeholder.svg"
             alt="placeholder" />
           <img
